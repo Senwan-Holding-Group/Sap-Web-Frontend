@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @layer base {
   :root {
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
 }
 ::-webkit-scrollbar {
@@ -12,10 +12,28 @@
 }
 :root {
   font-family: "Poppins", serif;
- 
- 
 }
-shadow{
-  box-shadow: 0px 3px 12px 0px #5454561A;
+.geantShadow {
+  box-shadow: 0px 3px 12px 0px #5454561a;
+}
 
+.hollow-gradient-icon {
+  font-size: 48px;
+  -webkit-mask-image: var(--fa-font-solid);
+  mask-image: var(--fa-font-solid);
+  background: conic-gradient(from 180deg at 50% 50%, #006C50 0deg, #006C50 27deg, #2A856D 73.8deg, rgba(128, 182, 168, 0) 360deg);
+  position: relative;
+}
+
+.hollow-gradient-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.7); /* Adjust scale for thickness */
+  width: 100%;
+  height: 100%;
+  background: white; /* Or your background color */
+  -webkit-mask-image: var(--fa-font-solid);
+  mask-image: var(--fa-font-solid);
 }

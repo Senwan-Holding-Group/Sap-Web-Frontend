@@ -36,8 +36,8 @@ const menuItems = [
       },
       {
         icon: <FontAwesomeIcon icon={faSitemap} />,
-        label: "Master Data",
-        path: "/master-data",
+        label: "Items Master Data",
+        path: "/items",
       },
     ],
   },

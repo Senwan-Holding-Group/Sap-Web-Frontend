@@ -1,25 +1,25 @@
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { faChevronLeft } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate, useParams } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useQuery } from "@tanstack/react-query";
 import { getActivePObyDocEntry } from "@/api/client";
 import DataRenderer from "@/components/DataRenderer";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStateContext } from "@/context/useStateContext";
+import { faChevronLeft } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
 
-const PODetails = () => {
+const DraftDetails = () => {
   const { id } = useParams();
   const { setError } = useStateContext();
   const navigate = useNavigate();
   const {
-    data: activePO,
+    data: draft,
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["activePODetails"],
-    queryFn: () => getActivePObyDocEntry(`/po/active/${id}`, setError),
+    queryKey: ["draftDetails"],
+    queryFn: () => getActivePObyDocEntry(`/po/draft/${id}`, setError),
     refetchOnWindowFocus: false,
   });
 
@@ -37,7 +37,7 @@ const PODetails = () => {
             />
           </span>
           <span className="text-lg font-bold  text-geantSap-black">
-            {activePO?.vendorCode}
+            {draft?.vendorCode}
           </span>
         </div>
         <div className="h-full w-full overflow-scroll py-6 px-4 flex flex-col gap-y-10">
@@ -51,7 +51,7 @@ const PODetails = () => {
                   Document number
                 </Label>
                 <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
-                  {activePO?.documentNumber}
+                  {draft?.documentNumber}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -60,7 +60,7 @@ const PODetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {activePO?.documentDate.split(" ")[0]}
+                  {draft?.documentDate.split(" ")[0]}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -69,7 +69,7 @@ const PODetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {activePO?.documentTotal}{" "}
+                  {draft?.documentTotal}{" "}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -77,7 +77,7 @@ const PODetails = () => {
                   Vendor Code
                 </Label>
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {activePO?.vendorCode}{" "}
+                  {draft?.vendorCode}{" "}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -86,7 +86,7 @@ const PODetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {activePO?.vendorName}
+                  {draft?.vendorName}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -95,7 +95,25 @@ const PODetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {activePO?.section}
+                  {draft?.section}
+                </span>
+              </div>
+              <div className="flex flex-col gap-y-2 ">
+                <Label className="text-sm font-bold text-geantSap-black">
+                  Approval status
+                </Label>
+
+                <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
+                  {draft?.approvalStatus}
+                </span>
+              </div>
+              <div className="flex flex-col gap-y-2 ">
+                <Label className="text-sm font-bold text-geantSap-black">
+                  Approval remarks
+                </Label>
+
+                <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
+                  {draft?.remarks}
                 </span>
               </div>
             </div>
@@ -107,9 +125,9 @@ const PODetails = () => {
                 <Label className="text-sm font-bold text-geantSap-black">
                   Status
                 </Label>
-              
+
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                {activePO?.status}
+                  {draft?.status}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -117,25 +135,25 @@ const PODetails = () => {
                   Posting Date
                 </Label>
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                {activePO?.documentDate.split(" ")[0]}
+                  {draft?.documentDate.split(" ")[0]}
                 </span>
               </div>{" "}
               <div className="flex flex-col gap-y-2 ">
                 <Label className="text-sm font-bold text-geantSap-black">
                   Delivery Date
                 </Label>
-                
+
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                {activePO?.deliveryDate.split(" ")[0]}
+                  {draft?.deliveryDate.split(" ")[0]}
                 </span>
               </div>{" "}
               <div className="flex flex-col gap-y-2 ">
                 <Label className="text-sm font-bold text-geantSap-black">
                   Comments
                 </Label>
-              
+
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                {activePO?.comments}
+                  {draft?.comments}
                 </span>
               </div>{" "}
               <div className="flex flex-col gap-y-2 ">
@@ -145,17 +163,26 @@ const PODetails = () => {
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
                   LYD
                 </span>
-
               </div>
               <div className="flex flex-col gap-y-2 ">
                 <Label className="text-sm font-bold text-geantSap-black">
                   Process Status
                 </Label>
-              
+
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                {activePO?.processStatus}
+                  {draft?.processStatus}
                 </span>
               </div>
+              <div className="flex flex-col gap-y-2 ">
+                <Label className="text-sm font-bold text-geantSap-black">
+                  Approval Key{" "}
+                </Label>
+
+                <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
+                  {draft?.approvalEntry}
+                </span>
+              </div>
+         
             </div>
             <div className="flex flex-col w-[26.875rem] gap-y-6 ">
               <h1 className="font-bold text-lg text-geantSap-gray-500">
@@ -212,7 +239,7 @@ const PODetails = () => {
                   </tr>
                 </thead>
                 <tbody className=" [&_tr:last-child]:border-0">
-                  {activePO?.documentLine?.map((item) => (
+                  {draft?.documentLine?.map((item) => (
                     <tr className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                       <td className="px-6 py-3">{item.itemCode}</td>
                       <td className="px-6 py-3">{item.itemDescription}</td>
@@ -276,7 +303,7 @@ const PODetails = () => {
       </DataRenderer>
       <div className="flex justify-end gap-x-4 p-6 border-t borde-geantSap-gray-50">
         <Button className="bg-transparent text-geantSap-primary-600 border border-geantSap-gray-100 rounded-lg">
-          Save PO as
+          Add
         </Button>
         <Button className="bg-geantSap-primary-500  rounded-lg">Edit</Button>
       </div>
@@ -284,4 +311,4 @@ const PODetails = () => {
   );
 };
 
-export default PODetails;
+export default DraftDetails;
