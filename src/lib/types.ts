@@ -9,18 +9,7 @@ export type ActivePo = {
   documentDate: string;
   documentTotal: string;
   section: string;
-  documentLine: [
-    {
-      itemCode: string;
-      itemDescription: string;
-      price: number;
-      quantity: number;
-      total: number;
-      uomCode: string;
-      uomEntry: number;
-      warehouseCode: string;
-    }
-  ];
+  documentLine: DocumentLine[];
   attachment: [];
   comments: string;
   currency: string;
@@ -28,4 +17,21 @@ export type ActivePo = {
   processStatus: string;
   approvalEntry: number;
   remarks: string;
+};
+export type DocumentLine = {
+  itemCode: string;
+  itemDescription: string;
+  itemName: string;
+  price: number;
+  quantity: number;
+  total: number;
+  uomCode: string;
+  uomEntry: number;
+  uomGroup: string;
+  barcodeList: [{ barcode: string }];
+  warehouseCode: string;
+};
+export type MenuList = {
+  label: string;
+  value: string;
 };

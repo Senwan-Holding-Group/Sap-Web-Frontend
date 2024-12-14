@@ -69,7 +69,7 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.documentTotal}{" "}
+                  {draft&&parseFloat(draft.documentTotal).toFixed(4)}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -77,7 +77,7 @@ const DraftDetails = () => {
                   Vendor Code
                 </Label>
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.vendorCode}{" "}
+                  {draft?.vendorCode}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -137,7 +137,7 @@ const DraftDetails = () => {
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
                   {draft?.documentDate.split(" ")[0]}
                 </span>
-              </div>{" "}
+              </div>
               <div className="flex flex-col gap-y-2 ">
                 <Label className="text-sm font-bold text-geantSap-black">
                   Delivery Date
@@ -146,7 +146,7 @@ const DraftDetails = () => {
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
                   {draft?.deliveryDate.split(" ")[0]}
                 </span>
-              </div>{" "}
+              </div>
               <div className="flex flex-col gap-y-2 ">
                 <Label className="text-sm font-bold text-geantSap-black">
                   Comments
@@ -155,7 +155,7 @@ const DraftDetails = () => {
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
                   {draft?.comments}
                 </span>
-              </div>{" "}
+              </div>
               <div className="flex flex-col gap-y-2 ">
                 <Label className="text-sm font-bold text-geantSap-black">
                   Currency
@@ -175,7 +175,7 @@ const DraftDetails = () => {
               </div>
               <div className="flex flex-col gap-y-2 ">
                 <Label className="text-sm font-bold text-geantSap-black">
-                  Approval Key{" "}
+                  Approval Key
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
@@ -239,13 +239,13 @@ const DraftDetails = () => {
                   </tr>
                 </thead>
                 <tbody className=" [&_tr:last-child]:border-0">
-                  {draft?.documentLine?.map((item) => (
+                  {draft&&draft.documentLine.map((item) => (
                     <tr className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                       <td className="px-6 py-3">{item.itemCode}</td>
                       <td className="px-6 py-3">{item.itemDescription}</td>
                       <td className="px-6 py-3">{item.quantity}</td>
                       <td className="px-6 py-3">{item.uomCode}</td>
-                      <td className="px-6 py-3">x{item.uomEntry}</td>
+                      <td className="px-6 py-3">{item.uomGroup}</td>
                       <td className="px-6 py-3">{item.price} LYD</td>
                       <td className="px-6 py-3">{item.total} LYD</td>
                       <td className="px-6 py-3">{item.warehouseCode}</td>

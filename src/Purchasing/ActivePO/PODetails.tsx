@@ -50,7 +50,7 @@ const PODetails = () => {
                 <Label className="text-sm font-bold text-geantSap-black">
                   Document number
                 </Label>
-                <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
+                <span className="h-10 w-[21.1875rem]  border border-geantSap-gray-50 p-2 rounded-lg">
                   {activePO?.documentNumber}
                 </span>
               </div>
@@ -69,7 +69,7 @@ const PODetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {activePO?.documentTotal}{" "}
+                  {activePO&&parseFloat(activePO.documentTotal).toFixed(4)}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -218,7 +218,7 @@ const PODetails = () => {
                       <td className="px-6 py-3">{item.itemDescription}</td>
                       <td className="px-6 py-3">{item.quantity}</td>
                       <td className="px-6 py-3">{item.uomCode}</td>
-                      <td className="px-6 py-3">x{item.uomEntry}</td>
+                      <td className="px-6 py-3">{item.uomGroup}</td>
                       <td className="px-6 py-3">{item.price} LYD</td>
                       <td className="px-6 py-3">{item.total} LYD</td>
                       <td className="px-6 py-3">{item.warehouseCode}</td>

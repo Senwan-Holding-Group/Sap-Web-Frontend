@@ -1,4 +1,3 @@
-import Search from "@/components/ui/Search";
 import { useEffect } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
@@ -68,7 +67,6 @@ const Purchasing = () => {
           </NavLink>
         </div>
       </div>
-        {!location.pathname.includes("details") && <Search />}
       <Outlet />
     </div>
   );
