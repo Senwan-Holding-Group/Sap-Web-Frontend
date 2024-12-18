@@ -11,7 +11,7 @@ const DataRenderer = ({ children, isError, isLoading }: props) => {
   const {error} =useStateContext()
   if (isLoading) {
     return (
-      <div  className="flex items-center h-full justify-center w-full  ">
+      <div  className="flex items-center  h-full justify-center w-full  ">
         <Loading />
       </div>
     );

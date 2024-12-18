@@ -1,20 +1,23 @@
-import { getActivePObyDocEntry } from "@/api/client";
+import { getActivePObyDocEntry, saveDraftToPO } from "@/api/client";
 import DataRenderer from "@/components/DataRenderer";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStateContext } from "@/context/useStateContext";
+import { useToast } from "@/hooks/use-toast";
 import { faChevronLeft } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const DraftDetails = () => {
   const { id } = useParams();
+  const { toast } = useToast();
+
   const { setError } = useStateContext();
   const navigate = useNavigate();
   const {
-    data: draft,
+    data: draftDetails,
     isFetching,
     isError,
   } = useQuery({
@@ -27,17 +30,17 @@ const DraftDetails = () => {
     <div className="bg-white border border-geantSap-gray-25 geantShadow h-[34rem] 3xl:h-[47rem] rounded-xl flex flex-col justify-between">
       <DataRenderer isLoading={isFetching} isError={isError}>
         <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">
-          <span
-            onClick={() => navigate(-1)}
+          <Link
+            to={"/purchasing/draft"}
             className="size-10 border flex items-center   cursor-pointer border-geantSap-gray-100 rounded-lg p-2"
           >
             <FontAwesomeIcon
               className="size-6 text-geantSap-primary-600"
               icon={faChevronLeft}
             />
-          </span>
+          </Link>
           <span className="text-lg font-bold  text-geantSap-black">
-            {draft?.vendorCode}
+            {draftDetails?.vendorCode}
           </span>
         </div>
         <div className="h-full w-full overflow-scroll py-6 px-4 flex flex-col gap-y-10">
@@ -51,7 +54,7 @@ const DraftDetails = () => {
                   Document number
                 </Label>
                 <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.documentNumber}
+                  {draftDetails?.documentNumber}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -60,7 +63,7 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.documentDate.split(" ")[0]}
+                  {draftDetails?.documentDate.split(" ")[0]}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -69,7 +72,8 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft&&parseFloat(draft.documentTotal).toFixed(4)}
+                  {draftDetails &&
+                    parseFloat(draftDetails.documentTotal).toFixed(4)}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -77,7 +81,7 @@ const DraftDetails = () => {
                   Vendor Code
                 </Label>
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.vendorCode}
+                  {draftDetails?.vendorCode}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -86,7 +90,7 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.vendorName}
+                  {draftDetails?.vendorName}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -95,7 +99,7 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.section}
+                  {draftDetails?.section}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -104,7 +108,7 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.approvalStatus}
+                  {draftDetails?.approvalStatus}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -113,7 +117,7 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.remarks}
+                  {draftDetails?.remarks}
                 </span>
               </div>
             </div>
@@ -127,7 +131,7 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.status}
+                  {draftDetails?.status}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -135,7 +139,7 @@ const DraftDetails = () => {
                   Posting Date
                 </Label>
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.documentDate.split(" ")[0]}
+                  {draftDetails?.documentDate.split(" ")[0]}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -144,7 +148,7 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.deliveryDate.split(" ")[0]}
+                  {draftDetails?.deliveryDate.split(" ")[0]}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -153,7 +157,7 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.comments}
+                  {draftDetails?.comments}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -170,7 +174,7 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.processStatus}
+                  {draftDetails?.processStatus}
                 </span>
               </div>
               <div className="flex flex-col gap-y-2 ">
@@ -179,10 +183,9 @@ const DraftDetails = () => {
                 </Label>
 
                 <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
-                  {draft?.approvalEntry}
+                  {draftDetails?.approvalEntry}
                 </span>
               </div>
-         
             </div>
             <div className="flex flex-col w-[26.875rem] gap-y-6 ">
               <h1 className="font-bold text-lg text-geantSap-gray-500">
@@ -238,19 +241,23 @@ const DraftDetails = () => {
                     <th className="p-6 rounded-tr-lg">Warehouse code</th>
                   </tr>
                 </thead>
-                <tbody className=" [&_tr:last-child]:border-0">
-                  {draft&&draft.documentLine.map((item) => (
-                    <tr className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
-                      <td className="px-6 py-3">{item.itemCode}</td>
-                      <td className="px-6 py-3">{item.itemDescription}</td>
-                      <td className="px-6 py-3">{item.quantity}</td>
-                      <td className="px-6 py-3">{item.uomCode}</td>
-                      <td className="px-6 py-3">{item.uomGroup}</td>
-                      <td className="px-6 py-3">{item.price} LYD</td>
-                      <td className="px-6 py-3">{item.total} LYD</td>
-                      <td className="px-6 py-3">{item.warehouseCode}</td>
-                    </tr>
-                  ))}
+                <tbody className=" [&_tr:last-child]:border-0 ">
+                  {draftDetails &&
+                    draftDetails.documentLine.map((item) => (
+                      <tr
+                        key={item.itemCode}
+                        className="text-geantSap-black text-nowrap font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
+                      >
+                        <td className="px-6 py-3">{item.itemCode}</td>
+                        <td className="px-6 py-3">{item.itemDescription}</td>
+                        <td className="px-6 py-3">{item.quantity}</td>
+                        <td className="px-6 py-3">{item.uomCode}</td>
+                        <td className="px-6 py-3">{item.uomGroup}</td>
+                        <td className="px-6 py-3">{item.price} LYD</td>
+                        <td className="px-6 py-3">{item.total} LYD</td>
+                        <td className="px-6 py-3">{item.warehouseCode}</td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </TabsContent>
@@ -302,10 +309,22 @@ const DraftDetails = () => {
         </div>
       </DataRenderer>
       <div className="flex justify-end gap-x-4 p-6 border-t borde-geantSap-gray-50">
-        <Button className="bg-transparent text-geantSap-primary-600 border border-geantSap-gray-100 rounded-lg">
+        <Button
+          type="submit"
+          disabled={
+            draftDetails?.processStatus != "Approved" &&
+            draftDetails?.approvalStatus != "Approved" || isFetching
+          }
+          onClick={() => {
+            if (draftDetails) {
+              saveDraftToPO(draftDetails.documentEntry, navigate, toast);
+            }
+          }}
+          className="bg-transparent disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 text-geantSap-primary-600 border border-geantSap-gray-100 rounded-lg"
+        >
           Add
         </Button>
-        <Button className="bg-geantSap-primary-500  rounded-lg">Edit</Button>
+        <Button disabled={isFetching} className="bg-geantSap-primary-500  rounded-lg">Edit</Button>
       </div>
     </div>
   );

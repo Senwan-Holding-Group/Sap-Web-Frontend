@@ -17,7 +17,7 @@ const App = () => {
         >
           <Sidebar expand={expand} toggle={toggle} />
         </div>
-        <div className={`py-6 pl-24 pr-6 w-screen `}>
+        <div className={`py-6 pl-24 pr-6 w-full h-full`}>
           <Outlet />
         </div>
       </QueryClientProvider>

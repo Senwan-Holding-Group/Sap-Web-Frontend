@@ -27,11 +27,20 @@ export type DocumentLine = {
   total: number;
   uomCode: string;
   uomEntry: number;
+  line: number;
+  lineNum: number;
   uomGroup: string;
   barcodeList: [{ barcode: string }];
   warehouseCode: string;
+  warehouseList:[string]
 };
 export type MenuList = {
   label: string;
   value: string;
 };
+export type VendorSelectList = {
+  vendorCode: string;
+  vendorName: string;
+  vendor: string;
+};
+

@@ -21,10 +21,10 @@ const POTable = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["activePO", search.searchValue],
+    queryKey: ["activePO",search.searchValue],
     queryFn: () =>
       getActivePOs(
-        `/po/active?${search.searchKey}=${search.searchValue}&perPage=12`,
+        `/po/active?${search.searchKey}=${search.searchValue}&perPage=1000`,
         setError
       ),
     refetchOnWindowFocus: true,
@@ -33,7 +33,7 @@ const POTable = () => {
 
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="flex justify-between gap-x-4">
+      <div className="flex sm:justify-between items-center flex-col sm:flex-row  gap-4">
         <Search menuList={activePOmenu} setSearch={setSearch} search={search} />
         <CreatePO />
       </div>
@@ -62,7 +62,7 @@ const POTable = () => {
               ) : (
                 activePOList.map((po) => (
                   <tr
-                    key={po.documentEntry}
+                    key={po.documentNumber}
                     onClick={() =>
                       navigate(
                         `/purchasing/active-PO/details/${po.documentEntry}`

@@ -23,14 +23,18 @@ const DraftTable = () => {
     isError,
   } = useQuery({
     queryKey: ["draft",search.searchValue],
-    queryFn: () => getActivePOs(`/po/draft?${search.searchKey}=${search.searchValue}&perPage=12`, setError),
-    refetchOnWindowFocus: true,
-    refetchOnMount: false,
+    queryFn: () =>
+      getActivePOs(
+        `/po/draft?${search.searchKey}=${search.searchValue}&perPage=100`,
+        setError
+      ),
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
 
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="flex justify-between gap-x-4">
+      <div className="flex sm:justify-between items-center flex-col sm:flex-row  gap-4">
       <Search menuList={draftmenu} setSearch={setSearch} search={search} />
         <CreatePO />
       </div>
@@ -46,6 +50,7 @@ const DraftTable = () => {
                 <th className="p-6">Process status</th>
                 <th className="p-6">Approval Key</th>
                 <th className="p-6 rounded-tr-xl">Approval remark</th>
+                {/* <th className="p-6 rounded-tr-xl">AddPO</th> */}
               </tr>
             </thead>
             <tbody className="bg-white [&_tr:last-child]:border-0 ">
@@ -57,7 +62,8 @@ const DraftTable = () => {
                 </tr>
               ) : (
                 draftList.map((draft) => (
-                  <tr key={draft.documentEntry}
+                  <tr
+                    key={draft.documentEntry}
                     onClick={() =>
                       navigate(
                         `/purchasing/draft/details/${draft.documentEntry}`
@@ -68,17 +74,34 @@ const DraftTable = () => {
                     <td className="px-6 py-3">{draft.documentNumber}</td>
                     <td className="px-6 py-3">{draft.vendorCode}</td>
                     <td className="px-6 py-3">{draft.vendorName}</td>
-                    <td className="px-6 py-3">{draft.status} </td>
+                    <td className="px-6 py-3">{draft.approvalStatus} </td>
                     <td className="px-6 py-3">{draft.processStatus} </td>
                     <td className="px-6 py-3">{draft.approvalEntry} </td>
                     <td className="px-6 py-3">{draft.remarks}</td>
+                    {/* <td className="px-6 py-3">
+                      <Button
+                        size={"icon"}
+                        disabled={
+                          draft?.processStatus != "Approved" &&
+                          draft?.approvalStatus != "Approved"
+                        }
+                        onClick={() => {
+                          if (draft)
+                            saveDraftToPO(draft.documentEntry, navigate, toast);
+                        }}
+                        className="bg-transparent h-fit border-0  disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 text-geantSap-primary-600  rounded-full"
+                      >
+                        <FontAwesomeIcon className="size-4" icon={faArrowRightArrowLeft}/>
+                        
+                      </Button>
+                    </td> */}
                   </tr>
                 ))
               )}
             </tbody>
             <tfoot className="sticky -bottom-1 w-full">
               <tr>
-                <td colSpan={7}>
+                <td colSpan={8}>
                   <Pagination />
                 </td>
               </tr>

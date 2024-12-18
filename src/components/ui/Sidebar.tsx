@@ -1,5 +1,4 @@
-import logoaren from "/geantlogoaren.svg";
-import logo from "/logo.svg";
+
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -63,7 +62,7 @@ const Sidebar = ({
   toggle,
 }: {
   expand: boolean;
-  toggle: () => void;
+  toggle: (close?:boolean) => void;
 }) => {
   return (
     <div className="w-full h-full flex flex-col gap-y-10 bg-white z-50">
@@ -71,13 +70,13 @@ const Sidebar = ({
         <div className={`flex  ${expand ? "justify-end" : "justify-center"}`}>
           {expand ? (
             <FontAwesomeIcon
-              onClick={() => toggle()}
+              onClick={() => toggle(true)}
               className="w-6 h-[1.2rem] cursor-pointer text-geantSap-primary-500  "
               icon={faArrowLeftLongToLine}
             />
           ) : (
             <FontAwesomeIcon
-              onClick={() => toggle()}
+              onClick={() => toggle(false)}
               className="w-6 h-[1.2rem] cursor-pointer text-geantSap-primary-500 "
               icon={faArrowRightLongToLine}
             />
@@ -86,14 +85,14 @@ const Sidebar = ({
         <div className="flex justify-center">
           {expand ? (
             <img
-              src={logoaren}
+              src={"/geantlogoaren.svg"}
               className="w-[11.25rem] h-[2.055rem]  object-cover"
               alt="logoaren"
               title="Geant Sap"
             />
           ) : (
             <img
-              src={logo}
+              src={"/logo.svg"}
               className="w-[2.10625rem] h-[2.05rem] "
               alt="logo"
               title="Geant Sap"
@@ -111,6 +110,7 @@ const Sidebar = ({
           >
             {i.items.map((item) => (
               <NavLink
+              onClick={() => toggle(true)}
                 to={item.path}
                 key={item.label}
                 style={({ isActive }) => ({

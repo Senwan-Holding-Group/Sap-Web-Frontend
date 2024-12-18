@@ -37,3 +37,6 @@
   -webkit-mask-image: var(--fa-font-solid);
   mask-image: var(--fa-font-solid);
 }
+.unset{
+  all: unset;
+}
