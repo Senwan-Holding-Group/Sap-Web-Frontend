@@ -12,8 +12,9 @@ import { CreatePORequest } from "@/lib/formsValidation";
 type SelectSectionProps = {
   field: ControllerRenderProps<CreatePORequest>;
   form: UseFormReturn<CreatePORequest>;
+  disabled?:boolean
 };
-const SelectSection = ({field,form}:SelectSectionProps) => {
+const SelectSection = ({field,form,disabled}:SelectSectionProps) => {
     const [open, setOpen] = useState(false);
 
     return (
@@ -23,7 +24,8 @@ const SelectSection = ({field,form}:SelectSectionProps) => {
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between rounded-lg disabled:bg-geantSap-gray-25  "
+            disabled={disabled}
+            className="w-full justify-between rounded-lg disabled:bg-geantSap-gray-25  disabled:text-geantSap-gray-400"
           >
             {field.value
               ? sectionList?.find((section) => section.sectionCode === field.value)

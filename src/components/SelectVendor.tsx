@@ -39,7 +39,8 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
     queryFn: () => getVendors(`/vendor`, setError, toast),
     refetchOnWindowFocus: true,
     refetchOnMount: false,
-    cacheTime: 100000,
+    cacheTime: 5 * 60 * 1000,
+    staleTime: 2 * 60 * 1000, 
   });
 
   return (
@@ -50,7 +51,7 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between rounded-lg disabled:bg-geantSap-gray-25  "
+          className="w-full justify-between rounded-lg disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 "
         >
           {field.value
             ? vendorsList?.find((vendor) => vendor.vendorCode === field.value)

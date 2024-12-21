@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 const taps = [
   {
     label: "Drafts",
@@ -19,13 +18,13 @@ const taps = [
   },
 ];
 const Purchasing = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const pathname = location.pathname === "/purchasing";
+  // const navigate = useNavigate();
+  // const location = useLocation();
+  // const pathname = location.pathname === "/purchasing";
 
-  useEffect(() => {
-    navigate("/purchasing/draft");
-  }, [pathname, navigate]);
+  // useEffect(() => {
+  //   navigate("/purchasing/draft");
+  // }, [pathname, navigate]);
 
   return (
     <div className="overflow-hidden w-full flex  flex-col gap-y-4 ">

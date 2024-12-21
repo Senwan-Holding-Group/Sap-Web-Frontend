@@ -100,7 +100,7 @@ const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
                         // ) {
                           setState((prev) => [
                             ...prev,
-                            { ...item, quantity: 1, total: item.price,line:state.length+1 },
+                            { ...item, quantity: 1,  total: parseFloat(item.price.toString()),line:state.length++ },
                           ]);
                         // } else {
                           // const newList=state.filter(

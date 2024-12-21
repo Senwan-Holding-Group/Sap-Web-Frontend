@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ActivePo, DocumentLine, VendorSelectList } from "@/lib/types";
 import api from ".";
-import { CreatePORequest } from "@/lib/formsValidation";
+import { CreatePORequest, EditDocumentRequest } from "@/lib/formsValidation";
 import { cn } from "@/lib/utils";
 import { QueryClient } from "@tanstack/react-query";
 import { NavigateFunction } from "react-router-dom";
@@ -98,8 +98,8 @@ export const createPo = async (
 };
 export const EditDocument = async (
   url:string,
-  PO: CreatePORequest,
-  form: UseFormReturn<CreatePORequest>,
+  PO: EditDocumentRequest,
+  form: UseFormReturn<EditDocumentRequest>,
   setdocLine: React.Dispatch<React.SetStateAction<DocumentLine[]>>,
   toast: any,
   queryClient: QueryClient,
@@ -107,14 +107,13 @@ export const EditDocument = async (
 ) => {
   try {
     await api.patch(url, PO);
-    queryClient.invalidateQueries();
-    form.reset();
     setdocLine([]);
+    queryClient.invalidateQueries();
     toast({
       className: cn(
         "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
       ),
-      description: "PO created successfully",
+      description: "PO Edited successfully",
     });
   } catch (error: any) {
     form.setError("root", {
@@ -130,11 +129,43 @@ export const EditDocument = async (
     console.log(error);
   }
 };
+export const cancelPO = async (
+  docEntry: number,
+  navigate: NavigateFunction,
+  toast: any,
+  setisSubmitting: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  setisSubmitting(true);
+  try {
+    await api.post(`/po/cancel/${docEntry}`);
+  
+    toast({
+      className: cn(
+        "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+      ),
+      description: "PO Canceled  successfully",
+    });
+    navigate(-1);
+  } catch (error: any) {
+    toast({
+      className: cn(
+        "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+      ),
+      variant: "destructive",
+      description: error.response.data.message,
+    });
+    console.log(error);
+  }
+  setisSubmitting(false)
+
+};
 export const saveDraftToPO = async (
   docEntry: number,
   navigate: NavigateFunction,
   toast: any,
+  setisSubmitting: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  setisSubmitting(true);
   try {
     await api.post(`/po/draft/${docEntry}`);
   
@@ -153,8 +184,8 @@ export const saveDraftToPO = async (
       variant: "destructive",
       description: error.response.data.message,
     });
-    
     console.log(error);
   }
-  
+  setisSubmitting(false)
+
 };

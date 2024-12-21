@@ -4,20 +4,21 @@ type SelectWarehouseProps = {
   setdocLine:React.Dispatch<React.SetStateAction<DocumentLine[]>>;
   docLine:DocumentLine[];
   item:DocumentLine;
+  disable?:boolean;
 }
-const SelectWarehouse = ({item,setdocLine,docLine}:SelectWarehouseProps) => {
+const SelectWarehouse = ({item,setdocLine,docLine,disable}:SelectWarehouseProps) => {
   let warehouseList: string[] = item.warehouseList; 
  if(typeof(item.warehouseList)==="string"){
      warehouseList= JSON.parse(item.warehouseList);     
  }
   
   return (
-    <Select  onValueChange={(SelectValue)=>{
+    <Select disabled={disable}  onValueChange={(SelectValue)=>{
       console.log(SelectValue);
       
       setdocLine(
         docLine.map((value) => {
-          if (value.line != item.line) {
+          if (value.line != item.line||value.lineNum!=item.lineNum) {
             return value;
           } else {
             return {
@@ -30,7 +31,7 @@ const SelectWarehouse = ({item,setdocLine,docLine}:SelectWarehouseProps) => {
     }}>
       <SelectTrigger className="w-[9rem] h-6">
         {/* <SelectValue  placeholder="Select" /> */}
-        <span>{item.warehouseCode?warehouseList[0]:"Select"}</span>
+        <span>{item.warehouseCode?item.warehouseCode:warehouseList[0]}</span>
       </SelectTrigger>
       <SelectContent  className="">
         {warehouseList.map((WC)=>(

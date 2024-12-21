@@ -32,6 +32,8 @@ import { createPo } from "@/api/client";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import SelectWarehouse from "../SelectWarehouse";
+import Loader from "../ui/Loader";
+import { Label } from "../ui/label";
 
 const CreatePOForm = () => {
   const queryClient = useQueryClient();
@@ -41,8 +43,8 @@ const CreatePOForm = () => {
   const form = useForm<CreatePORequest>({
     resolver: zodResolver(CreatePOFormSchema),
     defaultValues: {
-      postingDate: undefined,
-      deliveryDate: undefined,
+      postingDate: new Date(),
+      deliveryDate: new Date(),
       vendorCode: "",
       section: "",
       comments: "",
@@ -60,7 +62,9 @@ const CreatePOForm = () => {
           quantity: item.quantity.toString(),
           price: item.price.toString(),
           uomCode: item.uomCode,
-          warehouseCode: item.warehouseCode?item.warehouseCode:item.warehouseList[0],
+          warehouseCode: item.warehouseCode
+            ? item.warehouseCode
+            : item.warehouseList[0],
           uomEntry: item.uomEntry,
         };
       }),
@@ -74,6 +78,8 @@ const CreatePOForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full overflow-scroll  justify-between h-full"
       >
+        <Loader enable={form.formState.isSubmitting} />
+
         <div className="flex w-full flex-col  overflow-scroll  gap-y-6 p-6 h-full ">
           <div className="flex justify-between gap-x-[9.5rem]  min-w-max ">
             <div className="w-[21.1875rem] flex flex-col gap-y-4">
@@ -224,6 +230,22 @@ const CreatePOForm = () => {
                   </FormItem>
                 )}
               />
+              <div className="flex flex-col gap-y-2 ">
+                <Label className="text-sm font-bold text-geantSap-black">
+                  Document total
+                </Label>
+
+                <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                  {docLine.length > 0
+                    ? `${new Intl.NumberFormat("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 4,
+                      }).format(
+                        docLine.reduce((sum, item) => sum + item.total, 0)
+                      )} LYD`
+                    : "0.0000 LYD"}
+                </span> 
+              </div>
             </div>
           </div>
 
@@ -416,7 +438,6 @@ const CreatePOForm = () => {
             className="bg-geantSap-primary-500 w-[8.125rem] disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base"
             type="submit"
           >
-            {" "}
             {form.formState.isSubmitting && (
               <FontAwesomeIcon className="" icon={faSpinner} spin />
             )}

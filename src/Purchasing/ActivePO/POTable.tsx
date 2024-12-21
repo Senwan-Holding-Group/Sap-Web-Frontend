@@ -8,7 +8,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CreatePO from "./CreatePO";
-
+// import { lazy, Suspense } from 'react';
+// import Loader from "@/components/ui/Loader";
+// import Loading from "@/components/ui/Loading";
+// const CreatePO = lazy(() => import('./CreatePO'));
 const POTable = () => {
   const navigate = useNavigate();
   const { setError } = useStateContext();
@@ -21,21 +24,26 @@ const POTable = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["activePO",search.searchValue],
+    queryKey: ["activePO",search],
     queryFn: () =>
       getActivePOs(
-        `/po/active?${search.searchKey}=${search.searchValue}&perPage=1000`,
+        `/po/active?${search.searchKey}=${search.searchValue}&perPage=90`,
         setError
       ),
-    refetchOnWindowFocus: true,
-    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+    cacheTime: 5 * 60 * 1000, 
+    staleTime: 2 * 60 * 1000, 
   });
 
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex sm:justify-between items-center flex-col sm:flex-row  gap-4">
         <Search menuList={activePOmenu} setSearch={setSearch} search={search} />
+
+
         <CreatePO />
+
       </div>
       <div className=" 3xl:h-[696px] h-[500px]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
         <DataRenderer isLoading={isFetching} isError={isError}>

@@ -3,17 +3,18 @@ import { Label } from "@/components/ui/label";
 import {
   faCalendarCirclePlus,
   faChevronLeft,
+  faSpinner,
   faX,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { EditDocument, getActivePObyDocEntry } from "@/api/client";
+import { cancelPO, EditDocument, getActivePObyDocEntry } from "@/api/client";
 import DataRenderer from "@/components/DataRenderer";
 import { useStateContext } from "@/context/useStateContext";
 import { useToast } from "@/hooks/use-toast";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DocumentLine } from "@/lib/types";
 import {
   editDocumentFormSchema,
@@ -43,13 +44,16 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import SelectWarehouse from "@/components/SelectWarehouse";
 import ItemSelect from "@/components/ItemsSelect";
+import Loader from "@/components/ui/Loader";
 
 const PODetails = () => {
   const { id } = useParams();
   const { setError } = useStateContext();
   const queryClient = useQueryClient();
+  const [isEdit, setisEdit] = useState(false);
+  const [isSubmitting, setisSubmitting] = useState(false);
+  const navigate = useNavigate();
 
-  // const navigate = useNavigate();
   const { toast } = useToast();
   const [docLine, setdocLine] = useState<DocumentLine[]>([]);
 
@@ -61,9 +65,18 @@ const PODetails = () => {
     queryKey: ["activePODetails"],
     queryFn: () => getActivePObyDocEntry(`/po/active/${id}`, setError),
     refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
   const form = useForm<EditDocumentRequest>({
     resolver: zodResolver(editDocumentFormSchema),
+    defaultValues: {
+      postingDate: new Date(),
+      deliveryDate: new Date(),
+      vendorCode: "",
+      section: "",
+      comments: "",
+      documentLines: [],
+    },
   });
   useEffect(() => {
     if (activePO) {
@@ -71,21 +84,12 @@ const PODetails = () => {
         postingDate: moment(activePO.documentDate).toDate(),
         deliveryDate: moment(activePO.deliveryDate).toDate(),
         vendorCode: activePO.vendorCode,
-        section: activePO.section,
-        comments: activePO.comments,
-        documentLines: activePO.documentLine.map((item) => ({
-          itemCode: item.itemCode,
-          quantity: item.quantity.toString(),
-          price: item.price.toString(),
-          uomCode: item.uomCode,
-          lineNum: item.lineNum,
-          warehouseCode: item.warehouseCode,
-          uomEntry: item.uomEntry,
-        })),
+        section: activePO.section === null ? "" : activePO.section,
+        comments: activePO.comments === null ? "" : activePO.comments,
+        documentLines: [],
       });
       setdocLine(activePO.documentLine);
     }
-    console.log(form.getValues());
   }, [form, activePO]);
 
   const onSubmit = async (values: EditDocumentRequest) => {
@@ -98,12 +102,14 @@ const PODetails = () => {
           quantity: item.quantity.toString(),
           price: item.price.toString(),
           uomCode: item.uomCode,
-          lineNum: item.lineNum,
-          warehouseCode: item.warehouseCode?item.warehouseCode:item.warehouseList[0],
+          warehouseCode: item.warehouseCode
+            ? item.warehouseCode
+            : item.warehouseList[0],
           uomEntry: item.uomEntry,
         };
       }),
     };
+    console.log(newValues);
     return EditDocument(
       `/po/active/${activePO?.documentEntry}`,
       newValues,
@@ -113,20 +119,13 @@ const PODetails = () => {
       queryClient
     );
   };
-  // const renderField = <T extends keyof EditDocumentRequest>(name: T, label: string, component: JSX.Element) => (
-  //   <FormField control={form.control} name={name} render={({ field }) => (
-  //     <FormItem className="flex flex-col mt-2 gap-y-2 w-[21.188rem]">
-  //       <FormLabel className="text-sm font-bold text-geantSap-black">{label}</FormLabel>
-  //       <FormControl>{cloneElement(component, { ...field })}</FormControl>
-  //       <FormMessage />
-  //     </FormItem>
-  //   )} />
-  // );
   const vendorCode = form.watch("vendorCode");
 
   return (
-    <Form  {...form}>
-    <form  className=" h-[34rem] 3xl:h-[47rem] box-border max-h-[47rem] overflow-auto  " onSubmit={form.handleSubmit(onSubmit)}>
+    <Form {...form}>
+      <div className=" h-[34rem] 3xl:h-[47rem] box-border max-h-[47rem] overflow-auto  ">
+        <Loader enable={form.formState.isSubmitting} />
+
         <div className="bg-white border  border-geantSap-gray-25 geantShadow h-full  rounded-xl flex flex-col justify-between">
           <DataRenderer isLoading={isFetching} isError={isError}>
             <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">
@@ -203,15 +202,10 @@ const PODetails = () => {
                     </span>
                   </div>
                 </div>
-                <div className="flex flex-col w-[26.875rem] gap-y-6 ">
+                <div className="flex flex-col rounded-full w-[26.875rem] gap-y-6 ">
                   <h1 className="font-bold text-lg text-geantSap-gray-500">
                     PO Information
                   </h1>
-                  {/* {renderField("vendorCode", "Vendor Code", <SelectVendor disable={!!docLine.length} form={form} field={field}/>)}
-              {renderField("section", "Section", <SelectSection form={form} field={field}/>)}
-              {renderField("postingDate", "Posting Date", <Calendar mode="single" selected={form.getValues("postingDate")} onSelect={form.setValue("postingDate")} />)}
-              {renderField("deliveryDate", "Delivery Date", <Calendar mode="single" selected={form.getValues("deliveryDate")} onSelect={form.setValue("deliveryDate")} />)}
-              {renderField("comments", "Comments", <Input placeholder="Comment" className="h-10 border border-geantSap-gray-50 p-2 rounded-lg" />)} */}
                   <FormField
                     control={form.control}
                     name="vendorCode"
@@ -222,7 +216,11 @@ const PODetails = () => {
                         </FormLabel>
                         <FormControl>
                           <SelectVendor
-                            disable={!!docLine.length}
+                            disable={
+                              !!docLine.length ||
+                              form.formState.isSubmitting ||
+                              !isEdit
+                            }
                             form={form}
                             field={field}
                           />
@@ -236,7 +234,7 @@ const PODetails = () => {
                       Vendor Name
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
                       {activePO?.vendorName}
                     </span>
                   </div>
@@ -249,7 +247,11 @@ const PODetails = () => {
                           Section
                         </FormLabel>
                         <FormControl>
-                          <SelectSection form={form} field={field} />
+                          <SelectSection
+                            form={form}
+                            field={field}
+                            disabled={form.formState.isSubmitting || !isEdit}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -267,9 +269,12 @@ const PODetails = () => {
                           <PopoverTrigger asChild>
                             <FormControl>
                               <Button
+                                disabled={
+                                  form.formState.isSubmitting || !isEdit
+                                }
                                 variant={"outline"}
                                 className={cn(
-                                  "w-full pl-3 text-left bgtr font-normal",
+                                  "w-full pl-3 text-left disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 font-normal",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -314,9 +319,12 @@ const PODetails = () => {
                           <PopoverTrigger asChild>
                             <FormControl>
                               <Button
+                                disabled={
+                                  form.formState.isSubmitting || !isEdit
+                                }
                                 variant={"outline"}
                                 className={cn(
-                                  "w-full pl-3 text-left bgtr font-normal",
+                                  "w-full pl-3 text-left disabled:bg-geantSap-gray-25 font-normal disabled:text-geantSap-gray-400",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -356,8 +364,9 @@ const PODetails = () => {
                         </FormLabel>
                         <FormControl>
                           <Input
+                            disabled={form.formState.isSubmitting || !isEdit}
                             placeholder="Comment"
-                            className="h-10   border border-geantSap-gray-50 p-2 rounded-lg"
+                            className="h-10   border disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 border-geantSap-gray-50 p-2 rounded-lg"
                             {...field}
                           />
                         </FormControl>
@@ -443,29 +452,35 @@ const PODetails = () => {
                           </td>
                           <td className="px-6 ">
                             <Input
-                              value={item.quantity}
+                              value={item.quantity || 1}
                               key={i}
+                              disabled={!isEdit}
                               onChange={(e) => {
                                 setdocLine(
                                   docLine.map((value) => {
-                                    if (value.line != item.line) {
+                                    if (
+                                      value.lineNum != item.lineNum ||
+                                      value.line != item.line
+                                    ) {
                                       return value;
                                     } else {
                                       return {
                                         ...value,
                                         quantity: parseFloat(e.target.value)
-                                          ? parseFloat(e.target.value)
+                                          ? Math.abs(parseFloat(e.target.value))
                                           : 1,
                                         total: parseFloat(e.target.value)
-                                          ? parseFloat(e.target.value) *
-                                            value.price
+                                          ? Math.abs(
+                                              parseFloat(e.target.value) *
+                                                value.price
+                                            )
                                           : value.price,
                                       };
                                     }
                                   })
                                 );
                               }}
-                              className="w-[5rem] p-0 h-1/2 border-0 text-center rounded-lg"
+                              className="w-[5rem] p-0 h-1/2 border-0 disabled:opacity-50 text-center rounded-lg"
                             />
                           </td>
                           <td className="px-6 py-3">{item.uomCode}</td>
@@ -488,24 +503,27 @@ const PODetails = () => {
                           <td className="px-6 py-3">
                             <SelectWarehouse
                               item={item}
+                              disable={!isEdit}
                               docLine={docLine}
                               setdocLine={setdocLine}
                             />
                           </td>
                           <td className="px-6">
                             <Button
+                              disabled={!isEdit}
                               onClick={() => {
                                 setdocLine(
                                   docLine.filter((value) => {
-                                    return value.lineNum
-                                      ? value.lineNum != item.lineNum
-                                      : value.line != item.line;
+                                    return (
+                                      value.lineNum !== item.lineNum ||
+                                      value.line !== item.line
+                                    );
                                   })
                                 );
                               }}
                               type="button"
                               size={"icon"}
-                              className=" flex p-0 items-center justify-center bg-transparent "
+                              className=" flex p-0 items-center disabled:opacity-50 justify-center bg-transparent "
                             >
                               <FontAwesomeIcon
                                 className="text-geantSap-error-500"
@@ -517,11 +535,13 @@ const PODetails = () => {
                       ))}
                       <tr className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                         <td className="px-6 py-3 ">
-                          <ItemSelect
-                            vendorCode={vendorCode}
-                            setState={setdocLine}
-                            state={docLine}
-                          />
+                          {isEdit && (
+                            <ItemSelect
+                              vendorCode={vendorCode}
+                              setState={setdocLine}
+                              state={docLine}
+                            />
+                          )}
                         </td>
                       </tr>
                     </tbody>
@@ -575,15 +595,80 @@ const PODetails = () => {
             </div>
           </DataRenderer>
           <div className="flex justify-end gap-x-4 p-6 border-t borde-geantSap-gray-50">
-            <Button className="bg-transparent text-geantSap-primary-600 border border-geantSap-gray-100 rounded-lg">
-              Save PO as
-            </Button>
-            <Button className="bg-geantSap-primary-500  rounded-lg">
-              Edit
-            </Button>
+            {form.formState.errors.root && (
+              <div className="text-center text-sm rounded-lg border border-red-500 bg-red-200 w-1/2 p-2">
+                {form.formState.errors.root.message}
+              </div>
+            )}
+
+            {!isEdit ? (
+              <>
+                <Button
+                  type="button"
+                  disabled={activePO?.status === "Closed" || isSubmitting}
+                  onClick={() => {
+                    if (activePO) {
+                      cancelPO(
+                        activePO.documentEntry,
+                        navigate,
+                        toast,
+                        setisSubmitting
+                      );
+                    }
+                  }}
+                  className="bg-transparent text-geantSap-error-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg"
+                >
+                  Cancel PO
+                </Button>
+                <Button
+                  type="button"
+                  disabled={form.formState.isSubmitting}
+                  className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg"
+                >
+                  Save PO as
+                </Button>
+                <Button
+                  disabled={activePO?.status === "Closed"}
+                  type="button"
+                  onClick={(e) => {
+                    if (!isEdit) {
+                      e.preventDefault();
+                      setisEdit(true);
+                    }
+                  }}
+                  className="bg-geantSap-primary-500 disabled:opacity-50 rounded-lg"
+                >
+                  Edit
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setisEdit(false);
+                  }}
+                  disabled={form.formState.isSubmitting}
+                  className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg"
+                >
+                  Cancel Edit
+                </Button>
+                <Button
+                  disabled={form.formState.isSubmitting}
+                  type="submit"
+                  onClick={form.handleSubmit(onSubmit)}
+                  className="bg-geantSap-primary-500  disabled:opacity-50 rounded-lg"
+                >
+                  {form.formState.isSubmitting && (
+                    <FontAwesomeIcon className="" icon={faSpinner} spin />
+                  )}
+                  Save
+                </Button>
+              </>
+            )}
           </div>
         </div>
-      </form>
+      </div>
     </Form>
   );
 };

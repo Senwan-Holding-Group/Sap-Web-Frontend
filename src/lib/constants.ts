@@ -80,5 +80,6 @@ export const sectionList = [
   { sectionCode: "83", section: "CONS. L.H.Hold" ,sectionName:"83 - CONS. L.H.Hold"},
   { sectionCode: "90", section: "CONSUMABLES" ,sectionName:"90 - CONSUMABLES"},
   { sectionCode: "99", section: "Management RCV" ,sectionName:"99 - Management RCV"},
+  { sectionCode: "999",section: "MIX" ,sectionName:"999 - MIX"},
 ];
 

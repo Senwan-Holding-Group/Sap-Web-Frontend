@@ -23,6 +23,9 @@ const CreatePO = () => {
       <DialogContent
         className=" sm:max-w-[90rem]  w-[90%]"
         aria-describedby={undefined}
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
       >
         <div className=" flex 3xl:h-[47.5rem] h-[40rem] overflow-scroll flex-col justify-between w-full  ">
           <div className="px-6  mt-4">

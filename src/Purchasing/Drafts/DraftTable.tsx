@@ -22,7 +22,7 @@ const DraftTable = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["draft",search.searchValue],
+    queryKey: ["draft",search],
     queryFn: () =>
       getActivePOs(
         `/po/draft?${search.searchKey}=${search.searchValue}&perPage=100`,
