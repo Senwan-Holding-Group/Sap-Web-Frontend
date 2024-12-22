@@ -122,7 +122,6 @@ const PODetails = () => {
   const calculateLineTotal = (quantity: number, price: number): number => {
     return Number((Math.abs(quantity) * price).toFixed(4));
   };
-
   const updateLineQuantity = (
     lineNum: number,
     line: number,
@@ -618,6 +617,7 @@ const PODetails = () => {
             {!isEdit ? (
               <>          
                <Alert
+                  disabled={activePO?.status === "Closed"}
                   title="Cancel PO"
                   description="Are you sure you want to cancel this PO?"
                   cancelPO={handleCancelPO}

@@ -11,15 +11,16 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
 type CancelPOAlertProps = {
+  disabled:boolean,
   cancelPO: () => void;
   title: string;
   description: string;
 };
-const CancelPOAlert = ({cancelPO,title,description}:CancelPOAlertProps) => {
+const CancelPOAlert = ({disabled,cancelPO,title,description}:CancelPOAlertProps) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="bg-transparent text-geantSap-error-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg">
+        <Button disabled={disabled} className="bg-transparent text-geantSap-error-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg">
           Cancel PO
         </Button>
       </AlertDialogTrigger>
