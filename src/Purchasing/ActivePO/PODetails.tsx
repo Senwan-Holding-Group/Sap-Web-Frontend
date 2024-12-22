@@ -45,6 +45,7 @@ import { Input } from "@/components/ui/input";
 import SelectWarehouse from "@/components/SelectWarehouse";
 import ItemSelect from "@/components/ItemsSelect";
 import Loader from "@/components/ui/Loader";
+import Alert from "@/components/CancelPOAlert";
 
 const PODetails = () => {
   const { id } = useParams();
@@ -144,6 +145,11 @@ const PODetails = () => {
         };
       })
     );
+  };
+  const handleCancelPO = () => {
+    if (activePO) {
+      cancelPO(activePO.documentEntry, navigate, toast, setisSubmitting);
+    }
   };
   const vendorCode = form.watch("vendorCode");
 
@@ -610,24 +616,12 @@ const PODetails = () => {
             )}
 
             {!isEdit ? (
-              <>
-                <Button
-                  type="button"
-                  disabled={activePO?.status === "Closed" || isSubmitting}
-                  onClick={() => {
-                    if (activePO) {
-                      cancelPO(
-                        activePO.documentEntry,
-                        navigate,
-                        toast,
-                        setisSubmitting
-                      );
-                    }
-                  }}
-                  className="bg-transparent text-geantSap-error-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg"
-                >
-                  Cancel PO
-                </Button>
+              <>          
+               <Alert
+                  title="Cancel PO"
+                  description="Are you sure you want to cancel this PO?"
+                  cancelPO={handleCancelPO}
+                />
                 <Button
                   type="button"
                   disabled={form.formState.isSubmitting}
