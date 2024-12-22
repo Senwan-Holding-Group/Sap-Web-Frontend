@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,6 +12,8 @@ import {
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { Button } from "./button";
+import { useAuth } from "@/api/Auth/useAuth";
+import { useState } from "react";
 
 const menuItems = [
   {
@@ -62,8 +63,19 @@ const Sidebar = ({
   toggle,
 }: {
   expand: boolean;
-  toggle: (close?:boolean) => void;
+  toggle: (close?: boolean) => void;
 }) => {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const { logout } = useAuth();
+  const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+       logout();
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
   return (
     <div className="w-full h-full flex flex-col gap-y-10 bg-white z-50">
       <div className=" w-full  flex flex-col gap-y-4  p-4 ">
@@ -110,7 +122,7 @@ const Sidebar = ({
           >
             {i.items.map((item) => (
               <NavLink
-              onClick={() => toggle(true)}
+                onClick={() => toggle(true)}
                 to={item.path}
                 key={item.label}
                 style={({ isActive }) => ({
@@ -119,7 +131,6 @@ const Sidebar = ({
                   margin: isActive ? "0 0.5rem" : "0 1rem",
                   borderRadius: isActive ? "0.5rem" : "",
                   padding: isActive ? "0.25rem 0.5rem" : "",
-                  
                 })}
                 className={`flex items-center h-8  rounded-lg  ${
                   expand ? "justify-between " : "justify-center w-[2.375rem] "
@@ -134,8 +145,10 @@ const Sidebar = ({
             {i.title === "OTHER" && (
               <div className="px-4 my-4">
                 <Button
+                  onClick={handleLogout}
                   variant="destructive"
-                  className={`${expand ? "w-56" : "w-10"}`}
+                  disabled={isLoggingOut}
+                  className={`disabled:opacity-50  ${expand ? "w-56" : "w-10"}`}
                 >
                   <FontAwesomeIcon icon={faArrowLeftFromBracket} />
                   {expand && "Logout"}

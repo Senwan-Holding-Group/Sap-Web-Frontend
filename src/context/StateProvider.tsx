@@ -6,9 +6,10 @@ type StateProviderProps = {
 };
 const StateProvider = ({ children }: StateProviderProps) => {
   const [error, setError] = useState<string | undefined >();
+  const [totalPage, setTotalPage] = useState<number>(0);
 
   return (
-    <StateContext.Provider value={{ error, setError }}>
+    <StateContext.Provider value={{ error, setError,totalPage, setTotalPage }}>
       {children}
     </StateContext.Provider>
   );

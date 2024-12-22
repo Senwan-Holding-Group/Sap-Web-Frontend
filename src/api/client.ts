@@ -1,18 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ActivePo, DocumentLine, VendorSelectList } from "@/lib/types";
 import api from ".";
-import { CreatePORequest, EditDocumentRequest } from "@/lib/formsValidation";
+import {
+  CreatePORequest,
+  EditDocumentRequest,
+  LoginRequest,
+} from "@/lib/formsValidation";
 import { cn } from "@/lib/utils";
 import { QueryClient } from "@tanstack/react-query";
 import { NavigateFunction } from "react-router-dom";
 import { UseFormReturn } from "react-hook-form";
-
+import secureLocalStorage from "react-secure-storage";
+export const login = async (
+  data: LoginRequest,
+  setToken: React.Dispatch<React.SetStateAction<string | null | undefined>>,
+  navigate: NavigateFunction,
+  form: UseFormReturn<LoginRequest>
+) => {
+  try {
+    const res = await api.post("/auth/login", data);
+    setToken(res.data.token);
+    secureLocalStorage.setItem("token", res.data.token);
+    navigate("/", { replace: true });
+  } catch (error: any) {
+    form.setError("root", {
+      message: error.response.data.message,
+    });
+    console.log(error);
+  }
+};
 export const getActivePOs = async (
   url: string,
-  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setTotalPage: React.Dispatch<React.SetStateAction<number>>
 ) => {
   try {
     const res = await api.get(url);
+    setTotalPage(res.data.totalPage);
     return res.data.data as ActivePo[];
   } catch (error: any) {
     console.log(error);
@@ -46,7 +70,7 @@ export const getItemsByVendor = async (
 export const getVendors = async (
   url: string,
   setError: React.Dispatch<React.SetStateAction<string | undefined>>,
-  toast:any
+  toast: any
 ) => {
   try {
     const res = await api.get(url);
@@ -69,7 +93,6 @@ export const createPo = async (
   setdocLine: React.Dispatch<React.SetStateAction<DocumentLine[]>>,
   toast: any,
   queryClient: QueryClient
-
 ) => {
   try {
     await api.post("/po", PO);
@@ -97,13 +120,12 @@ export const createPo = async (
   }
 };
 export const EditDocument = async (
-  url:string,
+  url: string,
   PO: EditDocumentRequest,
   form: UseFormReturn<EditDocumentRequest>,
   setdocLine: React.Dispatch<React.SetStateAction<DocumentLine[]>>,
   toast: any,
-  queryClient: QueryClient,
-
+  queryClient: QueryClient
 ) => {
   try {
     await api.patch(url, PO);
@@ -138,7 +160,7 @@ export const cancelPO = async (
   setisSubmitting(true);
   try {
     await api.post(`/po/cancel/${docEntry}`);
-  
+
     toast({
       className: cn(
         "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
@@ -156,8 +178,7 @@ export const cancelPO = async (
     });
     console.log(error);
   }
-  setisSubmitting(false)
-
+  setisSubmitting(false);
 };
 export const saveDraftToPO = async (
   docEntry: number,
@@ -168,7 +189,7 @@ export const saveDraftToPO = async (
   setisSubmitting(true);
   try {
     await api.post(`/po/draft/${docEntry}`);
-  
+
     toast({
       className: cn(
         "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
@@ -186,6 +207,5 @@ export const saveDraftToPO = async (
     });
     console.log(error);
   }
-  setisSubmitting(false)
-
+  setisSubmitting(false);
 };

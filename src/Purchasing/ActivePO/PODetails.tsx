@@ -53,7 +53,6 @@ const PODetails = () => {
   const [isEdit, setisEdit] = useState(false);
   const [isSubmitting, setisSubmitting] = useState(false);
   const navigate = useNavigate();
-
   const { toast } = useToast();
   const [docLine, setdocLine] = useState<DocumentLine[]>([]);
 
@@ -119,12 +118,39 @@ const PODetails = () => {
       queryClient
     );
   };
+  const calculateLineTotal = (quantity: number, price: number): number => {
+    return Number((Math.abs(quantity) * price).toFixed(4));
+  };
+
+  const updateLineQuantity = (
+    lineNum: number,
+    line: number,
+    newQuantity: string
+  ) => {
+    const quantity = parseFloat(newQuantity);
+
+    if (isNaN(quantity) || quantity <= 0) return;
+
+    setdocLine(
+      docLine.map((value) => {
+        if (value.lineNum != lineNum || value.line != line) {
+          return value;
+        }
+
+        return {
+          ...value,
+          quantity: Math.abs(quantity),
+          total: calculateLineTotal(quantity, value.price),
+        };
+      })
+    );
+  };
   const vendorCode = form.watch("vendorCode");
 
   return (
     <Form {...form}>
       <div className=" h-[34rem] 3xl:h-[47rem] box-border max-h-[47rem] overflow-auto  ">
-        <Loader enable={form.formState.isSubmitting} />
+        <Loader enable={form.formState.isSubmitting || isSubmitting} />
 
         <div className="bg-white border  border-geantSap-gray-25 geantShadow h-full  rounded-xl flex flex-col justify-between">
           <DataRenderer isLoading={isFetching} isError={isError}>
@@ -456,28 +482,10 @@ const PODetails = () => {
                               key={i}
                               disabled={!isEdit}
                               onChange={(e) => {
-                                setdocLine(
-                                  docLine.map((value) => {
-                                    if (
-                                      value.lineNum != item.lineNum ||
-                                      value.line != item.line
-                                    ) {
-                                      return value;
-                                    } else {
-                                      return {
-                                        ...value,
-                                        quantity: parseFloat(e.target.value)
-                                          ? Math.abs(parseFloat(e.target.value))
-                                          : 1,
-                                        total: parseFloat(e.target.value)
-                                          ? Math.abs(
-                                              parseFloat(e.target.value) *
-                                                value.price
-                                            )
-                                          : value.price,
-                                      };
-                                    }
-                                  })
+                                updateLineQuantity(
+                                  item.lineNum,
+                                  item.line,
+                                  e.target.value
                                 );
                               }}
                               className="w-[5rem] p-0 h-1/2 border-0 disabled:opacity-50 text-center rounded-lg"

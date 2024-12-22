@@ -10,8 +10,13 @@ import { useNavigate } from "react-router-dom";
 import CreatePO from "../ActivePO/CreatePO";
 
 const DraftTable = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
   const navigate = useNavigate();
-  const { setError } = useStateContext();
+  const { setError ,setTotalPage,totalPage} = useStateContext();
   const [search, setSearch] = useState({
     searchKey: draftmenu[0].value,
     searchValue: "",
@@ -22,11 +27,11 @@ const DraftTable = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["draft",search],
+    queryKey: ["draft", search,currentPage],
     queryFn: () =>
       getActivePOs(
-        `/po/draft?${search.searchKey}=${search.searchValue}&perPage=100`,
-        setError
+        `/po/draft?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`,
+        setError,setTotalPage
       ),
     refetchOnWindowFocus: false,
     refetchOnMount: true,
@@ -35,7 +40,7 @@ const DraftTable = () => {
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex sm:justify-between items-center flex-col sm:flex-row  gap-4">
-      <Search menuList={draftmenu} setSearch={setSearch} search={search} />
+        <Search menuList={draftmenu} setSearch={setSearch} search={search} />
         <CreatePO />
       </div>
       <div className=" 3xl:h-[696px] h-[500px]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
@@ -102,7 +107,11 @@ const DraftTable = () => {
             <tfoot className="sticky -bottom-1 w-full">
               <tr>
                 <td colSpan={8}>
-                  <Pagination />
+                  <Pagination
+                    totalPages={totalPage}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                  />
                 </td>
               </tr>
             </tfoot>

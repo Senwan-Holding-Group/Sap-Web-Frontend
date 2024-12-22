@@ -21,7 +21,7 @@ const ItemsTable = () => {
         <tbody className="bg-white [&_tr:last-child]:border-0 ">
           <tr
             onClick={() => navigate(`/items/details/${1}`)}
-            className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
+            className="text-geantSap-black text-nowrap font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
           >
             <td className="px-6 py-3">128032</td>
             <td className="px-6 py-3">الريحان حليب خالي الدسم 1 لتر</td>

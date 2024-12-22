@@ -5,12 +5,15 @@ import "./index.css";
 import Router from "./Router/Router.tsx";
 import StateProvider from "./context/StateProvider.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
+import AuthProvider from "./api/Auth/AuthProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <StateProvider>
-      <Toaster />
-      <Router />
-    </StateProvider>
+    <AuthProvider>
+      <StateProvider>
+        <Toaster />
+        <Router />
+      </StateProvider>
+    </AuthProvider>
   </StrictMode>
 );

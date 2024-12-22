@@ -1,7 +1,7 @@
 import { Check, ChevronDown } from "lucide-react";
 import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { getVendors } from "@/api/client";
@@ -24,9 +24,12 @@ type SelectVendorProps = {
   form: UseFormReturn<CreatePORequest>;
   disable: boolean;
 };
+const ITEMS_PER_PAGE = 100; // Number of items to show at once
 
 const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
   const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
   const { setError } = useStateContext();
   const { toast } = useToast();
 
@@ -40,8 +43,38 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
     refetchOnWindowFocus: true,
     refetchOnMount: false,
     cacheTime: 5 * 60 * 1000,
-    staleTime: 2 * 60 * 1000, 
+    staleTime: 2 * 60 * 1000,
   });
+
+  // Filter and slice vendors based on search and display count
+  const displayedVendors = useMemo(() => {
+    if (!vendorsList) return [];
+    
+    const filtered = searchTerm
+      ? vendorsList.filter((vendor) =>
+          vendor.vendor.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : vendorsList;
+
+    return filtered.slice(0, displayCount);
+  }, [vendorsList, searchTerm, displayCount]);
+
+  // Handle scroll to load more
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    const isNearBottom = scrollHeight - scrollTop <= clientHeight * 1.5;
+    const hasMore = displayCount < (vendorsList?.length || 0);
+
+    if (isNearBottom && hasMore) {
+      setDisplayCount(prev => Math.min(prev + ITEMS_PER_PAGE, vendorsList?.length || 0));
+    }
+  };
+
+  // Debounced search handler
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    setDisplayCount(ITEMS_PER_PAGE); // Reset display count when searching
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -51,7 +84,7 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between rounded-lg disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 "
+          className="w-full justify-between rounded-lg disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400"
         >
           {field.value
             ? vendorsList?.find((vendor) => vendor.vendorCode === field.value)
@@ -60,15 +93,22 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
           <ChevronDown className="opacity-50 size-6" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className=" p-0">
+      <PopoverContent className="p-0">
         <Command>
-          <CommandInput placeholder="Search Vendors..." />
+          <CommandInput 
+            placeholder="Search Vendors..." 
+            value={searchTerm}
+            onValueChange={handleSearch}
+          />
           <CommandList>
-            <ScrollArea className="h-[300px] ">
+            <ScrollArea 
+              className="h-[300px]" 
+              onScroll={handleScroll}
+            >
               <DataRenderer isLoading={isFetching} isError={isError}>
                 <CommandEmpty>No vendor found.</CommandEmpty>
                 <CommandGroup>
-                  {vendorsList?.map((vendor) => (
+                  {displayedVendors.map((vendor) => (
                     <CommandItem
                       {...field}
                       key={vendor.vendorCode}
@@ -89,6 +129,11 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
                       />
                     </CommandItem>
                   ))}
+                  {displayCount < (vendorsList?.length || 0) && (
+                    <CommandItem className="text-center text-sm text-gray-500">
+                      Scroll to load more
+                    </CommandItem>
+                  )}
                 </CommandGroup>
               </DataRenderer>
             </ScrollArea>

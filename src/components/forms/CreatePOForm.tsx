@@ -22,7 +22,7 @@ import {
 import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { DialogClose } from "../ui/dialog";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { DocumentLine } from "@/lib/types";
 import { Calendar } from "../ui/calendar";
 import SelectVendor from "../SelectVendor";
@@ -71,6 +71,34 @@ const CreatePOForm = () => {
     };
     return createPo(newValues, form, setdocLine, toast, queryClient);
   };
+  const calculateDocumentTotal = useCallback(() => {
+    return docLine.reduce((sum, line) => sum + (line.total || 0), 0);
+  }, [docLine]);
+  const documentTotal = calculateDocumentTotal();
+  const calculateLineTotal = (quantity: number, price: number): number => {
+    return Number((Math.abs(quantity) * price).toFixed(4));
+  };
+
+  const updateLineQuantity = (line: number, newQuantity: string) => {
+    const quantity = parseFloat(newQuantity);
+
+    if (isNaN(quantity) || quantity <= 0) return;
+
+    setdocLine(
+      docLine.map((value) => {
+        if (value.line != line) {
+          return value;
+        }
+
+        return {
+          ...value,
+          quantity: Math.abs(quantity),
+          total: calculateLineTotal(quantity, value.price),
+        };
+      })
+    );
+  };
+
   const vendorCode = form.watch("vendorCode");
   return (
     <Form {...form}>
@@ -241,10 +269,11 @@ const CreatePOForm = () => {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 4,
                       }).format(
-                        docLine.reduce((sum, item) => sum + item.total, 0)
+                        // docLine.reduce((sum, item) => sum + item.total, 0)
+                        documentTotal
                       )} LYD`
                     : "0.0000 LYD"}
-                </span> 
+                </span>
               </div>
             </div>
           </div>
@@ -288,24 +317,7 @@ const CreatePOForm = () => {
                             value={item.quantity}
                             key={i}
                             onChange={(e) => {
-                              setdocLine(
-                                docLine.map((value) => {
-                                  if (value.line != item.line) {
-                                    return value;
-                                  } else {
-                                    return {
-                                      ...value,
-                                      quantity: parseFloat(e.target.value)
-                                        ? parseFloat(e.target.value)
-                                        : 1,
-                                      total: parseFloat(e.target.value)
-                                        ? parseFloat(e.target.value) *
-                                          value.price
-                                        : value.price,
-                                    };
-                                  }
-                                })
-                              );
+                              updateLineQuantity(item.line, e.target.value);
                             }}
                             className="w-[5rem] p-0 h-1/2 border-0 text-center rounded-lg"
                           />

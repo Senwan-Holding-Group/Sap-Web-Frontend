@@ -1,8 +1,15 @@
 import Pagination from "@/components/ui/Pagination";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const MissingQtyTable = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 50;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className=" 3xl:h-[696px] h-[500px]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
@@ -147,19 +154,21 @@ const MissingQtyTable = () => {
             <td className="px-6 py-3">5,000.00 LYD </td>
             <td className="px-6 py-3">-7,000.00 LYD </td>
           </tr>
-       
-      
         </tbody>
-        <tfoot className="sticky -bottom-1 w-full">
+        <tfoot className="sticky h-10 -bottom-1 w-full">
           <tr>
             <td colSpan={7}>
-              <Pagination />
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+              />
             </td>
           </tr>
         </tfoot>
       </table>
     </div>
-  )
-}
+  );
+};
 
-export default MissingQtyTable
+export default MissingQtyTable;

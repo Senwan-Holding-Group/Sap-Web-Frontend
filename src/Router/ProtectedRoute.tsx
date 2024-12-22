@@ -1,25 +1,27 @@
 import { useAuth } from "@/api/Auth/useAuth";
-import { PermissionName } from "@/lib/constants";
-import { usePermissions } from "@/lib/hooks/UsePermissions";
+// import { PermissionName } from "@/lib/constants";
+// import { usePermissions } from "@/lib/hooks/UsePermissions";
 import { Navigate, useLocation } from "react-router-dom";
 
 type ProtectedRouteProps = {
-  permission?: PermissionName;
+  // permission?: PermissionName;
   children: React.ReactNode;
 };
-const ProtectedRoute = ({ permission, children }: ProtectedRouteProps) => {
-  const { token } = useAuth();
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+  const { token, isLoading } = useAuth();
   const location = useLocation();
 
-  const { hasPermission } = usePermissions();
-  if (token && !hasPermission(permission!)) {
-    return <></>;
+  // Don't render anything while checking authentication
+  if (isLoading) {
+    return null;
   }
-  return token ? (
-    children
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
-  );
+
+  if (token === null) {
+    // Only redirect if token is explicitly null
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

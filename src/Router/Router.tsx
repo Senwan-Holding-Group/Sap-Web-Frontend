@@ -22,6 +22,7 @@ import VendorsDetails from "@/Vendors/VendorsDetails";
 import Items from "@/Items/Items";
 import ItemsTable from "@/Items/ItemsTable";
 import ItemDetails from "@/Items/ItemDetails";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -31,11 +32,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/purchasing",
-        element: <Purchasing />,
+        element: (
+          <ProtectedRoute>
+            <Purchasing />
+          </ProtectedRoute>
+        ),
         children: [
           {
             path: "/purchasing/draft",
@@ -97,7 +106,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/items",
-        element: <Items />,
+        element: (
+          <ProtectedRoute>
+            <Items />
+          </ProtectedRoute>
+        ),
         children: [
           {
             path: "/items",
@@ -111,7 +124,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/vendors",
-        element: <Vendors />,
+        element: (
+          <ProtectedRoute>
+            <Vendors />
+          </ProtectedRoute>
+        ),
         children: [
           {
             path: "/vendors",

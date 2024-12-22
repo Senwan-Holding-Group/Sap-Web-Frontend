@@ -8,7 +8,7 @@ const queryClient = new QueryClient();
 const App = () => {
   const [expand, toggle] = useToggleState(false);
   return (
-    <div className="h-screen w-screen bg-geantSap-bg flex">
+    <div className="h-screen w-screen bg-geantSap-bg flex font-sans">
       <QueryClientProvider client={queryClient}>
         <div
           className={`fixed transition-all ease-out duration-300 rounded-tr-lg rounded-br-lg shadow h-full z-10 ${
@@ -17,7 +17,7 @@ const App = () => {
         >
           <Sidebar expand={expand} toggle={toggle} />
         </div>
-        <div className={`py-6 pl-24 pr-6 w-full h-full`}>
+        <div className={`py-6 pl-24 pr-6 w-full h-full font-sans`}>
           <Outlet />
         </div>
       </QueryClientProvider>

@@ -10,6 +10,9 @@ export default {
       screens:{
         "3xl":"1580px"
       },
+      fontFamily: {
+        sans: ['Poppins', 'serif'],
+      },
   		colors: {
         geantSap:{
           primary:{
