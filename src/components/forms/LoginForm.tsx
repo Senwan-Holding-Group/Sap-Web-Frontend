@@ -78,6 +78,7 @@ const LoginForm = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
+                    type="password"
                       placeholder="Password"
                       className="h-10  w-[21.313rem] border  border-geantSap-gray-50 p-2 rounded-lg"
                       {...field}

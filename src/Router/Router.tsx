@@ -23,15 +23,20 @@ import Items from "@/Items/Items";
 import ItemsTable from "@/Items/ItemsTable";
 import ItemDetails from "@/Items/ItemDetails";
 import ProtectedRoute from "./ProtectedRoute";
+import SplashScreen from "@/components/SplashScreen";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <SplashScreen />,
+  },
+  {
+    path: "/sap",
     element: <App />,
     errorElement: <NotFound />,
     children: [
       {
-        path: "/",
+        path: "/sap/dashboard",
         element: (
           <ProtectedRoute>
             <Dashboard />
@@ -39,7 +44,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/purchasing",
+        path: "/sap/purchasing",
         element: (
           <ProtectedRoute>
             <Purchasing />
@@ -47,11 +52,11 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/purchasing/draft",
+            path: "/sap/purchasing/draft",
             element: <Draft />,
             children: [
               {
-                path: "/purchasing/draft",
+                path: "/sap/purchasing/draft",
                 element: <DraftTable />,
               },
               {
@@ -61,11 +66,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/purchasing/active-PO",
+            path: "/sap/purchasing/active-PO",
             element: <ActivePO />,
             children: [
               {
-                path: "/purchasing/active-PO",
+                path: "/sap/purchasing/active-PO",
                 element: <POTable />,
               },
               {
@@ -75,11 +80,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/purchasing/missing-qty",
+            path: "/sap/purchasing/missing-qty",
             element: <MissingQty />,
             children: [
               {
-                path: "/purchasing/missing-qty",
+                path: "/sap/purchasing/missing-qty",
                 element: <MissingQtyTable />,
               },
               {
@@ -89,11 +94,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/purchasing/matching",
+            path: "/sap/purchasing/matching",
             element: <Matching />,
             children: [
               {
-                path: "/purchasing/matching",
+                path: "/sap/purchasing/matching",
                 element: <MatchingTable />,
               },
               {
@@ -105,7 +110,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/items",
+        path: "/sap/items",
         element: (
           <ProtectedRoute>
             <Items />
@@ -113,7 +118,7 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/items",
+            path: "/sap/items",
             element: <ItemsTable />,
           },
           {
@@ -123,7 +128,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/vendors",
+        path: "/sap/vendors",
         element: (
           <ProtectedRoute>
             <Vendors />
@@ -131,7 +136,7 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/vendors",
+            path: "/sap/vendors",
             element: <VendorsTable />,
           },
           {

@@ -11,7 +11,7 @@ import {
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import Search from "./ui/Search";
-import { itemMenu } from "@/lib/constants";
+import { itemVendorMenu } from "@/lib/constants";
 import { useState } from "react";
 import { DocumentLine } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
@@ -28,7 +28,7 @@ type ItemSelectProps = {
 const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
   const { setError } = useStateContext();
   const [search, setSearch] = useState({
-    searchKey: itemMenu[0].value,
+    searchKey: itemVendorMenu[0].value,
     searchValue: "",
   });
   const {
@@ -70,7 +70,7 @@ const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
               </span>
 
               <Search
-                menuList={itemMenu}
+                menuList={itemVendorMenu}
                 search={search}
                 setSearch={setSearch}
               />
@@ -93,21 +93,12 @@ const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
                     <tr
                       key={item.itemCode}
                       onClick={() => {
-                        // if (
-                        //   !state.find(
-                        //     (value) => value.itemCode === item.itemCode
-                        //   )
-                        // ) {
+                     
                           setState((prev) => [
                             ...prev,
                             { ...item, quantity: 1,  total: parseFloat(item.price.toString()),line:state.length++ },
                           ]);
-                        // } else {
-                          // const newList=state.filter(
-                          //   (value) => value.itemCode != item.itemCode
-                          // )
-                          // setState(newList)
-                        // }
+                     
                       }}
                       className={`text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25  cursor-pointer ${
                         state.find(

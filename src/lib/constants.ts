@@ -16,6 +16,15 @@ export const activePOmenu = [
   { label: "Document date", value: "documentDate" },
   { label: "Document total", value: "documentTotal" },
 ];
+export const missingQTYmenu = [
+  { label: "Vendor code", value: "vendorCode" },
+  { label: "Vendor name", value: "vendorName" },
+  { label: "PO value", value: "poValue" },
+  { label: "GR value", value: "GRValue" },
+  { label: "Delivery date", value: "deliveryDate" },
+  { label: "Document NO", value: "documentNumber" },
+  { label: "Document date", value: "documentDate" },
+];
 export const draftmenu = [
   { label: "Vendor code", value: "vendorCode" },
   { label: "Vendor name", value: "vendorName" },
@@ -23,11 +32,26 @@ export const draftmenu = [
   { label: "Status", value: "status" },
   { label: "Process status", value: "processStatus" },
 ];
-export const itemMenu = [
+export const vendorsmenu = [
+  { label: "Vendor code", value: "vendorCode" },
+  { label: "Vendor name", value: "vendorName" },
+  { label: "Status", value: "status" },
+  { label: "Account balance", value: "accountBalance" },
+  { label: "PO balance", value: "poBalance" },
+  { label: "GR balance", value: "grBalance" },
+];
+export const itemVendorMenu = [
   { label: "Item code", value: "itemCode" },
   { label: "Item name ", value: "itemName" },
   { label: "Item barcode", value: "barcode" },
-
+];
+export const itemsMenu = [
+  { label: "Item code", value: "itemCode" },
+  { label: "Item name ", value: "itemName" },
+  { label: "Status", value: "status" },
+  { label: "Department", value: "department" },
+  { label: "Section", value: "section" },
+  { label: "Barcode", value: "barcode" },
 ];
 export const sectionList = [
   { sectionCode: "11", section: "BEVERAGE" ,sectionName:"11 - BEVERAGE"},

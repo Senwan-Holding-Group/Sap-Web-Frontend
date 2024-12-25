@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ActivePo, DocumentLine, VendorSelectList } from "@/lib/types";
+import { ActivePo, DocumentLine, Item, MissingQTY, Vendor, VendorSelectList } from "@/lib/types";
 import api from ".";
 import {
   CreatePORequest,
@@ -21,7 +21,7 @@ export const login = async (
     const res = await api.post("/auth/login", data);
     setToken(res.data.token);
     secureLocalStorage.setItem("token", res.data.token);
-    navigate("/", { replace: true });
+    navigate("/sap/dashboard", { replace: true });
   } catch (error: any) {
     form.setError("root", {
       message: error.response.data.message,
@@ -29,6 +29,7 @@ export const login = async (
     console.log(error);
   }
 };
+// Active PO and Draft
 export const getActivePOs = async (
   url: string,
   setError: React.Dispatch<React.SetStateAction<string | undefined>>,
@@ -53,38 +54,6 @@ export const getActivePObyDocEntry = async (
   } catch (error: any) {
     console.log(error);
     setError(error.message);
-  }
-};
-export const getItemsByVendor = async (
-  url: string,
-  setError: React.Dispatch<React.SetStateAction<string | undefined>>
-) => {
-  try {
-    const res = await api.get(url);
-    return res.data.data as DocumentLine[];
-  } catch (error: any) {
-    console.log(error);
-    setError(error.message);
-  }
-};
-export const getVendors = async (
-  url: string,
-  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
-  toast: any
-) => {
-  try {
-    const res = await api.get(url);
-    return res.data.data as VendorSelectList[];
-  } catch (error: any) {
-    console.log(error);
-    toast({
-      className: cn(
-        "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
-      ),
-      variant: "destructive",
-      description: error.response.data.message,
-    });
-    setError(error.response.data.message);
   }
 };
 export const createPo = async (
@@ -209,3 +178,136 @@ export const saveDraftToPO = async (
   }
   setisSubmitting(false);
 };
+// Vendor
+export const getVendors = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setTotalPage: React.Dispatch<React.SetStateAction<number>>
+) => {
+  try {
+    const res = await api.get(url);
+    setTotalPage(res.data.totalPage);
+    return res.data.data as Vendor[];
+  } catch (error: any) {
+    console.log(error);
+    if(error.status===404){
+
+      setError("Not found check your entry");
+    }else{
+      setError(error.message);
+    }
+
+  }
+};
+export const getVendorsbyCode = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data.data as Vendor;
+  } catch (error: any) {
+    console.log(error);
+    setError(error.message);
+  }
+};
+export const getDocVendors = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
+  toast: any
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data.data as VendorSelectList[];
+  } catch (error: any) {
+    console.log(error);
+    toast({
+      className: cn(
+        "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+      ),
+      variant: "destructive",
+      description: error.response.data.message,
+    });
+    setError(error.response.data.message);
+  }
+};
+//Missing QTY
+export const getMissingQuantity = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setTotalPage: React.Dispatch<React.SetStateAction<number>>
+) => {
+  try {
+    const res = await api.get(url);
+    setTotalPage(res.data.totalPage);
+    return res.data.data as MissingQTY[];
+  } catch (error: any) {
+    console.log(error);
+    if(error.status===404){
+
+      setError("Not found check your entry");
+    }else{
+      setError(error.message);
+    }
+
+  }
+};
+export const getMissingbyDocEntry = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data.data as MissingQTY;
+  } catch (error: any) {
+    console.log(error);
+    setError(error.message);
+  }
+};
+//ITems
+export const getItemsByVendor = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data.data as DocumentLine[];
+  } catch (error: any) {
+    console.log(error);
+    setError(error.message);
+  }
+};
+export const getItemByCode = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data.data as Item;
+  } catch (error: any) {
+    console.log(error);
+    setError(error.message);
+  }
+};
+export const getItems = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setTotalPage: React.Dispatch<React.SetStateAction<number>>
+) => {
+  try {
+    const res = await api.get(url);
+    setTotalPage(res.data.totalPage);
+    return res.data.data as Item[];
+  } catch (error: any) {
+    console.log(error);
+    if(error.status===404){
+
+      setError("Not found check your entry");
+    }else{
+      setError(error.message);
+    }
+
+  }
+};
+
+

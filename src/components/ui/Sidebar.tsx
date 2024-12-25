@@ -22,22 +22,22 @@ const menuItems = [
       {
         icon: <FontAwesomeIcon icon={faDiamonds4} />,
         label: "Dashboard",
-        path: "/",
+        path: "/sap/dashboard",
       },
       {
         icon: <FontAwesomeIcon icon={faBasketShopping} />,
         label: "Purchasing",
-        path: "/purchasing",
+        path: "/sap/purchasing",
       },
       {
         icon: <FontAwesomeIcon icon={faUsers} />,
         label: "Vendors",
-        path: "/vendors",
+        path: "/sap/vendors",
       },
       {
         icon: <FontAwesomeIcon icon={faSitemap} />,
         label: "Items Master Data",
-        path: "/items",
+        path: "/sap/items",
       },
     ],
   },

@@ -132,7 +132,7 @@ const DraftDetails = () => {
           <DataRenderer isLoading={isFetching} isError={isError}>
             <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">
               <Link
-                to={"/purchasing/draft"}
+                to={"/sap/purchasing/draft"}
                 className="size-10 border flex items-center   cursor-pointer border-geantSap-gray-100 rounded-lg p-2"
               >
                 <FontAwesomeIcon
@@ -408,42 +408,40 @@ const DraftDetails = () => {
                   </div>
                 </div>
                 <div className="flex flex-col w-[26.875rem] gap-y-6 ">
-                  <h1 className="font-bold text-lg text-geantSap-gray-500">
-                    Administrative data
-                  </h1>
-                  <div className="flex gap-x-4 mt-4 items-center font-normal text-base">
-                    <Label className=" text-geantSap-gray-500">
-                      Created By:
-                    </Label>
-                    <span id="createdby" className=" text-geantSap-black">
-                      Adam
-                    </span>
-                  </div>
-                  <div className="flex gap-x-4  items-center font-normal text-base">
-                    <Label className=" text-geantSap-gray-500">
-                      Created On:
-                    </Label>
-                    <span id="createdon" className=" text-geantSap-black">
-                      12/6/2024, 14:12:00 AM
-                    </span>
-                  </div>
-                  <div className="flex gap-x-4  items-center font-normal text-base">
-                    <Label className=" text-geantSap-gray-500">
-                      Edited By:
-                    </Label>
-                    <span id="Editedby" className=" text-geantSap-black">
-                      Adam
-                    </span>
-                  </div>
-                  <div className="flex gap-x-4  items-center font-normal text-base">
-                    <Label className=" text-geantSap-gray-500">
-                      Edited On:
-                    </Label>
-                    <span id="Editedon" className=" text-geantSap-black">
-                      12/6/2024, 14:12:00 AM
-                    </span>
-                  </div>
+                <h1 className="font-bold text-lg text-geantSap-gray-500">
+                  Administrative data
+                </h1>
+                <div className="flex gap-x-4 mt-4 items-center font-normal text-base">
+                  <Label className=" text-geantSap-gray-500">Created By:</Label>
+                  <span id="createdby" className=" text-geantSap-black">
+                    {draftDetails?.administrativeData?.createdBy}
+                  </span>
                 </div>
+                <div className="flex gap-x-4  items-center font-normal text-base">
+                  <Label className=" text-geantSap-gray-500">Created On:</Label>
+                  <span id="createdon" className=" text-geantSap-black">
+                    {draftDetails &&
+                      new Date(
+                        draftDetails?.administrativeData?.createdOn
+                      ).toDateString()}
+                  </span>
+                </div>
+                <div className="flex gap-x-4  items-center font-normal text-base">
+                  <Label className=" text-geantSap-gray-500">Edited By:</Label>
+                  <span id="Editedby" className=" text-geantSap-black">
+                    {draftDetails?.administrativeData?.editedBy}
+                  </span>
+                </div>
+                <div className="flex gap-x-4  items-center font-normal text-base">
+                  <Label className=" text-geantSap-gray-500">Edited On:</Label>
+                  <span id="Editedon" className=" text-geantSap-black">
+                    {draftDetails &&
+                      new Date(
+                        draftDetails?.administrativeData?.editedOn
+                      ).toDateString()}
+                  </span>
+                </div>
+              </div>
               </div>
               <Tabs defaultValue="item" className="w-full ">
                 <TabsList className="grid w-60 grid-cols-2 ">
@@ -522,7 +520,7 @@ const DraftDetails = () => {
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 4,
                               currency: "LYD",
-                            }).format(item.price)}{" "}
+                            }).format(item.price)}
                             LYD
                           </td>
                           <td className="px-6 py-3">

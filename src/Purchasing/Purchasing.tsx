@@ -1,30 +1,31 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 const taps = [
   {
     label: "Drafts",
-    path: "/purchasing/draft",
+    path: "/sap/purchasing/draft",
   },
   {
     label: "Active PO Orders",
-    path: "/purchasing/active-PO",
+    path: "/sap/purchasing/active-PO",
   },
   {
     label: "MissingQty",
-    path: "/purchasing/missing-qty",
+    path: "/sap/purchasing/missing-qty",
   },
   {
     label: "Matching",
-    path: "/purchasing/matching",
+    path: "/sap/purchasing/matching",
   },
 ];
 const Purchasing = () => {
-  // const navigate = useNavigate();
-  // const location = useLocation();
-  // const pathname = location.pathname === "/purchasing";
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathname = location.pathname === "/sap/purchasing";
 
-  // useEffect(() => {
-  //   navigate("/purchasing/draft");
-  // }, [pathname, navigate]);
+  useEffect(() => {
+    navigate("/sap/purchasing/draft");
+  }, [pathname, navigate]);
 
   return (
     <div className="overflow-hidden w-full flex  flex-col gap-y-4 ">
@@ -32,7 +33,7 @@ const Purchasing = () => {
         <h1 className="text-geantSap-primary-500 font-bold text-2xl leading-[36px] ">
           Purchasing
         </h1>
-        <div className="flex gapx border-b border-geantSap-gray-100 overflow-x-scroll text-nowrap  h-10">
+        <div className="flex  border-b border-geantSap-gray-100 overflow-x-scrol text-nowrap  h-10">
          {taps.map((tap)=>(
           <NavLink
             key={tap.label}

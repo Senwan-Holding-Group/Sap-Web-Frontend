@@ -46,6 +46,7 @@ import SelectWarehouse from "@/components/SelectWarehouse";
 import ItemSelect from "@/components/ItemsSelect";
 import Loader from "@/components/ui/Loader";
 import Alert from "@/components/CancelPOAlert";
+import SelectLayout from "@/components/SelectLayout";
 
 const PODetails = () => {
   const { id } = useParams();
@@ -161,7 +162,7 @@ const PODetails = () => {
           <DataRenderer isLoading={isFetching} isError={isError}>
             <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">
               <Link
-                to={"/purchasing/active-PO"}
+                to={"/sap/purchasing/active-PO"}
                 className="size-10 border flex items-center   cursor-pointer border-geantSap-gray-100 rounded-lg p-2"
               >
                 <FontAwesomeIcon
@@ -407,42 +408,40 @@ const PODetails = () => {
                   />
                 </div>
                 <div className="flex flex-col w-[26.875rem] gap-y-6 ">
-                  <h1 className="font-bold text-lg text-geantSap-gray-500">
-                    Administrative data
-                  </h1>
-                  <div className="flex gap-x-4 mt-4 items-center font-normal text-base">
-                    <Label className=" text-geantSap-gray-500">
-                      Created By:
-                    </Label>
-                    <span id="createdby" className=" text-geantSap-black">
-                      Adam
-                    </span>
-                  </div>
-                  <div className="flex gap-x-4  items-center font-normal text-base">
-                    <Label className=" text-geantSap-gray-500">
-                      Created On:
-                    </Label>
-                    <span id="createdon" className=" text-geantSap-black">
-                      12/6/2024, 14:12:00 AM
-                    </span>
-                  </div>
-                  <div className="flex gap-x-4  items-center font-normal text-base">
-                    <Label className=" text-geantSap-gray-500">
-                      Edited By:
-                    </Label>
-                    <span id="Editedby" className=" text-geantSap-black">
-                      Adam
-                    </span>
-                  </div>
-                  <div className="flex gap-x-4  items-center font-normal text-base">
-                    <Label className=" text-geantSap-gray-500">
-                      Edited On:
-                    </Label>
-                    <span id="Editedon" className=" text-geantSap-black">
-                      12/6/2024, 14:12:00 AM
-                    </span>
-                  </div>
+                <h1 className="font-bold text-lg text-geantSap-gray-500">
+                  Administrative data
+                </h1>
+                <div className="flex gap-x-4 mt-4 items-center font-normal text-base">
+                  <Label className=" text-geantSap-gray-500">Created By:</Label>
+                  <span id="createdby" className=" text-geantSap-black">
+                    {activePO?.administrativeData?.createdBy}
+                  </span>
                 </div>
+                <div className="flex gap-x-4  items-center font-normal text-base">
+                  <Label className=" text-geantSap-gray-500">Created On:</Label>
+                  <span id="createdon" className=" text-geantSap-black">
+                    {activePO &&
+                      new Date(
+                        activePO?.administrativeData?.createdOn
+                      ).toDateString()}
+                  </span>
+                </div>
+                <div className="flex gap-x-4  items-center font-normal text-base">
+                  <Label className=" text-geantSap-gray-500">Edited By:</Label>
+                  <span id="Editedby" className=" text-geantSap-black">
+                    {activePO?.administrativeData?.editedBy}
+                  </span>
+                </div>
+                <div className="flex gap-x-4  items-center font-normal text-base">
+                  <Label className=" text-geantSap-gray-500">Edited On:</Label>
+                  <span id="Editedon" className=" text-geantSap-black">
+                    {activePO &&
+                      new Date(
+                        activePO?.administrativeData?.editedOn
+                      ).toDateString()}
+                  </span>
+                </div>
+              </div>
               </div>
               <Tabs defaultValue="item" className="min-w-max  ">
                 <TabsList className="grid w-60 grid-cols-2 ">
@@ -617,18 +616,12 @@ const PODetails = () => {
             {!isEdit ? (
               <>          
                <Alert
-                  disabled={activePO?.status === "Closed"}
+                  disabled={activePO?.status === "Closed" || isFetching}
                   title="Cancel PO"
                   description="Are you sure you want to cancel this PO?"
                   cancelPO={handleCancelPO}
                 />
-                <Button
-                  type="button"
-                  disabled={form.formState.isSubmitting}
-                  className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg"
-                >
-                  Save PO as
-                </Button>
+               <SelectLayout/>
                 <Button
                   disabled={activePO?.status === "Closed"}
                   type="button"

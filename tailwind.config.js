@@ -10,6 +10,14 @@ export default {
       screens:{
         "3xl":"1580px"
       },
+      keyframes: {
+        loading: {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' }
+        }},
+        animation: {
+          'loading': 'loading 2s ease-in-out',
+        },
       fontFamily: {
         sans: ['Poppins', 'serif'],
       },

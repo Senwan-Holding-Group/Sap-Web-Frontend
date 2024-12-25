@@ -71,7 +71,7 @@ const DraftTable = () => {
                     key={draft.documentEntry}
                     onClick={() =>
                       navigate(
-                        `/purchasing/draft/details/${draft.documentEntry}`
+                        `/sap/purchasing/draft/details/${draft.documentEntry}`
                       )
                     }
                     className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
@@ -83,23 +83,6 @@ const DraftTable = () => {
                     <td className="px-6 py-3">{draft.processStatus} </td>
                     <td className="px-6 py-3">{draft.approvalEntry} </td>
                     <td className="px-6 py-3">{draft.remarks}</td>
-                    {/* <td className="px-6 py-3">
-                      <Button
-                        size={"icon"}
-                        disabled={
-                          draft?.processStatus != "Approved" &&
-                          draft?.approvalStatus != "Approved"
-                        }
-                        onClick={() => {
-                          if (draft)
-                            saveDraftToPO(draft.documentEntry, navigate, toast);
-                        }}
-                        className="bg-transparent h-fit border-0  disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 text-geantSap-primary-600  rounded-full"
-                      >
-                        <FontAwesomeIcon className="size-4" icon={faArrowRightArrowLeft}/>
-                        
-                      </Button>
-                    </td> */}
                   </tr>
                 ))
               )}

@@ -171,14 +171,14 @@ console.log(pages);
               </Button>
             </li>
           </div>
-          <div className="flex flex-row text-geantSap-gray-500 gap-1">
+          <div className="flex flex-row text-geantSap-gray-500 gap-2  ">
             {pages.map((page, index) => (
               <li
                 key={index}
-                className={`size-6 flex justify-center items-center cursor-pointer hover:bg-geantSap-gray-50 rounded-lg
+                className={`size-6 flex justify-center items-center  cursor-pointer hover:bg-geantSap-gray-50 rounded-lg px-4
                   ${
                     page === currentPage
-                      ? "bg-geantSap-gray-50 rounded-lg font-bold text-[12px] leading-[21px] text-geantSap-black"
+                      ? "bg-geantSap-gray-50  rounded-lg px-4 font-bold text-[12px] leading-[21px] text-geantSap-black"
                       : ""
                   }
                 `}

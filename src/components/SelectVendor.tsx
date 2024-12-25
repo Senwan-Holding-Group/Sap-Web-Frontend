@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { getVendors } from "@/api/client";
+import { getDocVendors } from "@/api/client";
 import { useStateContext } from "@/context/useStateContext";
 import {
   Command,
@@ -24,7 +24,7 @@ type SelectVendorProps = {
   form: UseFormReturn<CreatePORequest>;
   disable: boolean;
 };
-const ITEMS_PER_PAGE = 100; // Number of items to show at once
+const ITEMS_PER_PAGE = 100;
 
 const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
   const [open, setOpen] = useState(false);
@@ -39,14 +39,13 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
     isError,
   } = useQuery({
     queryKey: ["vendors"],
-    queryFn: () => getVendors(`/vendor`, setError, toast),
+    queryFn: () => getDocVendors(`/vendor/doc`, setError, toast),
     refetchOnWindowFocus: true,
     refetchOnMount: false,
     cacheTime: 5 * 60 * 1000,
     staleTime: 2 * 60 * 1000,
   });
 
-  // Filter and slice vendors based on search and display count
   const displayedVendors = useMemo(() => {
     if (!vendorsList) return [];
     
@@ -59,7 +58,6 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
     return filtered.slice(0, displayCount);
   }, [vendorsList, searchTerm, displayCount]);
 
-  // Handle scroll to load more
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     const isNearBottom = scrollHeight - scrollTop <= clientHeight * 1.5;
@@ -70,10 +68,9 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
     }
   };
 
-  // Debounced search handler
   const handleSearch = (value: string) => {
     setSearchTerm(value);
-    setDisplayCount(ITEMS_PER_PAGE); // Reset display count when searching
+    setDisplayCount(ITEMS_PER_PAGE); 
   };
 
   return (
@@ -93,8 +90,8 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
           <ChevronDown className="opacity-50 size-6" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
-        <Command>
+      <PopoverContent className="p-0" align="start">
+        <Command shouldFilter={false}>
           <CommandInput 
             placeholder="Search Vendors..." 
             value={searchTerm}
@@ -110,7 +107,6 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
                 <CommandGroup>
                   {displayedVendors.map((vendor) => (
                     <CommandItem
-                      {...field}
                       key={vendor.vendorCode}
                       value={vendor.vendorCode}
                       onSelect={() => {

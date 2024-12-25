@@ -23,6 +23,7 @@ export const CreatePOFormSchema = z.object({
     ),
   });
   export type CreatePORequest =z.infer<typeof CreatePOFormSchema>
+  
 export const editDocumentFormSchema = z.object({
     vendorCode: z.string(),
     comments:z.string(),
@@ -41,6 +42,8 @@ export const editDocumentFormSchema = z.object({
     ),
   });
   export type EditDocumentRequest =z.infer<typeof editDocumentFormSchema>
+
+
 export const loginFormSchema = z.object({
     code: z.string().min(3,{ message: "UserCode is required." }),
     password:z.string().min(4,{message:"Password is required "}),
