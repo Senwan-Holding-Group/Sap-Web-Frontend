@@ -163,13 +163,13 @@ const Sidebar = ({
                   }`}
                 >
                   <FontAwesomeIcon
-                    className={`transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                    className={`transition-transform duration-300 ease-in-out ${
                       expand ? "rotate-0" : "rotate-180"
                     }`}
                     icon={faArrowLeftFromBracket}
                   />
                   <span
-                    className={`whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                    className={`whitespace-nowrap transition-all duration-300 ease-in-out ${
                       expand
                         ? "opacity-100 max-w-[200px]"
                         : "opacity-0 max-w-0 overflow-hidden"

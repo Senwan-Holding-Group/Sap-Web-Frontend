@@ -29,6 +29,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <SplashScreen />,
+    errorElement: <NotFound />,
   },
   {
     path: "/sap",

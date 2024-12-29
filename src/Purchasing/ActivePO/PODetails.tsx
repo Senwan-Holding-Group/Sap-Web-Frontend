@@ -623,7 +623,7 @@ const PODetails = () => {
                 />
                <SelectLayout disabled={isFetching}/>
                 <Button
-                  disabled={activePO?.status === "Closed"}
+                  disabled={activePO?.status === "Closed"|| isFetching}
                   type="button"
                   onClick={(e) => {
                     if (!isEdit) {

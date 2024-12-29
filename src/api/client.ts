@@ -32,9 +32,16 @@ export const login = async (
     secureLocalStorage.setItem("token", res.data.token);
     navigate("/sap/dashboard", { replace: true });
   } catch (error: any) {
-    form.setError("root", {
-      message: error.response.data.message,
-    });
+    if (error.message === "Network Error") {
+      form.setError("root", {
+        message: "Something went wrong check your connection",
+      });
+    } else {
+      form.setError("root", {
+        message: error.response.data.message,
+      });
+    }
+
     console.log(error);
   }
 };
@@ -46,8 +53,13 @@ export const getDashboardData = async (
     const res = await api.get(url);
     return res.data.data as DasboardData;
   } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
     console.log(error);
-    setError(error.message);
   }
 };
 // Active PO and Draft
@@ -61,8 +73,12 @@ export const getActivePOs = async (
     setTotalPage(res.data.totalPage);
     return res.data.data as ActivePo[];
   } catch (error: any) {
-    console.log(error);
-    setError(error.message);
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
   }
 };
 export const getActivePObyDocEntry = async (
@@ -73,8 +89,13 @@ export const getActivePObyDocEntry = async (
     const res = await api.get(url);
     return res.data.data as ActivePo;
   } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
     console.log(error);
-    setError(error.message);
   }
 };
 export const getPOPrintLayout = async (
@@ -85,8 +106,13 @@ export const getPOPrintLayout = async (
     const res = await api.get(url);
     return res.data.data as POPrintLayout;
   } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
     console.log(error);
-    setError(error.message);
   }
 };
 export const createPo = async (
@@ -108,9 +134,15 @@ export const createPo = async (
       description: "PO created successfully",
     });
   } catch (error: any) {
-    form.setError("root", {
-      message: error.response.data.message,
-    });
+    if (error.message === "Network Error") {
+      form.setError("root", {
+        message: "Something went wrong check your connection",
+      });
+    } else {
+      form.setError("root", {
+        message: error.response.data.message,
+      });
+    }
     toast({
       className: cn(
         "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
@@ -140,9 +172,15 @@ export const EditDocument = async (
       description: "PO Edited successfully",
     });
   } catch (error: any) {
-    form.setError("root", {
-      message: error.response.data.message,
-    });
+    if (error.message === "Network Error") {
+      form.setError("root", {
+        message: "Something went wrong check your connection",
+      });
+    } else {
+      form.setError("root", {
+        message: error.response.data.message,
+      });
+    }
     toast({
       className: cn(
         "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
@@ -176,7 +214,10 @@ export const cancelPO = async (
         "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
       ),
       variant: "destructive",
-      description: error.response.data.message,
+      description:
+        error.message === "Network Error"
+          ? "Something went wrong check your connection"
+          : error.response.data.message,
     });
     console.log(error);
   }
@@ -205,7 +246,10 @@ export const saveDraftToPO = async (
         "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
       ),
       variant: "destructive",
-      description: error.response.data.message,
+      description:
+        error.message === "Network Error"
+          ? "Something went wrong check your connection"
+          : error.response.data.message,
     });
     console.log(error);
   }
@@ -223,11 +267,12 @@ export const getVendors = async (
     return res.data.data as Vendor[];
   } catch (error: any) {
     console.log(error);
-    if (error.status === 404) {
-      setError("Not found check your entry");
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
     } else {
-      setError(error.message);
+      setError(error.response.data.message);
     }
+    console.log(error);
   }
 };
 export const getVendorsbyCode = async (
@@ -238,8 +283,13 @@ export const getVendorsbyCode = async (
     const res = await api.get(url);
     return res.data.data as Vendor;
   } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
     console.log(error);
-    setError(error.message);
   }
 };
 export const getDocVendors = async (
@@ -251,15 +301,22 @@ export const getDocVendors = async (
     const res = await api.get(url);
     return res.data.data as VendorSelectList[];
   } catch (error: any) {
-    console.log(error);
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
     toast({
       className: cn(
         "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
       ),
       variant: "destructive",
-      description: error.response.data.message,
+      description:
+        error.message === "Network Error"
+          ? "Something went wrong check your connection"
+          : error.response.data.message,
     });
-    setError(error.response.data.message);
   }
 };
 //Missing QTY
@@ -273,11 +330,11 @@ export const getMissingQuantity = async (
     setTotalPage(res.data.totalPage);
     return res.data.data as MissingQTY[];
   } catch (error: any) {
-    console.log(error);
-    if (error.status === 404) {
-      setError("Not found check your entry");
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
     } else {
-      setError(error.message);
+      setError(error.response.data.message);
     }
   }
 };
@@ -289,8 +346,12 @@ export const getMissingbyDocEntry = async (
     const res = await api.get(url);
     return res.data.data as MissingQTY;
   } catch (error: any) {
-    console.log(error);
-    setError(error.message);
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
   }
 };
 //ITems
@@ -302,8 +363,12 @@ export const getItemsByVendor = async (
     const res = await api.get(url);
     return res.data.data as DocumentLine[];
   } catch (error: any) {
-    console.log(error);
-    setError(error.message);
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
   }
 };
 export const getItemByCode = async (
@@ -314,8 +379,12 @@ export const getItemByCode = async (
     const res = await api.get(url);
     return res.data.data as Item;
   } catch (error: any) {
-    console.log(error);
-    setError(error.message);
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
   }
 };
 export const getItems = async (
@@ -328,11 +397,11 @@ export const getItems = async (
     setTotalPage(res.data.totalPage);
     return res.data.data as Item[];
   } catch (error: any) {
-    console.log(error);
-    if (error.status === 404) {
-      setError("Not found check your entry");
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
     } else {
-      setError(error.message);
+      setError(error.response.data.message);
     }
   }
 };

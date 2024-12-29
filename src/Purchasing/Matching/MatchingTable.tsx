@@ -1,4 +1,4 @@
-import Pagination from "@/components/ui/Pagination";
+// import Pagination from "@/components/ui/Pagination";
 import { useNavigate } from "react-router-dom";
 
 const MatchingTable = () => {
@@ -153,7 +153,7 @@ const MatchingTable = () => {
       <tfoot className="sticky -bottom-1 w-full">
         <tr>
           <td colSpan={7}>
-            <Pagination />
+            {/* <Pagination /> */}
           </td>
         </tr>
       </tfoot>
