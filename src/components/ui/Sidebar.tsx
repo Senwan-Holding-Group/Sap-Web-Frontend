@@ -71,7 +71,7 @@ const Sidebar = ({
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
-       logout();
+      logout();
     } finally {
       setIsLoggingOut(false);
     }
@@ -96,12 +96,14 @@ const Sidebar = ({
         </div>
         <div className="flex justify-center">
           {expand ? (
-            <img
-              src={"/geantlogoaren.svg"}
-              className="w-[11.25rem] h-[2.055rem]  object-cover"
-              alt="logoaren"
-              title="Geant Sap"
-            />
+            <div className="max-w-[11.25rem] overflow-hidden">
+              <img
+                src={"/geantlogoaren.svg"}
+                className="w-full h-[2.055rem]  object-contain px-2"
+                alt="logoaren"
+                title="Geant Sap"
+              />
+            </div>
           ) : (
             <img
               src={"/logo.svg"}
@@ -120,38 +122,61 @@ const Sidebar = ({
             } gap-y-6`}
             key={i.title}
           >
-            {i.items.map((item) => (
-              <NavLink
-                onClick={() => toggle(true)}
-                to={item.path}
-                key={item.label}
-                style={({ isActive }) => ({
-                  color: isActive ? "#006c50" : "#727273",
-                  background: isActive ? "#e6f1ee " : "",
-                  margin: isActive ? "0 0.5rem" : "0 1rem",
-                  borderRadius: isActive ? "0.5rem" : "",
-                  padding: isActive ? "0.25rem 0.5rem" : "",
-                })}
-                className={`flex items-center h-8  rounded-lg  ${
-                  expand ? "justify-between " : "justify-center w-[2.375rem] "
-                } `}
-              >
-                {expand && (
-                  <span className="font-medium text-base ">{item.label}</span>
-                )}
-                {item.icon}
-              </NavLink>
-            ))}
+            {i.title != "OTHER" && (
+              <>
+                {i.items.map((item) => (
+                  <NavLink
+                    onClick={() => toggle(true)}
+                    to={item.path}
+                    key={item.label}
+                    style={({ isActive }) => ({
+                      color: isActive ? "#006c50" : "#727273",
+                      background: isActive ? "#e6f1ee " : "",
+                      margin: isActive ? "0 0.5rem" : "0 1rem",
+                      borderRadius: isActive ? "0.5rem" : "",
+                      padding: isActive ? "0.25rem 0.5rem" : "",
+                    })}
+                    className={`flex items-center h-8  rounded-lg  ${
+                      expand
+                        ? "justify-between "
+                        : "justify-center w-[2.375rem] "
+                    } `}
+                  >
+                    {expand && (
+                      <span className="font-medium text-base truncate max-w-[180px]">
+                        {item.label}
+                      </span>
+                    )}
+                    {item.icon}
+                  </NavLink>
+                ))}
+              </>
+            )}
             {i.title === "OTHER" && (
               <div className="px-4 my-4">
                 <Button
                   onClick={handleLogout}
                   variant="destructive"
                   disabled={isLoggingOut}
-                  className={`disabled:opacity-50  ${expand ? "w-56" : "w-10"}`}
+                  className={`disabled:opacity-50 transition-all duration-300 ease-in-out flex items-center gap-2 ${
+                    expand ? "w-56" : "w-10"
+                  }`}
                 >
-                  <FontAwesomeIcon icon={faArrowLeftFromBracket} />
-                  {expand && "Logout"}
+                  <FontAwesomeIcon
+                    className={`transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                      expand ? "rotate-0" : "rotate-180"
+                    }`}
+                    icon={faArrowLeftFromBracket}
+                  />
+                  <span
+                    className={`whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                      expand
+                        ? "opacity-100 max-w-[200px]"
+                        : "opacity-0 max-w-0 overflow-hidden"
+                    }`}
+                  >
+                    Logout
+                  </span>
                 </Button>
               </div>
             )}

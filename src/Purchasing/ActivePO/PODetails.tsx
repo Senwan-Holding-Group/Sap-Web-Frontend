@@ -621,7 +621,7 @@ const PODetails = () => {
                   description="Are you sure you want to cancel this PO?"
                   cancelPO={handleCancelPO}
                 />
-               <SelectLayout/>
+               <SelectLayout disabled={isFetching}/>
                 <Button
                   disabled={activePO?.status === "Closed"}
                   type="button"

@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ActivePo, DocumentLine, Item, MissingQTY, Vendor, VendorSelectList } from "@/lib/types";
+import {
+  ActivePo,
+  DasboardData,
+  DocumentLine,
+  Item,
+  MissingQTY,
+  POPrintLayout,
+  Vendor,
+  VendorSelectList,
+} from "@/lib/types";
 import api from ".";
 import {
   CreatePORequest,
@@ -29,6 +38,18 @@ export const login = async (
     console.log(error);
   }
 };
+export const getDashboardData = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data.data as DasboardData;
+  } catch (error: any) {
+    console.log(error);
+    setError(error.message);
+  }
+};
 // Active PO and Draft
 export const getActivePOs = async (
   url: string,
@@ -51,6 +72,18 @@ export const getActivePObyDocEntry = async (
   try {
     const res = await api.get(url);
     return res.data.data as ActivePo;
+  } catch (error: any) {
+    console.log(error);
+    setError(error.message);
+  }
+};
+export const getPOPrintLayout = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data.data as POPrintLayout;
   } catch (error: any) {
     console.log(error);
     setError(error.message);
@@ -190,13 +223,11 @@ export const getVendors = async (
     return res.data.data as Vendor[];
   } catch (error: any) {
     console.log(error);
-    if(error.status===404){
-
+    if (error.status === 404) {
       setError("Not found check your entry");
-    }else{
+    } else {
       setError(error.message);
     }
-
   }
 };
 export const getVendorsbyCode = async (
@@ -243,13 +274,11 @@ export const getMissingQuantity = async (
     return res.data.data as MissingQTY[];
   } catch (error: any) {
     console.log(error);
-    if(error.status===404){
-
+    if (error.status === 404) {
       setError("Not found check your entry");
-    }else{
+    } else {
       setError(error.message);
     }
-
   }
 };
 export const getMissingbyDocEntry = async (
@@ -300,14 +329,10 @@ export const getItems = async (
     return res.data.data as Item[];
   } catch (error: any) {
     console.log(error);
-    if(error.status===404){
-
+    if (error.status === 404) {
       setError("Not found check your entry");
-    }else{
+    } else {
       setError(error.message);
     }
-
   }
 };
-
-

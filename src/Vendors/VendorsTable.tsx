@@ -65,6 +65,7 @@ const VendorsTable = () => {
               ) : (
                 vendorsList.map((vendor) => (
               <tr
+                key={vendor.vendorCode}
                 onClick={() => navigate(`/sap/vendors/details/${vendor.vendorCode}`)}
                 className="text-geantSap-black text-nowrap font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
               >

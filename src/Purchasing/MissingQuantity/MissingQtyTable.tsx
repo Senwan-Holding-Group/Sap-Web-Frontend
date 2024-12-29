@@ -68,8 +68,9 @@ const MissingQtyTable = () => {
                   </td>
                 </tr>
               ) : (
-                missingQtyList.map((missing) => (
+                missingQtyList.map((missing,i) => (
               <tr
+                  key={i}
                 onClick={() => navigate(`/sap/purchasing/missing-qty/details/${missing.documentEntry}`)}
                 className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
               >

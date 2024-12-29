@@ -135,22 +135,24 @@ export type Item = {
   department: string;
   family: string;
   subFamily: string;
-  active:string;
+  status: string;
   uomGroup: number;
   plu: string;
   administrativeData: {
     createdBy: string;
-    createdOn:string;
+    createdOn: string;
     editedBy: string;
     editedOn: string;
   };
-  pricing: [{
-    UomCode:string
-    CodeBars: string;
-    Discount: string;
-    ListName: string;
-    Price: number;
-  }];
+  pricing: [
+    {
+      UomCode: string;
+      CodeBars: string;
+      Discount: string;
+      ListName: string;
+      Price: number;
+    }
+  ];
   stock: {
     DC: number;
     RCB: number;
@@ -161,5 +163,35 @@ export type Item = {
     RCB: number;
     RCV: number;
   };
-  vendor: [{ vendorCode: string; vendorName:string}];
+  vendor: [{ vendorCode: string; vendorName: string }];
+};
+export type POPrintLayout = {
+  vendorCode: string;
+  vendorName: string;
+  contactPerson: {
+    contactPerson: string;
+  };
+  telephone: string;
+  documentNumber: number;
+  documentDate: string;
+  shippingAddress: string;
+  status: string;
+  deliveryDate: string;
+  documentLine: POPrintLayoutDocLine[];
+};
+export type POPrintLayoutDocLine = {
+  barcode: string;
+  itemCode: string;
+  itemDescription: string;
+  price: number;
+  quantity: number;
+  total: number;
+  uomCode: string;
+  uomGroup: string;
+  warehouseCode: string;
+};
+export type DasboardData = {
+  netReceive: string;
+  vendors: number;
+  items: number;
 };

@@ -78,7 +78,7 @@ const SplashScreen = () => {
       }, 500);
     };
 
-    const interval = setInterval(transitionToNextImage, 1500);
+    const interval = setInterval(transitionToNextImage, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -101,35 +101,6 @@ const SplashScreen = () => {
           />
         </div>
 
-        {/* Loading Message */}
-        {/* <div className="mt-4 text-geantSap-primary-500 text-lg font-medium">
-          {images[currentImageIndex].message}
-        </div> */}
-
-        {/* Progress Dots */}
-        {/* <div className="mt-4 flex space-x-2">
-          {images.map((_, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full transition-all duration-300 
-              ${
-                index === currentImageIndex
-                  ? "bg-geantSap-primary-500 scale-125"
-                  : "bg-gray-300"
-              }`}
-            />
-          ))}
-        </div> */}
-
-        {/* Progress Bar */}
-        {/* <div className="mt-4 h-1 w-32 bg-gray-200 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-geantSap-primary-500 transition-all duration-300"
-            style={{
-              width: `${((currentImageIndex + 1) / images.length) * 100}%`,
-            }}
-          />
-        </div> */}
       </div>
     </div>
   );

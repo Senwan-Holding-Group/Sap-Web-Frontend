@@ -34,7 +34,7 @@ const SelectSection = ({field,form,disabled}:SelectSectionProps) => {
             <ChevronDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className=" p-0">
+        <PopoverContent className=" p-0 w-[21.1875rem]" align="start">
           <Command >
             <CommandInput
               

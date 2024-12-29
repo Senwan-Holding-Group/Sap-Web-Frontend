@@ -40,7 +40,7 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
   } = useQuery({
     queryKey: ["vendors"],
     queryFn: () => getDocVendors(`/vendor/doc`, setError, toast),
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
     refetchOnMount: false,
     cacheTime: 5 * 60 * 1000,
     staleTime: 2 * 60 * 1000,
@@ -59,7 +59,7 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
   }, [vendorsList, searchTerm, displayCount]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    const { scrollTop, scrollHeight, clientHeight, } = e.currentTarget;
     const isNearBottom = scrollHeight - scrollTop <= clientHeight * 1.5;
     const hasMore = displayCount < (vendorsList?.length || 0);
 
@@ -90,7 +90,7 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
           <ChevronDown className="opacity-50 size-6" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0" align="start">
+      <PopoverContent className="p-0 w-[21.1875rem]" align="start">
         <Command shouldFilter={false}>
           <CommandInput 
             placeholder="Search Vendors..." 
@@ -99,7 +99,7 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
           />
           <CommandList>
             <ScrollArea 
-              className="h-[300px]" 
+              className="h-[300px] overscroll-y-auto" 
               onScroll={handleScroll}
             >
               <DataRenderer isLoading={isFetching} isError={isError}>

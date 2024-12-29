@@ -66,6 +66,7 @@ const ItemsTable = () => {
               ) : (
                 itemsList.map((item) => (
                   <tr
+                  key={item.itemCode}
                     onClick={() =>
                       navigate(`/sap/items/details/${item.itemCode}`)
                     }
@@ -74,7 +75,7 @@ const ItemsTable = () => {
                     <td className="px-6 py-3">{item.itemCode}</td>
                     <td className="px-6 py-3">{item.itemName} </td>
                     <td className="px-6 py-3">
-                      {item.active === "Yes" ? "Active" : "Inactive"}{" "}
+                      {item.status }
                     </td>
                     <td className="px-6 py-3">{item.department}</td>
                     <td className="px-6 py-3">{item.section} </td>

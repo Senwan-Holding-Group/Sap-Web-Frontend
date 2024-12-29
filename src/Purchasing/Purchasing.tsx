@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 const taps = [
   {
     label: "Drafts",
@@ -13,20 +12,15 @@ const taps = [
     label: "MissingQty",
     path: "/sap/purchasing/missing-qty",
   },
-  {
-    label: "Matching",
-    path: "/sap/purchasing/matching",
-  },
+  // {
+  //   label: "Matching",
+  //   path: "/sap/purchasing/matching",
+  // },
 ];
 const Purchasing = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const pathname = location.pathname === "/sap/purchasing";
+ 
 
-  useEffect(() => {
-    navigate("/sap/purchasing/draft");
-  }, [pathname, navigate]);
-
+ 
   return (
     <div className="overflow-hidden w-full flex  flex-col gap-y-4 ">
       <div className="  flex flex-col gap-y-2">

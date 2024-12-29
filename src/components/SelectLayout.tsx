@@ -1,3 +1,4 @@
+import POPrintLayout from "./PrintLayout/POPrintLayout";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -8,18 +9,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-
-const SelectLayout = () => {
+type Props = {
+  disabled: boolean;
+};
+const SelectLayout = ({disabled}:Props) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg">
+        <Button disabled={disabled} type="button" className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg">
           Save PO as
         </Button>
       </DialogTrigger>
       <DialogContent
         aria-describedby={undefined}
-        className="h-[25rem] flex flex-col justify-between 3xl:h-[27.5rem]  sm:max-w-3xl w-[90%] "
+        className="h-[25rem] flex flex-col justify-between 3xl:h-[27.5rem]  sm:max-w-xl w-[90%] "
       >
         <div className="p-4 ">
           <DialogHeader className="border-b  border-geantSap-gray-50  md:h-[3.5rem]">
@@ -30,9 +33,10 @@ const SelectLayout = () => {
             </DialogTitle>
           </DialogHeader>
         </div>
-        <div className=" px-4 h-full w-full overflow-scroll">
-          <div className="border-2 h-full bg-white border-geantSap-gray-25 rounded-lg">
-            
+        <div className=" px-4 h-full w-full  ">
+          <div className="border-2 h-[15rem] mb-2 bg-white border-geantSap-gray-25 rounded-lg overflow-scroll">
+            <POPrintLayout title={"PO With Price"}/>
+            <POPrintLayout title={"PO Without Price"}/>
           </div>
         </div>
         <DialogFooter className=" bg-[#fcfcfc] rounded-bl-lg p-6  rounded-br-lg  border-t flex flex-row gap-4 h-[5.5rem] border-geantSap-gray-50">

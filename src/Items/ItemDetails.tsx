@@ -195,7 +195,7 @@ const ItemDetails = () => {
                       {itemDetails &&
                         Object.values(itemDetails.stock).map((value, i) => (
                           <td key={i} className="px-6 py-3">
-                            {value}{" "}
+                            {value}
                           </td>
                         ))}
                     </tr>
@@ -222,7 +222,7 @@ const ItemDetails = () => {
                       {itemDetails &&
                         Object.values(itemDetails.cost).map((value, i) => (
                           <td key={i} className="px-6 py-3">
-                            {value} LYD{" "}
+                            {value} LYD
                           </td>
                         ))}
                     </tr>
@@ -242,15 +242,23 @@ const ItemDetails = () => {
                     </tr>
                   </thead>
                   <tbody className=" [&_tr:last-child]:border-0 ">
-                    {itemDetails?.vendor.map((vendor, i) => (
-                      <tr
-                        key={i}
-                        className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
-                      >
-                        <td className="px-6 py-3">{vendor.vendorCode}</td>
-                        <td className="px-6 py-3">{vendor.vendorName}</td>
+                    {!itemDetails?.vendor?.length ? (
+                      <tr className="h-[5rem]">
+                        <td colSpan={2} className="text-center ">
+                          No Venors to show
+                        </td>
                       </tr>
-                    ))}
+                    ) : (
+                      itemDetails?.vendor.map((vendor, i) => (
+                        <tr
+                          key={i}
+                          className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
+                        >
+                          <td className="px-6 py-3">{vendor.vendorCode}</td>
+                          <td className="px-6 py-3">{vendor.vendorName}</td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </TabsContent>
