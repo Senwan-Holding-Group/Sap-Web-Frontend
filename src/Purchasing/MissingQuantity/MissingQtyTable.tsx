@@ -1,4 +1,4 @@
-import {  getMissingQuantity } from "@/api/client";
+import { getMissingQuantity } from "@/api/client";
 import DataRenderer from "@/components/DataRenderer";
 import Pagination from "@/components/ui/Pagination";
 import Search from "@/components/ui/Search";
@@ -61,28 +61,45 @@ const MissingQtyTable = () => {
               </tr>
             </thead>
             <tbody className="bg-white [&_tr:last-child]:border-0 ">
-            {!missingQtyList?.length ? (
+              {!missingQtyList?.length ? (
                 <tr className="h-[24rem] 3xl:h-[36rem]">
                   <td colSpan={7} className="text-center ">
                     No data found
                   </td>
                 </tr>
               ) : (
-                missingQtyList.map((missing,i) => (
-              <tr
-                  key={i}
-                onClick={() => navigate(`/sap/purchasing/missing-qty/details/${missing.documentEntry}`)}
-                className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
-              >
-                <td className="px-6 py-3">{missing.documentNumber}</td>
-                <td className="px-6 py-3">{missing.vendorCode}</td>
-                <td className="px-6 py-3">{missing.vendorName}</td>
-                <td className="px-6 py-3">{missing.deliveryDate?.split(" ")[0]}</td>
-                <td className="px-6 py-3">{parseFloat(missing.documentTotal).toFixed(4)}</td>
-                <td className="px-6 py-3">{parseFloat(missing.grValue).toFixed(4)}</td>
-                <td className="px-6 py-3">{parseFloat(missing.difference).toFixed(4)}</td>
-              </tr>
-                )))}
+                missingQtyList.map((missing, i) => (
+                  <tr
+                    key={i}
+                    onClick={() =>
+                      navigate(
+                        `/sap/purchasing/missing-qty/details/${missing.documentEntry}`
+                      )
+                    }
+                    className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
+                  >
+                    <td className="px-6 py-3">{missing.documentNumber}</td>
+                    <td className="px-6 py-3">{missing.vendorCode}</td>
+                    <td className="px-6 py-3">{missing.vendorName}</td>
+                    <td className="px-6 py-3">
+                      {missing.deliveryDate?.split(" ")[0]}
+                    </td>
+                    <td className="px-6 py-3">
+                      {parseFloat(missing.documentTotal).toFixed(4)}
+                    </td>
+                    <td className="px-6 py-3">
+                      {parseFloat(missing.grValue).toFixed(4)}
+                    </td>
+                    <td className="px-6 py-3 ">
+                      <span
+                        className=" bg-geantSap-error-50 text-geantSap-error-500 hover:bg-geantSap-error-100 px-3  py-1 rounded-[40px] text-sm font-normalleading-[21px] inline-block  transition-colors duration-200 cursor-default"
+                      >
+                        {parseFloat(missing.difference).toFixed(4)}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
             <tfoot className="sticky h-10 -bottom-1 w-full">
               <tr>

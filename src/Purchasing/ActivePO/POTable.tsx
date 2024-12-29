@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CreatePO from "./CreatePO";
+import StatusBadge from "@/components/StatusBadge";
 
 const POTable = () => {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const POTable = () => {
                     <td className="px-6 py-3">
                       {po.deliveryDate.split(" ")[0]}
                     </td>
-                    <td className="px-6 py-3">{po.status}</td>
+                    <td className="px-6 py-3"><StatusBadge status={po.status}/></td>
                     <td className="px-6 py-3">{po.processStatus}</td>
                     <td className="px-6 py-3">{po.documentNumber}</td>
                     <td className="px-6 py-3">

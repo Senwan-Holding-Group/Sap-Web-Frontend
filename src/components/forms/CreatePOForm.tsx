@@ -290,7 +290,7 @@ const CreatePOForm = () => {
                 className="w-full border-2 overflow-scroll border-geantSap-gray-25 rounded-lg"
                 value="item"
               >
-                <table className="w-full text-nowrap  ">
+                <table className="w-full text-nowrap bg-white ">
                   <thead className="bg-geantSap-gray-25">
                     <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
                       <th className="px-6 py-3 rounded-tl-lg ">Item No.</th>

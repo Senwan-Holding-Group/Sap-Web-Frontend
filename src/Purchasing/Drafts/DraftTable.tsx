@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CreatePO from "../ActivePO/CreatePO";
+import StatusBadge from "@/components/StatusBadge";
 
 const DraftTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -79,7 +80,7 @@ const DraftTable = () => {
                     <td className="px-6 py-3">{draft.documentNumber}</td>
                     <td className="px-6 py-3">{draft.vendorCode}</td>
                     <td className="px-6 py-3">{draft.vendorName}</td>
-                    <td className="px-6 py-3">{draft.approvalStatus} </td>
+                    <td className="px-6 py-3"><StatusBadge status={draft.approvalStatus}/> </td>
                     <td className="px-6 py-3">{draft.processStatus} </td>
                     <td className="px-6 py-3">{draft.approvalEntry} </td>
                     <td className="px-6 py-3">{draft.remarks}</td>
