@@ -155,7 +155,7 @@ const PODetails = () => {
 
   return (
     <Form {...form}>
-      <div className=" h-[34rem] 3xl:h-[47rem] box-border max-h-[47rem] overflow-auto  ">
+      <div className=" sm:h-[35rem] 3xl:h-[47rem] h-[52.5rem] box-border max-h-[52.5rem] overflow-auto  ">
         <Loader enable={form.formState.isSubmitting || isSubmitting} />
 
         <div className="bg-white border  border-geantSap-gray-25 geantShadow h-full  rounded-xl flex flex-col justify-between">
@@ -184,7 +184,7 @@ const PODetails = () => {
                     <Label className="text-sm font-bold text-geantSap-black">
                       Document number
                     </Label>
-                    <span className="h-10 w-[21.1875rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {activePO?.documentNumber}
                     </span>
                   </div>
@@ -193,7 +193,13 @@ const PODetails = () => {
                       Document date
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] border bg-geantSap-gray-25 text-geantSap-gray-400 border-geantSap-gray-50 p-2 rounded-lg">
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
+                    >
                       {activePO?.documentDate.split(" ")[0]}
                     </span>
                   </div>
@@ -202,7 +208,13 @@ const PODetails = () => {
                       Document total
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
+                    >
                       {activePO &&
                         parseFloat(activePO.documentTotal).toFixed(4)}
                     </span>
@@ -212,7 +224,13 @@ const PODetails = () => {
                       Status
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
+                    >
                       {activePO?.status}
                     </span>
                   </div>
@@ -220,7 +238,13 @@ const PODetails = () => {
                     <Label className="text-sm font-bold text-geantSap-black">
                       Currency
                     </Label>
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
+                    >
                       LYD
                     </span>
                   </div>
@@ -229,7 +253,13 @@ const PODetails = () => {
                       Process Status
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
+                    >
                       {activePO?.processStatus}
                     </span>
                   </div>
@@ -266,7 +296,13 @@ const PODetails = () => {
                       Vendor Name
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
+                    >
                       {activePO?.vendorName}
                     </span>
                   </div>
@@ -306,7 +342,7 @@ const PODetails = () => {
                                 }
                                 variant={"outline"}
                                 className={cn(
-                                  "w-full pl-3 text-left disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 font-normal",
+                                  "w-full pl-3 text-left  border border-geantSap-gray-50 font-normal",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -356,7 +392,7 @@ const PODetails = () => {
                                 }
                                 variant={"outline"}
                                 className={cn(
-                                  "w-full pl-3 text-left disabled:bg-geantSap-gray-25 font-normal disabled:text-geantSap-gray-400",
+                                  "w-full pl-3 text-left  border border-geantSap-gray-50 font-normal ",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -391,14 +427,14 @@ const PODetails = () => {
                     name="comments"
                     render={({ field }) => (
                       <FormItem className="flex w-[21.1875rem] flex-col gap-y-2">
-                        <FormLabel className="text-sm font-bold text-geantSap-black">
+                        <FormLabel className="text-sm font-bold text-geantSap-black ">
                           Comments
                         </FormLabel>
                         <FormControl>
                           <Input
                             disabled={form.formState.isSubmitting || !isEdit}
                             placeholder="Comment"
-                            className="h-10   border disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 border-geantSap-gray-50 p-2 rounded-lg"
+                            className="h-10   border  border-geantSap-gray-50 p-2 rounded-lg"
                             {...field}
                           />
                         </FormControl>
@@ -408,40 +444,48 @@ const PODetails = () => {
                   />
                 </div>
                 <div className="flex flex-col w-[26.875rem] gap-y-6 ">
-                <h1 className="font-bold text-lg text-geantSap-gray-500">
-                  Administrative data
-                </h1>
-                <div className="flex gap-x-4 mt-4 items-center font-normal text-base">
-                  <Label className=" text-geantSap-gray-500">Created By:</Label>
-                  <span id="createdby" className=" text-geantSap-black">
-                    {activePO?.administrativeData?.createdBy}
-                  </span>
+                  <h1 className="font-bold text-lg text-geantSap-gray-500">
+                    Administrative data
+                  </h1>
+                  <div className="flex gap-x-4 mt-4 items-center font-normal text-base">
+                    <Label className=" text-geantSap-gray-500">
+                      Created By:
+                    </Label>
+                    <span id="createdby" className=" text-geantSap-black">
+                      {activePO?.administrativeData?.createdBy}
+                    </span>
+                  </div>
+                  <div className="flex gap-x-4  items-center font-normal text-base">
+                    <Label className=" text-geantSap-gray-500">
+                      Created On:
+                    </Label>
+                    <span id="createdon" className=" text-geantSap-black">
+                      {activePO &&
+                        new Date(
+                          activePO?.administrativeData?.createdOn
+                        ).toDateString()}
+                    </span>
+                  </div>
+                  <div className="flex gap-x-4  items-center font-normal text-base">
+                    <Label className=" text-geantSap-gray-500">
+                      Edited By:
+                    </Label>
+                    <span id="Editedby" className=" text-geantSap-black">
+                      {activePO?.administrativeData?.editedBy}
+                    </span>
+                  </div>
+                  <div className="flex gap-x-4  items-center font-normal text-base">
+                    <Label className=" text-geantSap-gray-500">
+                      Edited On:
+                    </Label>
+                    <span id="Editedon" className=" text-geantSap-black">
+                      {activePO &&
+                        new Date(
+                          activePO?.administrativeData?.editedOn
+                        ).toDateString()}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex gap-x-4  items-center font-normal text-base">
-                  <Label className=" text-geantSap-gray-500">Created On:</Label>
-                  <span id="createdon" className=" text-geantSap-black">
-                    {activePO &&
-                      new Date(
-                        activePO?.administrativeData?.createdOn
-                      ).toDateString()}
-                  </span>
-                </div>
-                <div className="flex gap-x-4  items-center font-normal text-base">
-                  <Label className=" text-geantSap-gray-500">Edited By:</Label>
-                  <span id="Editedby" className=" text-geantSap-black">
-                    {activePO?.administrativeData?.editedBy}
-                  </span>
-                </div>
-                <div className="flex gap-x-4  items-center font-normal text-base">
-                  <Label className=" text-geantSap-gray-500">Edited On:</Label>
-                  <span id="Editedon" className=" text-geantSap-black">
-                    {activePO &&
-                      new Date(
-                        activePO?.administrativeData?.editedOn
-                      ).toDateString()}
-                  </span>
-                </div>
-              </div>
               </div>
               <Tabs defaultValue="item" className="min-w-max  ">
                 <TabsList className="grid w-60 grid-cols-2 ">
@@ -465,7 +509,7 @@ const PODetails = () => {
                         <th className="p-6">Price</th>
                         <th className="p-6">Total (LC)</th>
                         <th className="p-6 ">Warehouse code</th>
-                        <th className="p-6 rounded-tr-lg"></th>
+                        <th className="p-6 rounded-tr-lg">Remove item</th>
                       </tr>
                     </thead>
                     <tbody className=" [&_tr:last-child]:border-0">
@@ -614,16 +658,16 @@ const PODetails = () => {
             )}
 
             {!isEdit ? (
-              <>          
-               <Alert
+              <>
+                <Alert
                   disabled={activePO?.status === "Closed" || isFetching}
                   title="Cancel PO"
                   description="Are you sure you want to cancel this PO?"
                   cancelPO={handleCancelPO}
                 />
-               <SelectLayout disabled={isFetching}/>
+                <SelectLayout disabled={isFetching} />
                 <Button
-                  disabled={activePO?.status === "Closed"|| isFetching}
+                  disabled={activePO?.status === "Closed" || isFetching}
                   type="button"
                   onClick={(e) => {
                     if (!isEdit) {

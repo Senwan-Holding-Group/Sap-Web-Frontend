@@ -135,6 +135,7 @@ const Sidebar = ({
                       margin: isActive ? "0 0.5rem" : "0 1rem",
                       borderRadius: isActive ? "0.5rem" : "",
                       padding: isActive ? "0.25rem 0.5rem" : "",
+                      fontWeight: isActive ? "600" : "500",
                     })}
                     className={`flex items-center h-8  rounded-lg  ${
                       expand
@@ -143,7 +144,7 @@ const Sidebar = ({
                     } `}
                   >
                     {expand && (
-                      <span className="font-medium text-base truncate max-w-[180px]">
+                      <span className=" text-base truncate max-w-[180px]">
                         {item.label}
                       </span>
                     )}
@@ -163,8 +164,7 @@ const Sidebar = ({
                   }`}
                 >
                   <FontAwesomeIcon
-                    className={`transition-transform duration-300 ease-in-out ${
-                      expand ? "rotate-0" : "rotate-180"
+                    className={`transition-transform duration-300 ease-in-out
                     }`}
                     icon={faArrowLeftFromBracket}
                   />

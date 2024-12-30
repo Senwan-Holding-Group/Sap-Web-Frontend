@@ -81,7 +81,7 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between rounded-lg disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400"
+          className="w-full justify-between rounded-lg  border border-geantSap-gray-50"
         >
           {field.value
             ? vendorsList?.find((vendor) => vendor.vendorCode === field.value)

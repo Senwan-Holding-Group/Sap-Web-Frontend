@@ -60,7 +60,7 @@ const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
       </DialogTrigger>
       <DialogContent
         aria-describedby={undefined}
-        className="h-[25rem] flex flex-col justify-between 3xl:h-[27.5rem]  sm:max-w-4xl w-[90%] "
+        className="h-[25rem] flex flex-col  justify-between 3xl:h-[27.5rem]  max-w-4xl 3xl:w-[56rem] lg:w-[50rem] md:w-[45em] sm:w-[35rem] w-[80%]"
       >
         <div className="p-4 ">
           <DialogHeader className="border-b  border-geantSap-gray-50  md:h-[3.5rem]">
@@ -77,8 +77,8 @@ const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
             </DialogTitle>
           </DialogHeader>
         </div>
-        <div className=" px-4 h-full w-full overflow-scroll">
-          <div className="border-2  border-geantSap-gray-25 rounded-lg">
+        <div className=" px-4 mb-4 h-[15rem] w-full ">
+          <div className="border-2 w-full overflow-scroll h-full  border-geantSap-gray-25 rounded-lg">
             <DataRenderer isLoading={isFetching} isError={isError}>
               <table className="w-full ">
                 <thead className="bg-geantSap-gray-25">
@@ -121,7 +121,7 @@ const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
         <DialogFooter className=" bg-[#fcfcfc] rounded-bl-lg p-6  rounded-br-lg  border-t flex flex-row gap-4 h-[5.5rem] border-geantSap-gray-50">
           <DialogClose asChild>
             <Button
-              onClick={() => setState([])}
+              // onClick={() => setState([])}
               className="bg-white w-[8.125rem] border rounded-lg text-geantSap-primary-600 font-medium text-base"
               type="button"
             >

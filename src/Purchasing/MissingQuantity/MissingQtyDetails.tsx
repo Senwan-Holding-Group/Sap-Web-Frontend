@@ -22,7 +22,7 @@ const MissingQtyDetails = () => {
     refetchOnMount: true,
   });
   return (
-    <div className=" h-[34rem] 3xl:h-[47rem] box-border max-h-[47rem] overflow-auto  ">
+    <div className="sm:h-[35rem] 3xl:h-[47rem] h-[52.5rem] box-border max-h-[52.5rem] overflow-auto  ">
       <div className="bg-white border border-geantSap-gray-25 geantShadow h-full rounded-xl flex flex-col justify-between">
         <DataRenderer isLoading={isFetching} isError={isError}>
           <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">
@@ -184,7 +184,7 @@ const MissingQtyDetails = () => {
                         <td className="px-6 py-3">{item.itemDescription}</td>
                         <td className="px-6 ">{item.Quantity}</td>
                         <td className="px-6 py-3">{item.grQuantity}</td>
-                        <td className="px-6 py-3">{item.difference}</td>
+                        <td className="px-6 py-3 text-geantSap-error-500">{item.difference}</td>
                         <td className="px-6 py-3">
                           {new Intl.NumberFormat("en-US", {
                             minimumFractionDigits: 2,

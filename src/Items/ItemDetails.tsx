@@ -25,7 +25,7 @@ const ItemDetails = () => {
   });
 
   return (
-    <div className=" h-[37rem] 3xl:h-[50rem] box-border max-h-[50rem] overflow-auto  ">
+    <div className=" sm:h-[38rem] 3xl:h-[50rem] h-[55rem] box-border max-h-[55rem] overflow-auto  ">
       <div className="bg-white border border-geantSap-gray-25 geantShadow h-full rounded-xl flex flex-col justify-between">
         <DataRenderer isLoading={isFetching} isError={isError}>
           <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">

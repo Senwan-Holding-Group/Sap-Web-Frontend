@@ -44,14 +44,14 @@ const DraftTable = () => {
         <Search menuList={draftmenu} setSearch={setSearch} search={search} />
         <CreatePO />
       </div>
-      <div className=" 3xl:h-[696px] h-[500px]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
+      <div className=" 3xl:h-[43.5rem] sm:h-[31.5rem] h-[45rem] max-h-[45rem]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
         <DataRenderer isLoading={isFetching} isError={isError}>
           <table className="w-full caption-bottom ">
             <thead className="sticky top-0 w-full bg-geantSap-gray-25">
               <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
                 <th className="p-6 rounded-tl-xl ">Document No.</th>
                 <th className="p-6 ">Vendor code</th>
-                <th className="p-6">Vendor name</th>
+                <th className="p-6 ">Vendor name</th>
                 <th className="p-6">Status</th>
                 <th className="p-6">Process status</th>
                 <th className="p-6">Approval Key</th>

@@ -301,7 +301,7 @@ const CreatePOForm = () => {
                       <th className="px-6 py-3">Price</th>
                       <th className="px-6 py-3">Total (LC)</th>
                       <th className="px-6 py-3">Warehouse code</th>
-                      <th className="px-6 py-3 rounded-tr-lg"></th>
+                      <th className="px-6 py-3 rounded-tr-lg">Remove item</th>
                     </tr>
                   </thead>
                   <tbody className=" [&_tr:last-child]:border-0">

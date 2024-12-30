@@ -11,7 +11,7 @@ const App = () => {
   const { token } = useAuth();
 
   return (
-    <div className="h-screen w-screen bg-geantSap-bg flex font-sans">
+    <div className="h-screen  w-screen bg-geantSap-bg flex font-sans">
       <QueryClientProvider client={queryClient}>
         <div
           className={`fixed transition-all ease-out duration-300 rounded-tr-lg rounded-br-lg shadow h-full z-10 ${

@@ -8,7 +8,8 @@ export default {
   theme: {
   	extend: {
       screens:{
-        "3xl":"1580px"
+        "3xl":"1580px",
+        
       },
       keyframes: {
         loading: {

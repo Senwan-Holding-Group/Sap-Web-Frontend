@@ -42,7 +42,7 @@ const ItemsTable = () => {
       <div className="flex sm:justify-between items-center flex-col sm:flex-row  gap-4">
         <Search menuList={itemsMenu} setSearch={setSearch} search={search} />
       </div>
-      <div className=" 3xl:h-[760px] h-[545px]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
+      <div className=" 3xl:h-[47.5rem] sm:h-[34.5rem] h-[52rem] max-h-[52rem]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
         <DataRenderer isLoading={isFetching} isError={isError}>
           <table className="w-full caption-bottom ">
             <thead className="sticky top-0 w-full bg-geantSap-gray-25">

@@ -46,7 +46,7 @@ const MissingQtyTable = () => {
           search={search}
         />
       </div>
-      <div className=" 3xl:h-[696px] h-[500px]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
+      <div className=" 3xl:h-[43.5rem] sm:h-[31.5rem] h-[48.5rem] max-h-[48.5rem]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
         <DataRenderer isLoading={isFetching} isError={isError}>
           <table className="w-full caption-bottom ">
             <thead className="sticky top-0 w-full bg-geantSap-gray-25">

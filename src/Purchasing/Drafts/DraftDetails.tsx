@@ -125,7 +125,7 @@ const DraftDetails = () => {
 
   return (
     <Form {...form}>
-      <div className=" h-[34rem] 3xl:h-[47rem] box-border max-h-[47rem] overflow-auto  ">
+      <div className=" sm:h-[35rem] 3xl:h-[47rem] h-[52.5rem] box-border max-h-[52.5rem] overflow-auto  ">
         <Loader enable={form.formState.isSubmitting || isSubmitting} />
 
         <div className="bg-white border border-geantSap-gray-25 geantShadow h-full rounded-xl flex flex-col justify-between">
@@ -154,7 +154,7 @@ const DraftDetails = () => {
                     <Label className="text-sm font-bold text-geantSap-black">
                       Document number
                     </Label>
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border  border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border  border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.documentNumber}
                     </span>
                   </div>
@@ -163,7 +163,7 @@ const DraftDetails = () => {
                       Document date
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.documentDate.split(" ")[0]}
                     </span>
                   </div>
@@ -172,7 +172,7 @@ const DraftDetails = () => {
                       Document total
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails &&
                         parseFloat(draftDetails.documentTotal).toFixed(4)}
                     </span>
@@ -182,7 +182,7 @@ const DraftDetails = () => {
                       Status
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.status}
                     </span>
                   </div>
@@ -190,7 +190,7 @@ const DraftDetails = () => {
                     <Label className="text-sm font-bold text-geantSap-black">
                       Currency
                     </Label>
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       LYD
                     </span>
                   </div>
@@ -199,7 +199,7 @@ const DraftDetails = () => {
                       Process Status
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.processStatus}
                     </span>
                   </div>
@@ -209,7 +209,7 @@ const DraftDetails = () => {
                       Approval status
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.approvalStatus}
                     </span>
                   </div>
@@ -218,7 +218,7 @@ const DraftDetails = () => {
                       Approval remarks
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.remarks}
                     </span>
                   </div>
@@ -256,7 +256,7 @@ const DraftDetails = () => {
                       Vendor Name
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400 border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.vendorName}
                     </span>
                   </div>
@@ -296,7 +296,7 @@ const DraftDetails = () => {
                                 }
                                 variant={"outline"}
                                 className={cn(
-                                  "w-full pl-3 text-left disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 font-normal",
+                                  "w-full pl-3 text-left  font-normal  border border-geantSap-gray-50",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -346,7 +346,7 @@ const DraftDetails = () => {
                                 }
                                 variant={"outline"}
                                 className={cn(
-                                  "w-full pl-3 text-left disabled:bg-geantSap-gray-25 font-normal disabled:text-geantSap-gray-400",
+                                  "w-full pl-3 text-left  border border-geantSap-gray-50 ",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -388,7 +388,7 @@ const DraftDetails = () => {
                           <Input
                             disabled={form.formState.isSubmitting || !isEdit}
                             placeholder="Comment"
-                            className="h-10   border disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 border-geantSap-gray-50 p-2 rounded-lg"
+                            className="h-10   border  border-geantSap-gray-50 p-2 rounded-lg"
                             {...field}
                           />
                         </FormControl>
@@ -402,7 +402,7 @@ const DraftDetails = () => {
                       Approval Key
                     </Label>
 
-                    <span className="h-10 w-[21.188rem] bg-geantSap-gray-25 text-geantSap-gray-400  border border-geantSap-gray-50 p-2 rounded-lg">
+                    <span className="h-10 w-[21.188rem]   border border-geantSap-gray-50 p-2 rounded-lg">
                       {draftDetails?.approvalEntry}
                     </span>
                   </div>
@@ -465,7 +465,7 @@ const DraftDetails = () => {
                         <th className="p-6">Price</th>
                         <th className="p-6">Total (LC)</th>
                         <th className="p-6 ">Warehouse code</th>
-                        <th className="p-6 rounded-tr-lg"></th>
+                        <th className="p-6 rounded-tr-lg">Remove item</th>
                       </tr>
                     </thead>
                     <tbody className=" [&_tr:last-child]:border-0 ">
@@ -624,7 +624,7 @@ const DraftDetails = () => {
               </Tabs>
             </div>
           </DataRenderer>
-          <div className="flex justify-end gap-x-4 p-6 border-t borde-geantSap-gray-50">
+          <div className="flex justify-end gap-x-4  p-6 border-t border-geantSap-gray-50">
             {form.formState.errors.root && (
               <div className="text-center text-sm rounded-lg border border-red-500 bg-red-200 w-1/2 p-2">
                 {form.formState.errors.root.message}

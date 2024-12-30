@@ -43,7 +43,7 @@ const Table = ({ documentLine, noPrice }: TableRow) => {
           <tbody>{rows}</tbody>
         </table>
         {noPrice && (
-          <div className=" flex font-semibold mt-2 text-[12px] justify-end ">
+          <div className=" flex font-semibold  mt-2 text-[12px] justify-end ">
             <div className="flex w-[15rem] gap-2">
               <p className=" ">Total Document :- </p>
               <span>{documentTotal?.toFixed(4)}</span>
