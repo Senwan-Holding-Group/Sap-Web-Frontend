@@ -16,6 +16,12 @@ const Dashboard = () => {
     refetchOnWindowFocus: false,
     refetchOnMount: true,
   });
+  // const evtSource = new EventSource("//10.13.0.251:3088/api/v1/sse/events");
+  //     evtSource.onmessage = (event) => {
+  //       console.log("====================================");
+  //       console.log(event.data);
+  //       console.log("====================================");
+  //     };
   return (
     <div className="space-y-8">
       <div className="font-bold space-y-2">
@@ -32,7 +38,10 @@ const Dashboard = () => {
           <p className="text-[2.5rem] leading-[3.75rem] text-geantSap-primary-500 flex justify-between">
             {dasboardData?.items}
             <span className="rounded-full bg-geantSap-primary-25 size-12 flex items-center justify-center">
-              <FontAwesomeIcon className="w-[1.25rem] h-[1.063rem]" icon={faSitemap} />
+              <FontAwesomeIcon
+                className="w-[1.25rem] h-[1.063rem]"
+                icon={faSitemap}
+              />
             </span>
           </p>
         </div>
@@ -41,14 +50,19 @@ const Dashboard = () => {
           <p className="text-[2.5rem] leading-[3.75rem] text-geantSap-primary-500 flex justify-between">
             {dasboardData?.vendors}
             <span className="rounded-full bg-geantSap-primary-25 size-12 flex items-center justify-center">
-              <FontAwesomeIcon className="w-[1.25rem] h-[1.063rem]" icon={faUsers} />
+              <FontAwesomeIcon
+                className="w-[1.25rem] h-[1.063rem]"
+                icon={faUsers}
+              />
             </span>
           </p>
         </div>
         <div className="font-bold bg-geantSap-primary-5 p-6 rounded-[18px] space-y-6">
           <h1 className=" text-lg leading-[1.688rem]">Total purchase </h1>
           <p className="text-[2.5rem] leading-[3.75rem] text-geantSap-primary-500 flex justify-between">
-            {dasboardData&&parseFloat(dasboardData?.netReceive).toFixed(2)}
+            {dasboardData && isNaN(parseFloat(dasboardData.netReceive))
+              ? 0
+              : dasboardData && parseFloat(dasboardData.netReceive).toFixed(2)}
             <span className="rounded-full bg-geantSap-primary-25 size-12 flex items-center justify-center">
               <FontAwesomeIcon
                 className="w-[1.25rem] h-[1.063rem]"

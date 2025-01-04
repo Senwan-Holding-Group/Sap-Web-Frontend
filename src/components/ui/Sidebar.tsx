@@ -6,6 +6,7 @@ import {
   faArrowRightLongToLine,
   faBasketShopping,
   faBellRing,
+  faCartFlatbedBoxes,
   faDiamonds4,
   faGear,
   faSitemap,
@@ -39,6 +40,11 @@ const menuItems = [
         label: "Items Master Data",
         path: "/sap/items",
       },
+      {
+        icon: <FontAwesomeIcon icon={faCartFlatbedBoxes} />,
+        label: "Inventory",
+        path: "/sap/inventory",
+      },
     ],
   },
   {
@@ -47,7 +53,7 @@ const menuItems = [
       {
         icon: <FontAwesomeIcon icon={faBellRing} />,
         label: "Alerts",
-        path: "/alerts",
+        path: "/sap/alerts",
       },
       {
         icon: <FontAwesomeIcon icon={faGear} />,
@@ -122,37 +128,33 @@ const Sidebar = ({
             } gap-y-6`}
             key={i.title}
           >
-            {i.title != "OTHER" && (
-              <>
-                {i.items.map((item) => (
-                  <NavLink
-                    onClick={() => toggle(true)}
-                    to={item.path}
-                    key={item.label}
-                    style={({ isActive }) => ({
-                      color: isActive ? "#006c50" : "#727273",
-                      background: isActive ? "#e6f1ee " : "",
-                      margin: isActive ? "0 0.5rem" : "0 1rem",
-                      borderRadius: isActive ? "0.5rem" : "",
-                      padding: isActive ? "0.25rem 0.5rem" : "",
-                      fontWeight: isActive ? "600" : "500",
-                    })}
-                    className={`flex items-center h-8  rounded-lg  ${
-                      expand
-                        ? "justify-between "
-                        : "justify-center w-[2.375rem] "
-                    } `}
-                  >
-                    {expand && (
-                      <span className=" text-base truncate max-w-[180px]">
-                        {item.label}
-                      </span>
-                    )}
-                    {item.icon}
-                  </NavLink>
-                ))}
-              </>
-            )}
+            <>
+              {i.items.map((item) => (
+                <NavLink
+                  onClick={() => toggle(true)}
+                  to={item.path}
+                  key={item.label}
+                  style={({ isActive }) => ({
+                    color: isActive ? "#006c50" : "#727273",
+                    background: isActive ? "#e6f1ee " : "",
+                    margin: isActive ? "0 0.5rem" : "0 1rem",
+                    borderRadius: isActive ? "0.5rem" : "",
+                    padding: isActive ? "0.25rem 0.5rem" : "",
+                    fontWeight: isActive ? "600" : "500",
+                  })}
+                  className={`flex items-center h-8  rounded-lg  ${
+                    expand ? "justify-between " : "justify-center w-[2.375rem] "
+                  } `}
+                >
+                  {expand && (
+                    <span className=" text-base truncate max-w-[180px]">
+                      {item.label}
+                    </span>
+                  )}
+                  {item.icon}
+                </NavLink>
+              ))}
+            </>
             {i.title === "OTHER" && (
               <div className="px-4 my-4">
                 <Button

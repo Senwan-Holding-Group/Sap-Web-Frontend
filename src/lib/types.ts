@@ -24,6 +24,35 @@ export type ActivePo = {
   approvalEntry: number;
   remarks: string;
 };
+export type Transfer = {
+  documentNumber: number;
+  documentDate: string;
+  documentTotal: string;
+  currency: string;
+  deliveryDate: string;
+  status: string;
+  section: string;
+  comments: string;
+  documentEntry: number;
+  documentKey: string;
+  requestSource: string;
+  transferTypeList: [string];
+  warehouseCode: string;
+  warehouseList: [string];
+  transferType: string;
+  documentLine: DocumentLine[];
+  attachment: [];
+  administrativeData: {
+    createdBy: string;
+    createdOn: string;
+    editedBy: string;
+    editedOn: string;
+  };
+  approvalStatus: string;
+  processStatus: string;
+  approvalEntry: number;
+  remarks: string;
+};
 export type MissingQTY = {
   vendorCode: string;
   vendorName: string;
@@ -40,6 +69,26 @@ export type MissingQTY = {
   };
   documentLine: MissingQTYDoctLine[];
   grValue: string;
+  difference: string;
+  section: string;
+};
+export type InventoryMissingQTY = {
+  warehouseCode: string;
+  requestSource: string;
+  deliveryDate: string;
+  documentNumber: number;
+  documentEntry: number;
+  documentDate: string;
+  documentTotal: string;
+  administrativeData: {
+    createdBy: string;
+    createdOn: string;
+    editedBy: string;
+    editedOn: string;
+  };
+  documentLine: MissingQTYDoctLine[];
+  trValue: string;
+  transferType: string;
   difference: string;
   section: string;
 };
@@ -64,6 +113,7 @@ export type DocumentLine = {
   uomEntry: number;
   line: number;
   lineNum: number;
+  stock: string;
   uomGroup: string;
   barcodeList: [{ barcode: string }];
   warehouseCode: string;
@@ -179,6 +229,16 @@ export type POPrintLayout = {
   deliveryDate: string;
   documentLine: POPrintLayoutDocLine[];
 };
+export type TransferPrintLayout = {
+  fromWarehouse: string;
+  toWarehouse: string;
+  requestSource: string;
+  documentNumber: number;
+  documentDate: string;
+  status: string;
+  deliveryDate: string;
+  documentLine: POPrintLayoutDocLine[];
+};
 export type POPrintLayoutDocLine = {
   barcode: string;
   itemCode: string;
@@ -194,4 +254,9 @@ export type DasboardData = {
   netReceive: string;
   vendors: number;
   items: number;
+};
+export type AlertData = {
+  message: string;
+  alertTime: string;
+  data: [];
 };

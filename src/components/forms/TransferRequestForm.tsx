@@ -1,4 +1,7 @@
-import { CreatePOFormSchema, CreatePORequest } from "@/lib/formsValidation";
+import {
+  CreateTransferRequest,
+  CreateTransferRequestFormSchema,
+} from "@/lib/formsValidation";
 import {
   Form,
   FormControl,
@@ -25,51 +28,60 @@ import { DialogClose } from "../ui/dialog";
 import { useCallback, useState } from "react";
 import { DocumentLine } from "@/lib/types";
 import { Calendar } from "../ui/calendar";
-import SelectVendor from "../SelectVendor";
 import SelectSection from "../SelectSection";
 import ItemSelect from "../ItemsSelect";
-import { createPo } from "@/api/client";
+import { createTransferRequest } from "@/api/client";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import SelectWarehouse from "../SelectWarehouse";
 import Loader from "../ui/Loader";
 import { Label } from "../ui/label";
-
-const CreatePOForm = () => {
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { useAuth } from "@/api/Auth/useAuth";
+const TransferRequestForm = () => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { toast } = useToast();
   const [docLine, setdocLine] = useState<DocumentLine[]>([]);
-  const form = useForm<CreatePORequest>({
-    resolver: zodResolver(CreatePOFormSchema),
+  const form = useForm<CreateTransferRequest>({
+    resolver: zodResolver(CreateTransferRequestFormSchema),
     defaultValues: {
       postingDate: new Date(),
       deliveryDate: new Date(),
-      vendorCode: "",
+      requestSource: user.requestSource,
+      transferType: "",
+      warehouseCode: "",
       section: "",
       comments: "",
       documentLines: [],
     },
   });
 
-  const onSubmit = async (values: CreatePORequest) => {
+  const onSubmit = async (values: CreateTransferRequest) => {
     const newValues = {
       ...values,
-      section: values.section === "" ? "999" : values.section,
       documentLines: docLine.map((item) => {
         return {
           itemCode: item.itemCode,
           quantity: item.quantity.toString(),
-          price: item.price.toString(),
           uomCode: item.uomCode,
-          warehouseCode: item.warehouseCode
-            ? item.warehouseCode
-            : item.warehouseList[0],
           uomEntry: item.uomEntry,
         };
       }),
     };
-    return createPo(newValues, form, setdocLine, toast, queryClient);
+    return createTransferRequest(
+      newValues,
+      form,
+      setdocLine,
+      toast,
+      queryClient
+    );
   };
   const calculateDocumentTotal = useCallback(() => {
     return docLine.reduce((sum, line) => sum + (line.total || 0), 0);
@@ -99,7 +111,7 @@ const CreatePOForm = () => {
     );
   };
 
-  const vendorCode = form.watch("vendorCode");
+  const section = form.watch("section");
   return (
     <Form {...form}>
       <form
@@ -201,22 +213,79 @@ const CreatePOForm = () => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="requestSource"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-y-2">
+                    <FormLabel className="text-sm font-bold text-geantSap-black">
+                      Request Source
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Request Source"
+                        disabled
+                        className="h-10 disabled:bg-geantSap-gray-25 text-geantSap-gray-400  border border-geantSap-gray-50 p-2 rounded-lg"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <div className="w-[21.1875rem] flex flex-col gap-y-4">
               <FormField
                 control={form.control}
-                name="vendorCode"
+                name="warehouseCode"
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-y-2">
                     <FormLabel className="text-sm font-bold text-geantSap-black">
-                      Vendor Code
+                      Warehouse
                     </FormLabel>
                     <FormControl>
-                      <SelectVendor
-                        disable={!!docLine.length}
-                        form={form}
-                        field={field}
-                      />
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-full justify-between rounded-lg  border border-geantSap-gray-50">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {user.warehouseList.map((WC) => (
+                            <SelectItem key={WC} value={WC}>
+                              {WC}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="transferType"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-y-2">
+                    <FormLabel className="text-sm font-bold text-geantSap-black">
+                      Transfer Type
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-full justify-between rounded-lg  border border-geantSap-gray-50">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {user.transferType.map((tP) => (
+                            <SelectItem key={tP} value={tP}>{tP}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -258,6 +327,7 @@ const CreatePOForm = () => {
                   </FormItem>
                 )}
               />
+
               <div className="flex flex-col gap-y-2 ">
                 <Label className="text-sm font-bold text-geantSap-black">
                   Document total
@@ -268,10 +338,7 @@ const CreatePOForm = () => {
                     ? `${new Intl.NumberFormat("en-US", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 4,
-                      }).format(
-                        // docLine.reduce((sum, item) => sum + item.total, 0)
-                        documentTotal
-                      )} LYD`
+                      }).format(documentTotal)} LYD`
                     : "0.0000 LYD"}
                 </span>
               </div>
@@ -300,7 +367,6 @@ const CreatePOForm = () => {
                       <th className="px-6 py-3">UOM Group</th>
                       <th className="px-6 py-3">Price</th>
                       <th className="px-6 py-3">Total (LC)</th>
-                      <th className="px-6 py-3">Warehouse code</th>
                       <th className="px-6 py-3 rounded-tr-lg">Remove item</th>
                     </tr>
                   </thead>
@@ -341,13 +407,7 @@ const CreatePOForm = () => {
                           }).format(item.total)}
                           LYD
                         </td>
-                        <td className="px-6 py-3">
-                          <SelectWarehouse
-                            item={item}
-                            docLine={docLine}
-                            setdocLine={setdocLine}
-                          />
-                        </td>
+
                         <td className="px-6">
                           <Button
                             onClick={() => {
@@ -372,10 +432,10 @@ const CreatePOForm = () => {
                     <tr className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                       <td className="px-6 py-3 ">
                         <ItemSelect
-                          code={vendorCode}
+                          type="section"
+                          code={section}
                           setState={setdocLine}
                           state={docLine}
-                          type="vendor"
                         />
                       </td>
                     </tr>
@@ -464,4 +524,4 @@ const CreatePOForm = () => {
   );
 };
 
-export default CreatePOForm;
+export default TransferRequestForm;

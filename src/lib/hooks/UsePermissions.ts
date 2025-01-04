@@ -6,6 +6,10 @@ export type User = {
   name: string;
   phone: string;
   role:string
+  warehouseList:string[]
+  transferType:string[]
+  requestSource:string
+  sectionList:string[]
   exp:number
 };
 // export const usePermissions = () => {

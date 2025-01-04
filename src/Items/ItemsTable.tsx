@@ -1,6 +1,7 @@
 // import Pagination from "@/components/ui/Pagination";
 import { getItems } from "@/api/client";
 import DataRenderer from "@/components/DataRenderer";
+import StatusBadge from "@/components/StatusBadge";
 import Pagination from "@/components/ui/Pagination";
 import Search from "@/components/ui/Search";
 import { useStateContext } from "@/context/useStateContext";
@@ -75,7 +76,7 @@ const ItemsTable = () => {
                     <td className="px-6 py-3">{item.itemCode}</td>
                     <td className="px-6 py-3">{item.itemName} </td>
                     <td className="px-6 py-3">
-                      {item.status }
+                      <StatusBadge  status={item.status}/>
                     </td>
                     <td className="px-6 py-3">{item.department}</td>
                     <td className="px-6 py-3">{item.section} </td>

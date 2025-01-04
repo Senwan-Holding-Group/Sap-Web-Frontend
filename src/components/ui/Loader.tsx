@@ -8,8 +8,10 @@ const Loader = ({ enable }: LoaderProps) => {
     <>
       {enable &&
         createPortal(
-          <div className="w-screen h-screen fixed left-0 top-0  bg-black bg-opacity-60 z-[100] flex flex-col gap-y-4 items-center justify-center">
-            <Loading />
+          <div className="w-screen h-screen fixed left-0 top-0  bg-black/25 z-[100] flex flex-col gap-y-4 items-center justify-center">
+            <div className="w-60 h-28 bg-white rounded-lg flex gap-4 items-center justify-center">
+              <Loading /> 
+            </div>
           </div>,
           document.getElementById("root") as HTMLElement
         )}

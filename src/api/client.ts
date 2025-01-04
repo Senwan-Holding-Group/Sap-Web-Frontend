@@ -3,16 +3,21 @@ import {
   ActivePo,
   DasboardData,
   DocumentLine,
+  InventoryMissingQTY,
   Item,
   MissingQTY,
   POPrintLayout,
+  Transfer,
+  TransferPrintLayout,
   Vendor,
   VendorSelectList,
 } from "@/lib/types";
 import api from ".";
 import {
   CreatePORequest,
+  CreateTransferRequest,
   EditDocumentRequest,
+  EditTransferRequest,
   LoginRequest,
 } from "@/lib/formsValidation";
 import { cn } from "@/lib/utils";
@@ -62,6 +67,18 @@ export const getDashboardData = async (
     console.log(error);
   }
 };
+export const checkAlert = async (
+  url: string,
+) => {
+  try {
+    const res = await api.get(url);
+    return res.status
+  } catch (error: any) {
+  
+    console.log(error);
+  }
+};
+//********************************************* */
 // Active PO and Draft
 export const getActivePOs = async (
   url: string,
@@ -255,6 +272,169 @@ export const saveDraftToPO = async (
   }
   setisSubmitting(false);
 };
+//******************************************** */
+//Transfer
+export const getTransferList = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setTotalPage: React.Dispatch<React.SetStateAction<number>>
+) => {
+  try {
+    const res = await api.get(url);
+    setTotalPage(res.data.totalPage);
+    return res.data.data as Transfer[];
+  } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
+  }
+};
+export const getTransferbyDocEntry = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data.data as Transfer;
+  } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
+    console.log(error);
+  }
+};
+export const createTransferRequest = async (
+  transfer: CreateTransferRequest,
+  form: UseFormReturn<CreateTransferRequest>,
+  setdocLine: React.Dispatch<React.SetStateAction<DocumentLine[]>>,
+  toast: any,
+  queryClient: QueryClient
+) => {
+  try {
+    await api.post("/transferReq", transfer);
+    queryClient.invalidateQueries();
+    form.reset();
+    setdocLine([]);
+    toast({
+      className: cn(
+        "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+      ),
+      description: "PO created successfully",
+    });
+  } catch (error: any) {
+    if (error.message === "Network Error") {
+      form.setError("root", {
+        message: "Something went wrong check your connection",
+      });
+    } else {
+      form.setError("root", {
+        message: error.response.data.message,
+      });
+    }
+    toast({
+      className: cn(
+        "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+      ),
+      variant: "destructive",
+      description: error.response.data.message,
+    });
+    console.log(error);
+  }
+};
+export const EditTransfer = async (
+  url: string,
+  transfer: EditTransferRequest,
+  form: UseFormReturn<EditTransferRequest>,
+  setdocLine: React.Dispatch<React.SetStateAction<DocumentLine[]>>,
+  toast: any,
+  queryClient: QueryClient
+) => {
+  try {
+    await api.patch(url, transfer);
+    setdocLine([]);
+    queryClient.invalidateQueries();
+    toast({
+      className: cn(
+        "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+      ),
+      description: "PO Edited successfully",
+    });
+  } catch (error: any) {
+    if (error.message === "Network Error") {
+      form.setError("root", {
+        message: "Something went wrong check your connection",
+      });
+    } else {
+      form.setError("root", {
+        message: error.response.data.message,
+      });
+    }
+    toast({
+      className: cn(
+        "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+      ),
+      variant: "destructive",
+      description: error.response.data.message,
+    });
+    console.log(error);
+  }
+};
+export const canceltransfer = async (
+  docEntry: number,
+  navigate: NavigateFunction,
+  toast: any,
+  setisSubmitting: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  setisSubmitting(true);
+  try {
+    await api.post(`/transferReq/cancel/${docEntry}`);
+
+    toast({
+      className: cn(
+        "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+      ),
+      description: "PO Canceled  successfully",
+    });
+    navigate(-1);
+  } catch (error: any) {
+    toast({
+      className: cn(
+        "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+      ),
+      variant: "destructive",
+      description:
+        error.message === "Network Error"
+          ? "Something went wrong check your connection"
+          : error.response.data.message,
+    });
+    console.log(error);
+  }
+  setisSubmitting(false);
+};
+export const getTransferPrintLayout = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data.data as TransferPrintLayout;
+  } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
+    console.log(error);
+  }
+};
+//******************************************** */
 // Vendor
 export const getVendors = async (
   url: string,
@@ -354,6 +534,43 @@ export const getMissingbyDocEntry = async (
     }
   }
 };
+//******************************************************* */
+//Inventory Missing Qty
+export const getInventoryMissingQuantity = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setTotalPage: React.Dispatch<React.SetStateAction<number>>
+) => {
+  try {
+    const res = await api.get(url);
+    setTotalPage(res.data.totalPage);
+    return res.data.data as InventoryMissingQTY[];
+  } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
+  }
+};
+export const getInventoryMissingbyDocEntry = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data.data as InventoryMissingQTY;
+  } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
+  }
+};
+//******************************************************* */
 //ITems
 export const getItemsByVendor = async (
   url: string,

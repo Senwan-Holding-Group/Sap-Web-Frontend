@@ -117,7 +117,7 @@ const POPrintLayout = ({ title }: Props) => {
         <Table
           noPrice={title !== "PO Without Price"}
           documentLine={
-            POPrintLayout && POPrintLayout.documentLine.slice(0, 100)
+            POPrintLayout && POPrintLayout.documentLine
           }
         />
          <div className=" px-[60px] h-1/2  text-[8px]  text-justify  mt-12  font-medium ">

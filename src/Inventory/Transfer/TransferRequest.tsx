@@ -1,3 +1,4 @@
+import TransferRequestForm from "@/components/forms/TransferRequestForm";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -6,18 +7,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { faFileCirclePlus } from "@fortawesome/pro-solid-svg-icons";
+import { faForklift } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CreatePOForm from "@/components/forms/CreatePOForm";
-const CreatePO = () => {
+const TransferRequest = () => {
   return (
-    <Dialog>
+<Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-geantSap-primary-500 w-[11.25rem] flex items-center rounded-xl">
+        <Button className="bg-geantSap-primary-500 w-[11.5625rem] flex items-center rounded-xl">
           <span className="size-6 flex items-center justify-center">
-            <FontAwesomeIcon className="size-6" icon={faFileCirclePlus} />
+            <FontAwesomeIcon className="" icon={faForklift} />
           </span>
-          <span className="font-medium text-base ">Create PO</span>
+          <span className="font-medium text-base ">Transfer request</span>
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -31,15 +31,14 @@ const CreatePO = () => {
           <div className="px-6  mt-4">
             <DialogHeader className="border-b border-geantSap-gray-50  h-[3.25rem]">
               <DialogTitle className="text-2xl p-2 leading-9 font-bold text-geantSap-primary-500 ">
-                New purchase order
+              Transfer request 
               </DialogTitle>
             </DialogHeader>
           </div>
-          <CreatePOForm />
+          <TransferRequestForm />
         </div>
       </DialogContent>
-    </Dialog>
-  );
-};
+    </Dialog>  )
+}
 
-export default CreatePO;
+export default TransferRequest

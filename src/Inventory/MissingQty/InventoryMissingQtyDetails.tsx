@@ -1,4 +1,4 @@
-import { getMissingbyDocEntry } from "@/api/client";
+import { getInventoryMissingbyDocEntry } from "@/api/client";
 import DataRenderer from "@/components/DataRenderer";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,17 +7,17 @@ import { faChevronLeft } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
-
-const MissingQtyDetails = () => {
+const InventoryMissingQtyDetails = () => {
   const { id } = useParams();
   const { setError } = useStateContext();
   const {
-    data: missingQTYDetails,
+    data: InventoryMissingQTYDetails,
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["missingQTYDetails"],
-    queryFn: () => getMissingbyDocEntry(`/po/missing/${id}`, setError),
+    queryKey: ["InventoryMissingQTYDetails"],
+    queryFn: () =>
+      getInventoryMissingbyDocEntry(`/transferReq/missing/${id}`, setError),
     refetchOnWindowFocus: false,
     refetchOnMount: true,
   });
@@ -27,7 +27,7 @@ const MissingQtyDetails = () => {
         <DataRenderer isLoading={isFetching} isError={isError}>
           <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">
             <Link
-              to={"/sap/purchasing/missing-qty"}
+              to={"/sap/inventory/missing-qty"}
               className="size-10 border flex items-center   cursor-pointer border-geantSap-gray-100 rounded-lg p-2"
             >
               <FontAwesomeIcon
@@ -36,21 +36,21 @@ const MissingQtyDetails = () => {
               />
             </Link>
             <span className="text-lg font-bold  text-geantSap-black">
-              {missingQTYDetails?.vendorCode}
+              {InventoryMissingQTYDetails?.warehouseCode}
             </span>
           </div>
           <div className="flex-1 w-full overflow-scroll py-6 px-4 flex flex-col gap-y-10">
             <div className="flex  min-w-[1288px]">
               <div className="flex w-[26.875rem] flex-col gap-y-6">
                 <h1 className="font-bold text-lg text-geantSap-gray-500">
-                  PO Information
+                  Missing Qty Information
                 </h1>
                 <div className="flex flex-col gap-y-2 mt-2">
                   <Label className="text-sm font-bold text-geantSap-black ">
                     Document number
                   </Label>
                   <span className="h-10 w-[21.188rem]  border  border-geantSap-gray-50 p-2 rounded-lg">
-                    {missingQTYDetails?.documentNumber}
+                    {InventoryMissingQTYDetails?.documentNumber}
                   </span>
                 </div>
                 <div className="flex flex-col gap-y-2 ">
@@ -59,62 +59,79 @@ const MissingQtyDetails = () => {
                   </Label>
 
                   <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
-                    {missingQTYDetails?.documentDate?.split(" ")[0]}
+                    {InventoryMissingQTYDetails?.documentDate?.split(" ")[0]}
                   </span>
                 </div>
                 <div className="flex flex-col gap-y-2 ">
                   <Label className="text-sm font-bold text-geantSap-black">
-                    Vendor Vode
+                    Delivery Date
                   </Label>
-
-                  <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
-                    {missingQTYDetails?.vendorCode}
+                  <span className="h-10 w-[21.188rem]  border  border-geantSap-gray-50 p-2 rounded-lg">
+                    {InventoryMissingQTYDetails?.deliveryDate.split(" ")[0]}
                   </span>
                 </div>
                 <div className="flex flex-col gap-y-2 ">
                   <Label className="text-sm font-bold text-geantSap-black">
-                    Vendor Name
+                    Requested Value
                   </Label>
 
                   <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
-                    {missingQTYDetails?.vendorName}
+                    {InventoryMissingQTYDetails?.documentTotal}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-y-2 ">
+                  <Label className="text-sm font-bold text-geantSap-black">
+                    Received Value
+                  </Label>
+
+                  <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
+                    {InventoryMissingQTYDetails?.trValue}
                   </span>
                 </div>
               </div>
               <div className="flex flex-col w-[26.875rem] gap-y-6 ">
                 <h1 className="font-bold text-lg text-geantSap-gray-500">
-                  PO Information
+                  Missing Qty Information
                 </h1>
+                <div className="flex flex-col gap-y-2 ">
+                  <Label className="text-sm font-bold text-geantSap-black">
+                    Difference
+                  </Label>
+
+                  <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
+                    {InventoryMissingQTYDetails?.difference}
+                  </span>
+                </div>
                 <div className="flex flex-col gap-y-2 mt-2">
                   <Label className="text-sm font-bold text-geantSap-black">
-                    GR number
+                    Section
                   </Label>
                   <span className="h-10 w-[21.188rem]  border  border-geantSap-gray-50 p-2 rounded-lg">
-                    {missingQTYDetails?.documentNumber}
+                    {InventoryMissingQTYDetails?.section}
                   </span>
                 </div>
                 <div className="flex flex-col gap-y-2 ">
                   <Label className="text-sm font-bold text-geantSap-black">
-                    PO Value
+                    Warehouse
                   </Label>
                   <span className="h-10 w-[21.188rem]  border  border-geantSap-gray-50 p-2 rounded-lg">
-                    {missingQTYDetails?.documentTotal}
+                    {InventoryMissingQTYDetails?.warehouseCode}
                   </span>
                 </div>{" "}
                 <div className="flex flex-col gap-y-2 ">
                   <Label className="text-sm font-bold text-geantSap-black">
-                    Gr Value
+                    Requested Source
                   </Label>
                   <span className="h-10 w-[21.188rem]  border  border-geantSap-gray-50 p-2 rounded-lg">
-                    {missingQTYDetails?.grValue}
+                    {InventoryMissingQTYDetails?.requestSource}
                   </span>
                 </div>
                 <div className="flex flex-col gap-y-2 ">
                   <Label className="text-sm font-bold text-geantSap-black">
-                    Deliver Date
+                    Transfer Type
                   </Label>
                   <span className="h-10 w-[21.188rem]  border  border-geantSap-gray-50 p-2 rounded-lg">
-                    {missingQTYDetails?.deliveryDate.split(" ")[0]}
+                    {InventoryMissingQTYDetails?.transferType}
                   </span>
                 </div>
               </div>
@@ -125,30 +142,30 @@ const MissingQtyDetails = () => {
                 <div className="flex gap-x-4 mt-4 items-center font-normal text-base">
                   <Label className=" text-geantSap-gray-500">Created By:</Label>
                   <span id="createdby" className=" text-geantSap-black">
-                    {missingQTYDetails?.administrativeData?.createdBy}
+                    {InventoryMissingQTYDetails?.administrativeData?.createdBy}
                   </span>
                 </div>
                 <div className="flex gap-x-4  items-center font-normal text-base">
                   <Label className=" text-geantSap-gray-500">Created On:</Label>
                   <span id="createdon" className=" text-geantSap-black">
-                    {missingQTYDetails &&
+                    {InventoryMissingQTYDetails &&
                       new Date(
-                        missingQTYDetails?.administrativeData?.createdOn
+                        InventoryMissingQTYDetails?.administrativeData?.createdOn
                       ).toDateString()}
                   </span>
                 </div>
                 <div className="flex gap-x-4  items-center font-normal text-base">
                   <Label className=" text-geantSap-gray-500">Edited By:</Label>
                   <span id="Editedby" className=" text-geantSap-black">
-                    {missingQTYDetails?.administrativeData?.editedBy}
+                    {InventoryMissingQTYDetails?.administrativeData?.editedBy}
                   </span>
                 </div>
                 <div className="flex gap-x-4  items-center font-normal text-base">
                   <Label className=" text-geantSap-gray-500">Edited On:</Label>
                   <span id="Editedon" className=" text-geantSap-black">
-                    {missingQTYDetails &&
+                    {InventoryMissingQTYDetails &&
                       new Date(
-                        missingQTYDetails?.administrativeData?.editedOn
+                        InventoryMissingQTYDetails?.administrativeData?.editedOn
                       ).toDateString()}
                   </span>
                 </div>
@@ -167,36 +184,41 @@ const MissingQtyDetails = () => {
                     <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
                       <th className="p-6 rounded-tl-lg ">Item No.</th>
                       <th className="p-6">Item description</th>
-                      <th className="p-6">PO quantity</th>
-                      <th className="p-6">GR quantity</th>
+                      <th className="p-6">Requested quantity</th>
+                      <th className="p-6">Received quantity</th>
                       <th className="p-6">Difference</th>
-                      <th className="p-6">Price</th>
-                      <th className="p-6 rounded-tr-lg">Warehouse code</th>
+                      <th className="p-6 rounded-tr-lg">Price</th>
                     </tr>
                   </thead>
                   <tbody className=" [&_tr:last-child]:border-0 ">
-                    {missingQTYDetails&&missingQTYDetails.documentLine?.map((item, i) => (
-                      <tr
-                        key={i}
-                        className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
-                      >
-                        <td className="px-6 py-3">{item.itemCode}</td>
-                        <td className="px-6 py-3">{item.itemDescription}</td>
-                        <td className="px-6 ">{item.Quantity}</td>
-                        <td className="px-6 py-3">{item.grQuantity}</td>
-                        <td className="px-6 py-3 text-geantSap-error-500">{item.difference}</td>
-                        <td className="px-6 py-3">
-                          {new Intl.NumberFormat("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 4,
-                            currency: "LYD",
-                          }).format(item.price)}
-                          LYD
-                        </td>
+                    {InventoryMissingQTYDetails &&
+                      InventoryMissingQTYDetails.documentLine?.map(
+                        (item, i) => (
+                          <tr
+                            key={i}
+                            className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
+                          >
+                            <td className="px-6 py-3">{item.itemCode}</td>
+                            <td className="px-6 py-3">
+                              {item.itemDescription}
+                            </td>
+                            <td className="px-6 ">{item.Quantity}</td>
+                            <td className="px-6 py-3">{item.grQuantity}</td>
+                            <td className="px-6 py-3 text-geantSap-error-500">
+                              {item.difference}
+                            </td>
+                            <td className="px-6 py-3">
+                              {new Intl.NumberFormat("en-US", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 4,
+                                currency: "LYD",
+                              }).format(item.price)}
+                              LYD
+                            </td>
 
-                        <td className="px-6 py-3">{item.warehouseCode}</td>
-                      </tr>
-                    ))}
+                          </tr>
+                        )
+                      )}
                   </tbody>
                 </table>
               </TabsContent>
@@ -208,4 +230,4 @@ const MissingQtyDetails = () => {
   );
 };
 
-export default MissingQtyDetails;
+export default InventoryMissingQtyDetails;

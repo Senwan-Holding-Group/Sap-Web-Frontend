@@ -24,6 +24,15 @@ import ItemsTable from "@/Items/ItemsTable";
 import ItemDetails from "@/Items/ItemDetails";
 import ProtectedRoute from "./ProtectedRoute";
 import SplashScreen from "@/components/SplashScreen";
+import Inventory from "@/Inventory/Inventory";
+import Transfer from "@/Inventory/Transfer/Transfer";
+import TransferTable from "@/Inventory/Transfer/TransferTable";
+import TransferDetails from "@/Inventory/Transfer/TransferDetails";
+import InventoryMissingQty from "@/Inventory/MissingQty/InventoryMissingQty";
+import InventorMissingQtyTable from "@/Inventory/MissingQty/InventorMissingQtyTable";
+import InventoryMissingQtyDetails from "@/Inventory/MissingQty/InventoryMissingQtyDetails";
+import Alerts from "@/Alerts/Alerts";
+import AlertsTable from "@/Alerts/AlertsTable";
 
 const router = createBrowserRouter([
   {
@@ -111,6 +120,44 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "/sap/inventory",
+        element: (
+          <ProtectedRoute>
+            <Inventory />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            path: "/sap/inventory/transfer",
+            element: <Transfer />,
+            children: [
+              {
+                path: "/sap/inventory/transfer",
+                element: <TransferTable />,
+              },
+              {
+                path: "details/:id",
+                element: <TransferDetails />,
+              },
+            ],
+          },
+          {
+            path: "/sap/inventory/missing-qty",
+            element: <InventoryMissingQty />,
+            children: [
+              {
+                path: "/sap/inventory/missing-qty",
+                element: <InventorMissingQtyTable />,
+              },
+              {
+                path: "details/:id",
+                element: <InventoryMissingQtyDetails />,
+              },
+            ],
+          },
+        ],
+      },
+      {
         path: "/sap/items",
         element: (
           <ProtectedRoute>
@@ -143,6 +190,20 @@ const router = createBrowserRouter([
           {
             path: "details/:id",
             element: <VendorsDetails />,
+          },
+        ],
+      },
+      {
+        path: "/sap/alerts",
+        element: (
+          <ProtectedRoute>
+            <Alerts />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            path: "/sap/alerts",
+            element: <AlertsTable />,
           },
         ],
       },

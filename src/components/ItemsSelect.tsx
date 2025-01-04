@@ -22,10 +22,11 @@ import DataRenderer from "./DataRenderer";
 type ItemSelectProps = {
   state: DocumentLine[];
   setState: React.Dispatch<React.SetStateAction<DocumentLine[]>>;
-  vendorCode: string;
+  code: string;
+  type:string
 };
 
-const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
+const ItemSelect = ({ setState, state,code,type }: ItemSelectProps) => {
   const { setError } = useStateContext();
   const [search, setSearch] = useState({
     searchKey: itemVendorMenu[0].value,
@@ -36,14 +37,15 @@ const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["items",vendorCode, search.searchValue],
+    queryKey: ["items",code, search.searchValue],
     queryFn: () =>
       getItemsByVendor(
-        `/item/vendor/${vendorCode}?${search.searchKey}=${search.searchValue}`,
+        `/item/${type}/${code}?${search.searchKey}=${search.searchValue}`,
         setError
       ),
     refetchOnWindowFocus: false,
-    enabled:vendorCode!=""
+    refetchOnMount:true,
+    enabled:code!=""
   });
   return (
     <Dialog>
@@ -85,6 +87,7 @@ const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
                   <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
                     <th className="px-6 py-3 rounded-tl-lg ">Item No.</th>
                     <th className="px-6 py-3">Item description</th>
+                    <th className="px-6 py-3">Stock</th>
                     <th className="px-6 py-3 rounded-tr-lg">Barcode</th>
                   </tr>
                 </thead>
@@ -96,7 +99,7 @@ const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
                      
                           setState((prev) => [
                             ...prev,
-                            { ...item, quantity: 1,  total: parseFloat(item.price.toString()),line:state.length++ },
+                            { ...item, quantity: 1,  total: item.price,line:state.length++ },
                           ]);
                      
                       }}
@@ -108,6 +111,7 @@ const ItemSelect = ({ setState, state,vendorCode }: ItemSelectProps) => {
                     >
                       <td className="px-6 py-3">{item.itemCode}</td>
                       <td className="px-6 py-3">{item.itemName}</td>
+                      <td className="px-6 py-3">{item.stock}</td>
                       <td className="px-6 py-3">
                         {item.barcodeList[0]?.barcode}
                       </td>

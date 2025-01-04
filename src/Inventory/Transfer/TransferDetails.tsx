@@ -10,15 +10,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { cancelPO, EditDocument, getActivePObyDocEntry } from "@/api/client";
+import {
+  canceltransfer,
+  EditTransfer,
+  getTransferbyDocEntry,
+} from "@/api/client";
 import DataRenderer from "@/components/DataRenderer";
 import { useStateContext } from "@/context/useStateContext";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { DocumentLine } from "@/lib/types";
 import {
-  editDocumentFormSchema,
-  EditDocumentRequest,
+  EditTransferRequest,
+  EditTransferRequestFormSchema,
 } from "@/lib/formsValidation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +35,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import moment from "moment";
-import SelectVendor from "@/components/SelectVendor";
 import SelectSection from "@/components/SelectSection";
 import {
   Popover,
@@ -42,14 +45,22 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import SelectWarehouse from "@/components/SelectWarehouse";
 import ItemSelect from "@/components/ItemsSelect";
 import Loader from "@/components/ui/Loader";
 import Alert from "@/components/CancelPOAlert";
 import SelectLayout from "@/components/SelectLayout";
-
-const PODetails = () => {
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useAuth } from "@/api/Auth/useAuth";
+const TransferDetails = () => {
   const { id } = useParams();
+  const { user } = useAuth();
+
   const { setError } = useStateContext();
   const queryClient = useQueryClient();
   const [isEdit, setisEdit] = useState(false);
@@ -58,68 +69,47 @@ const PODetails = () => {
   const { toast } = useToast();
   const [docLine, setdocLine] = useState<DocumentLine[]>([]);
 
+
   const {
-    data: activePO,
+    data: transferDetails,
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["activePODetails"],
-    queryFn: () => getActivePObyDocEntry(`/po/active/${id}`, setError),
+    queryKey: ["TransferDetails"],
+    queryFn: () => getTransferbyDocEntry(`/transferReq/active/${id}`, setError),
     refetchOnWindowFocus: false,
     refetchOnMount: true,
   });
-  const form = useForm<EditDocumentRequest>({
-    resolver: zodResolver(editDocumentFormSchema),
+  const form = useForm<EditTransferRequest>({
+    resolver: zodResolver(EditTransferRequestFormSchema),
     defaultValues: {
       postingDate: new Date(),
       deliveryDate: new Date(),
-      vendorCode: "",
+      requestSource: "",
+      transferType: "",
+      warehouseCode: "",
       section: "",
       comments: "",
       documentLines: [],
     },
   });
   useEffect(() => {
-    if (activePO) {
+    if (transferDetails) {
       form.reset({
-        postingDate: moment(activePO.documentDate).toDate(),
-        deliveryDate: moment(activePO.deliveryDate).toDate(),
-        vendorCode: activePO.vendorCode,
-        section: activePO.section === null ? "" : activePO.section,
-        comments: activePO.comments === null ? "" : activePO.comments,
+        postingDate: moment(transferDetails.documentDate).toDate(),
+        deliveryDate: moment(transferDetails.deliveryDate).toDate(),
+        section:
+          transferDetails.section === null ? "" : transferDetails.section,
+        comments:
+          transferDetails.comments === null ? "" : transferDetails.comments,
+        requestSource: transferDetails.requestSource,
+        transferType: transferDetails.transferType,
+        warehouseCode: transferDetails.warehouseCode,
         documentLines: [],
       });
-      setdocLine(activePO.documentLine);
+      setdocLine(transferDetails.documentLine);
     }
-  }, [form, activePO]);
-
-  const onSubmit = async (values: EditDocumentRequest) => {
-    const newValues = {
-      ...values,
-      section: values.section === "" ? "999" : values.section,
-      documentLines: docLine.map((item) => {
-        return {
-          itemCode: item.itemCode,
-          quantity: item.quantity.toString(),
-          price: item.price.toString(),
-          uomCode: item.uomCode,
-          warehouseCode: item.warehouseCode
-            ? item.warehouseCode
-            : item.warehouseList[0],
-          uomEntry: item.uomEntry,
-        };
-      }),
-    };
-    console.log(newValues);
-    return EditDocument(
-      `/po/active/${activePO?.documentEntry}`,
-      newValues,
-      form,
-      setdocLine,
-      toast,
-      queryClient
-    );
-  };
+  }, [form, transferDetails]);
   const calculateLineTotal = (quantity: number, price: number): number => {
     return Number((Math.abs(quantity) * price).toFixed(4));
   };
@@ -146,13 +136,39 @@ const PODetails = () => {
       })
     );
   };
-  const handleCancelPO = () => {
-    if (activePO) {
-      cancelPO(activePO.documentEntry, navigate, toast, setisSubmitting);
+  const handleCancelTransfer = () => {
+    if (transferDetails) {
+      canceltransfer(
+        transferDetails.documentEntry,
+        navigate,
+        toast,
+        setisSubmitting
+      );
     }
   };
-  const vendorCode = form.watch("vendorCode");
 
+  const onSubmit = async (values: EditTransferRequest) => {
+    const newValues = {
+      ...values,
+      documentLines: docLine.map((item) => {
+        return {
+          itemCode: item.itemCode,
+          quantity: item.quantity.toString(),
+          uomCode: item.uomCode,
+          uomEntry: item.uomEntry,
+        };
+      }),
+    };
+    return EditTransfer(
+      `/transferReq/active/${transferDetails?.documentEntry}`,
+      newValues,
+      form,
+      setdocLine,
+      toast,
+      queryClient
+    );
+  };
+  const section = form.watch("section");
   return (
     <Form {...form}>
       <div className=" sm:h-[35rem] 3xl:h-[47rem] h-[52.5rem] box-border max-h-[52.5rem] overflow-auto  ">
@@ -162,7 +178,7 @@ const PODetails = () => {
           <DataRenderer isLoading={isFetching} isError={isError}>
             <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">
               <Link
-                to={"/sap/purchasing/active-PO"}
+                to={"/sap/inventory/transfer"}
                 className="size-10 border flex items-center   cursor-pointer border-geantSap-gray-100 rounded-lg p-2"
               >
                 <FontAwesomeIcon
@@ -171,21 +187,27 @@ const PODetails = () => {
                 />
               </Link>
               <span className="text-lg font-bold  text-geantSap-black">
-                {activePO?.vendorCode}
+                {transferDetails?.warehouseCode}
               </span>
             </div>
             <div className="flex-1 w-full overflow-scroll py-6 px-4 flex flex-col gap-y-10">
               <div className="flex  min-w-[1288px]">
                 <div className="flex w-[26.875rem] flex-col gap-y-6">
                   <h1 className="font-bold text-lg text-geantSap-gray-500">
-                    PO Information
+                    Transfer Information
                   </h1>
                   <div className="flex flex-col gap-y-2 mt-2">
                     <Label className="text-sm font-bold text-geantSap-black">
                       Document number
                     </Label>
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
-                      {activePO?.documentNumber}
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
+                    >
+                      {transferDetails?.documentNumber}
                     </span>
                   </div>
                   <div className="flex flex-col gap-y-2 ">
@@ -200,7 +222,7 @@ const PODetails = () => {
                           : ""
                       }  border border-geantSap-gray-50 p-2 rounded-lg`}
                     >
-                      {activePO?.documentDate.split(" ")[0]}
+                      {transferDetails?.documentDate.split(" ")[0]}
                     </span>
                   </div>
                   <div className="flex flex-col gap-y-2 ">
@@ -215,23 +237,8 @@ const PODetails = () => {
                           : ""
                       }  border border-geantSap-gray-50 p-2 rounded-lg`}
                     >
-                      {activePO &&
-                        parseFloat(activePO.documentTotal).toFixed(4)}
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-y-2">
-                    <Label className="text-sm font-bold text-geantSap-black">
-                      Status
-                    </Label>
-
-                    <span
-                      className={`h-10 w-[21.188rem] ${
-                        isEdit
-                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
-                          : ""
-                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
-                    >
-                      {activePO?.status}
+                      {transferDetails &&
+                        parseFloat(transferDetails.documentTotal).toFixed(4)}
                     </span>
                   </div>
                   <div className="flex flex-col gap-y-2 ">
@@ -248,9 +255,9 @@ const PODetails = () => {
                       LYD
                     </span>
                   </div>
-                  <div className="flex flex-col gap-y-2 ">
+                  <div className="flex flex-col gap-y-2">
                     <Label className="text-sm font-bold text-geantSap-black">
-                      Process Status
+                      Status
                     </Label>
 
                     <span
@@ -260,52 +267,40 @@ const PODetails = () => {
                           : ""
                       }  border border-geantSap-gray-50 p-2 rounded-lg`}
                     >
-                      {activePO?.processStatus}
+                      {transferDetails?.status}
                     </span>
                   </div>
-                </div>
-                <div className="flex flex-col rounded-full w-[26.875rem] gap-y-6 ">
-                  <h1 className="font-bold text-lg text-geantSap-gray-500">
-                    PO Information
-                  </h1>
                   <FormField
                     control={form.control}
-                    name="vendorCode"
+                    name="requestSource"
                     render={({ field }) => (
-                      <FormItem className="flex flex-col mt-2 gap-y-2 w-[21.188rem]">
+                      <FormItem className="flex flex-col gap-y-2 w-[21.188rem]">
                         <FormLabel className="text-sm font-bold text-geantSap-black">
-                          Vendor Code
+                          Request Source
                         </FormLabel>
                         <FormControl>
-                          <SelectVendor
-                            disable={
-                              !!docLine.length ||
-                              form.formState.isSubmitting ||
-                              !isEdit
-                            }
-                            form={form}
-                            field={field}
+                          <Input
+                            placeholder="Request Source"
+                            disabled
+                            className={`h-10 ${
+                              isEdit
+                                ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                                : ""
+                            }  border border-geantSap-gray-50 p-2 rounded-lg`}
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <div className="flex flex-col gap-y-2 ">
-                    <Label className="text-sm font-bold text-geantSap-black">
-                      Vendor Name
-                    </Label>
+                </div>
 
-                    <span
-                      className={`h-10 w-[21.188rem] ${
-                        isEdit
-                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
-                          : ""
-                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
-                    >
-                      {activePO?.vendorName}
-                    </span>
-                  </div>
+                <div className="flex flex-col rounded-full w-[26.875rem] gap-y-6 ">
+                  <h1 className="font-bold text-lg text-geantSap-gray-500">
+                    Transfer Information
+                  </h1>
+
                   <FormField
                     control={form.control}
                     name="section"
@@ -442,6 +437,69 @@ const PODetails = () => {
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="warehouseCode"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col mt-2 gap-y-2 w-[21.188rem]">
+                        <FormLabel className="text-sm font-bold text-geantSap-black">
+                          Warehouse
+                        </FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            disabled={form.formState.isSubmitting || !isEdit}
+                          >
+                            <SelectTrigger className="w-full justify-between rounded-lg  border border-geantSap-gray-50">
+                              <SelectValue placeholder="Select" />
+                              {/* <span>
+                            {item.warehouseCode
+                              ? item.warehouseCode
+                              : warehouseList[0]}
+                          </span> */}
+                            </SelectTrigger>
+                            <SelectContent className="">
+                            {user.warehouseList.map((WC) => (
+                            <SelectItem key={WC} value={WC}>
+                              {WC}
+                            </SelectItem>
+                          ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="transferType"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col gap-y-2 w-[21.188rem]">
+                        <FormLabel className="text-sm font-bold text-geantSap-black">
+                          Transfer Type
+                        </FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            disabled={form.formState.isSubmitting || !isEdit}
+                          >
+                            <SelectTrigger className="w-full justify-between rounded-lg  border border-geantSap-gray-50">
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                            <SelectContent>
+                            {user.transferType.map((tP) => (
+                            <SelectItem key={tP} value={tP}>{tP}</SelectItem>
+                          ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div className="flex flex-col w-[26.875rem] gap-y-6 ">
                   <h1 className="font-bold text-lg text-geantSap-gray-500">
@@ -452,7 +510,7 @@ const PODetails = () => {
                       Created By:
                     </Label>
                     <span id="createdby" className=" text-geantSap-black">
-                      {activePO?.administrativeData?.createdBy}
+                      {transferDetails?.administrativeData?.createdBy}
                     </span>
                   </div>
                   <div className="flex gap-x-4  items-center font-normal text-base">
@@ -460,9 +518,9 @@ const PODetails = () => {
                       Created On:
                     </Label>
                     <span id="createdon" className=" text-geantSap-black">
-                      {activePO &&
+                      {transferDetails &&
                         new Date(
-                          activePO?.administrativeData?.createdOn
+                          transferDetails?.administrativeData?.createdOn
                         ).toDateString()}
                     </span>
                   </div>
@@ -471,7 +529,7 @@ const PODetails = () => {
                       Edited By:
                     </Label>
                     <span id="Editedby" className=" text-geantSap-black">
-                      {activePO?.administrativeData?.editedBy}
+                      {transferDetails?.administrativeData?.editedBy}
                     </span>
                   </div>
                   <div className="flex gap-x-4  items-center font-normal text-base">
@@ -479,9 +537,9 @@ const PODetails = () => {
                       Edited On:
                     </Label>
                     <span id="Editedon" className=" text-geantSap-black">
-                      {activePO &&
+                      {transferDetails &&
                         new Date(
-                          activePO?.administrativeData?.editedOn
+                          transferDetails?.administrativeData?.editedOn
                         ).toDateString()}
                     </span>
                   </div>
@@ -508,7 +566,6 @@ const PODetails = () => {
                         <th className="p-6">UOM Group</th>
                         <th className="p-6">Price</th>
                         <th className="p-6">Total (LC)</th>
-                        <th className="p-6 ">Warehouse code</th>
                         <th className="p-6 rounded-tr-lg">Remove item</th>
                       </tr>
                     </thead>
@@ -557,14 +614,6 @@ const PODetails = () => {
                             }).format(item.total)}
                             LYD
                           </td>
-                          <td className="px-6 py-3">
-                            <SelectWarehouse
-                              item={item}
-                              disable={!isEdit}
-                              docLine={docLine}
-                              setdocLine={setdocLine}
-                            />
-                          </td>
                           <td className="px-6">
                             <Button
                               disabled={!isEdit}
@@ -594,10 +643,10 @@ const PODetails = () => {
                         <td className="px-6 py-3 ">
                           {isEdit && (
                             <ItemSelect
-                              code={vendorCode}
+                              code={section}
                               setState={setdocLine}
                               state={docLine}
-                              type="vendor"
+                              type="section"
                             />
                           )}
                         </td>
@@ -662,14 +711,14 @@ const PODetails = () => {
             {!isEdit ? (
               <>
                 <Alert
-                  disabled={activePO?.status === "Closed" || isFetching}
-                  title="Cancel PO"
-                  description="Are you sure you want to cancel this PO?"
-                  cancel={handleCancelPO}
+                  disabled={transferDetails?.status === "Closed" || isFetching}
+                  title="Cancel transfer Request"
+                  description="Are you sure you want to cancel this transfer request?"
+                  cancel={handleCancelTransfer}
                 />
-                <SelectLayout title="Save PO as" disabled={isFetching} />
+                <SelectLayout title="Save Transfer request as" disabled={isFetching} />
                 <Button
-                  disabled={activePO?.status === "Closed" || isFetching}
+                  disabled={transferDetails?.status === "Closed" || isFetching}
                   type="button"
                   onClick={(e) => {
                     if (!isEdit) {
@@ -714,4 +763,4 @@ const PODetails = () => {
   );
 };
 
-export default PODetails;
+export default TransferDetails;

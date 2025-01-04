@@ -1,4 +1,5 @@
 import POPrintLayout from "./PrintLayout/POPrintLayout";
+import TransferReqLayout from "./PrintLayout/TransferReqLayout";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -11,13 +12,18 @@ import {
 } from "./ui/dialog";
 type Props = {
   disabled: boolean;
+  title: string;
 };
-const SelectLayout = ({disabled}:Props) => {
+const SelectLayout = ({ disabled, title }: Props) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={disabled} type="button" className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg">
-          Save PO as
+        <Button
+          disabled={disabled}
+          type="button"
+          className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg"
+        >
+          {title}
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -35,8 +41,14 @@ const SelectLayout = ({disabled}:Props) => {
         </div>
         <div className=" px-4 h-full w-full  ">
           <div className="border-2 h-[15rem] mb-2 bg-white border-geantSap-gray-25 rounded-lg overflow-scroll">
-            <POPrintLayout title={"PO With Price"}/>
-            <POPrintLayout title={"PO Without Price"}/>
+            {title === "Save PO as" ? (
+              <>
+                <POPrintLayout title={"PO With Price"} />
+                <POPrintLayout title={"PO Without Price"} />
+              </>
+            ) : (
+              <TransferReqLayout />
+            )}
           </div>
         </div>
         <DialogFooter className=" bg-[#fcfcfc] rounded-bl-lg p-6  rounded-br-lg  border-t flex flex-row gap-4 h-[5.5rem] border-geantSap-gray-50">

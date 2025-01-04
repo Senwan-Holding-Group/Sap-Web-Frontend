@@ -111,7 +111,6 @@ const DraftDetails = () => {
         };
       }),
     };
-    console.log(newValues);
     return EditDocument(
       `/po/draft/${draftDetails?.documentEntry}`,
       newValues,
@@ -119,6 +118,29 @@ const DraftDetails = () => {
       setdocLine,
       toast,
       queryClient
+    );
+  };
+  const calculateLineTotal = (quantity: number, price: number): number => {
+    return Number((Math.abs(quantity) * price).toFixed(4));
+  };
+  const updateLineQuantity = (line: number,lineNum:number, newQuantity: string) => {
+    const quantity = parseFloat(newQuantity);
+
+    if (isNaN(quantity)) return;
+
+    setdocLine(
+      docLine.map((value) => {
+        if (value.lineNum != lineNum ||
+          value.line != line) {
+          return value;
+        }
+
+        return {
+          ...value,
+          quantity: Math.abs(quantity),
+          total: calculateLineTotal(quantity, value.price),
+        };
+      })
     );
   };
   const vendorCode = form.watch("vendorCode");
@@ -482,33 +504,13 @@ const DraftDetails = () => {
                           </td>
                           <td className="px-6 ">
                             <Input
-                              value={item.quantity || "1"}
+                              value={item.quantity || 1}
                               key={i}
+                              type="number"
                               disabled={!isEdit}
                               onChange={(e) => {
-                                setdocLine(
-                                  docLine.map((value) => {
-                                    if (
-                                      value.lineNum != item.lineNum ||
-                                      value.line != item.line
-                                    ) {
-                                      return value;
-                                    } else {
-                                      return {
-                                        ...value,
-                                        quantity: parseFloat(e.target.value)
-                                          ? Math.abs(parseFloat(e.target.value))
-                                          : 1,
-                                        total: parseFloat(e.target.value)
-                                          ? Math.abs(
-                                              parseFloat(e.target.value) *
-                                                value.price
-                                            )
-                                          : value.price,
-                                      };
-                                    }
-                                  })
-                                );
+                                
+                                updateLineQuantity(item.line,item.lineNum, e.target.value);
                               }}
                               className="w-[5rem] p-0 h-1/2 border-0 disabled:opacity-50 text-center rounded-lg"
                             />
@@ -567,9 +569,10 @@ const DraftDetails = () => {
                         <td className="px-6 py-3 ">
                           {isEdit && (
                             <ItemSelect
-                              vendorCode={vendorCode}
+                              code={vendorCode}
                               setState={setdocLine}
                               state={docLine}
+                              type="vendor"
                             />
                           )}
                         </td>

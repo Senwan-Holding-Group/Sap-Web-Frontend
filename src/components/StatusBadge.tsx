@@ -1,9 +1,11 @@
 enum Status {
   APPROVED = "approved",
-  APPENDED = "opened",
+  OPENED = "opened",
+  ACTIVE = "active",
   PENDING = "pending",
   CLOSED = "closed",
   CANCELLED = "cancelled",
+  INACTIVE = "inactive",
   REJECTED = "rejected",
   UNMATCHED = "unmatched",
 }
@@ -18,10 +20,12 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
 
     switch (normalizedStatus) {
       case Status.APPROVED:
-      case Status.APPENDED:
+      case Status.OPENED:
+      case Status.ACTIVE:
         return "bg-geantSap-primary-15 text-geantSap-primary-600 hover:bg-geantSap-primary-100";
       case Status.PENDING:
       case Status.CLOSED:
+      case Status.INACTIVE:
         return "bg-geantSap-gray-50 text-geantSap-gray-600 hover:bg-geantSap-gray-100";
       case Status.CANCELLED:
       case Status.REJECTED:

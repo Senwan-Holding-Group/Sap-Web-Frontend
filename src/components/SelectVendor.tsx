@@ -1,4 +1,4 @@
-import { Check, ChevronDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { useMemo, useState } from "react";
@@ -19,6 +19,8 @@ import DataRenderer from "./DataRenderer";
 import { useToast } from "@/hooks/use-toast";
 import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import { CreatePORequest } from "@/lib/formsValidation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/pro-solid-svg-icons/faChevronDown";
 type SelectVendorProps = {
   field: ControllerRenderProps<CreatePORequest>;
   form: UseFormReturn<CreatePORequest>;
@@ -86,8 +88,8 @@ const SelectVendor = ({ field, form, disable }: SelectVendorProps) => {
           {field.value
             ? vendorsList?.find((vendor) => vendor.vendorCode === field.value)
                 ?.vendor
-            : "Select Vendor..."}
-          <ChevronDown className="opacity-50 size-6" />
+            : "Select"}
+      <FontAwesomeIcon icon={faChevronDown} className="h-4 w-4  text-geantSap-primary-500" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0 w-[21.1875rem]" align="start">
