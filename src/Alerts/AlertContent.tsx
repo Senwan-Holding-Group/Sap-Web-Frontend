@@ -33,7 +33,7 @@ const AlertContent = ({ data, message }: Props) => {
         className=" sm:max-w-[70rem]  w-[90%]"
         aria-describedby={undefined}
       >
-        <div className=" flex 3xl:h-[40rem] h-[30rem] bg-[#fcfcfc] rounded-xl overflow-scrol flex-col   gap-y-4  w-full ">
+        <div className=" flex 3xl:h-[40rem] h-[30rem] bg-[#fcfcfc] rounded-xl overflow-scroll flex-col   gap-y-4  w-full ">
           <div className="px-6  mt-4">
             <DialogHeader className="border-b border-geantSap-gray-50  h-[3.25rem]">
               <DialogTitle className="text-2xl p-2 leading-9 font-bold text-geantSap-primary-500 ">
@@ -41,7 +41,7 @@ const AlertContent = ({ data, message }: Props) => {
               </DialogTitle>
             </DialogHeader>
           </div>
-          <div className="px-6 flex gap-2">
+          <div className="px-6 flex gap-2 sm:flex-row flex-col items-center">
             <h1 className="font-medium text-base text-black">
               Alert message :
             </h1>
