@@ -103,7 +103,7 @@ const AlertContent = ({ data, message }: Props) => {
                         onClick={() =>
                           line.type === "po"
                             ? navigate(
-                                `/sap/purchasing/active-PO/details/${line.documentEntry}`
+                                `/sap/purchasing/draft/details/${line.documentEntry}`
                               )
                             : navigate(`/sap/items/details/${line.itemCode}`)
                         }
