@@ -13,7 +13,7 @@ const CreatePO = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-geantSap-primary-500 w-[11.25rem] flex items-center rounded-xl">
+        <Button className="bg-geantSap-primary-500 w-[11.25rem] flex items-center rounded-lg">
           <span className="size-6 flex items-center justify-center">
             <FontAwesomeIcon className="size-6" icon={faFileCirclePlus} />
           </span>

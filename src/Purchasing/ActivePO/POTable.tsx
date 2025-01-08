@@ -7,7 +7,6 @@ import { activePOmenu } from "@/lib/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CreatePO from "./CreatePO";
 import StatusBadge from "@/components/StatusBadge";
 
 const POTable = () => {
@@ -43,7 +42,6 @@ const POTable = () => {
     <div className="flex flex-col gap-y-4">
       <div className="flex sm:justify-between items-center flex-col sm:flex-row  gap-4">
         <Search menuList={activePOmenu} setSearch={setSearch} search={search} />
-        <CreatePO />
       </div>
       <div className="  3xl:h-[43.5rem] sm:h-[31.5rem] h-[45rem] max-h-[45rem]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
         <DataRenderer isLoading={isFetching} isError={isError}>

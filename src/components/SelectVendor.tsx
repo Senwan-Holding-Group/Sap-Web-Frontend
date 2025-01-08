@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Check } from "lucide-react";
 import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -17,13 +18,12 @@ import {
 import { ScrollArea } from "./ui/scroll-area";
 import DataRenderer from "./DataRenderer";
 import { useToast } from "@/hooks/use-toast";
-import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
-import { CreatePORequest } from "@/lib/formsValidation";
+import {  FieldValues, UseFormReturn } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/pro-solid-svg-icons/faChevronDown";
 type SelectVendorProps = {
-  field: ControllerRenderProps<CreatePORequest>;
-  form: UseFormReturn<CreatePORequest>;
+  field: FieldValues;
+  form: UseFormReturn<any>;
   disable: boolean;
 };
 const ITEMS_PER_PAGE = 100;

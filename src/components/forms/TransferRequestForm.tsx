@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendarCirclePlus,
+  faFileExport,
   faSpinner,
   faX,
 } from "@fortawesome/pro-solid-svg-icons";
@@ -30,7 +31,7 @@ import { DocumentLine } from "@/lib/types";
 import { Calendar } from "../ui/calendar";
 import SelectSection from "../SelectSection";
 import ItemSelect from "../ItemsSelect";
-import { createTransferRequest } from "@/api/client";
+import { createTransferRequest, exportItemsBy } from "@/api/client";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import Loader from "../ui/Loader";
@@ -43,6 +44,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useAuth } from "@/api/Auth/useAuth";
+import ImportItems from "../ImportItems";
 const TransferRequestForm = () => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -282,7 +284,9 @@ const TransferRequestForm = () => {
                         </SelectTrigger>
                         <SelectContent>
                           {user.transferType.map((tP) => (
-                            <SelectItem key={tP} value={tP}>{tP}</SelectItem>
+                            <SelectItem key={tP} value={tP}>
+                              {tP}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -345,7 +349,7 @@ const TransferRequestForm = () => {
             </div>
           </div>
 
-          <div className="border-t border-geantSap-gray-50 min-w-max ">
+          <div className="border-t relative border-geantSap-gray-50 min-w-max ">
             <Tabs defaultValue="item" className=" mt-4 ">
               <TabsList className="grid w-60 grid-cols-2 ">
                 <TabsTrigger value="item">Item</TabsTrigger>
@@ -353,6 +357,26 @@ const TransferRequestForm = () => {
                   Attachment
                 </TabsTrigger>
               </TabsList>
+              <div className="absolute right-0 top-4 flex gap-x-4 ">
+                <ImportItems
+                  url="/item/section/bulk"
+                  Code={section}
+                  setState={setdocLine}
+                />
+                <Button
+                  type="button"
+                  onClick={() => {
+                    exportItemsBy("section", section);
+                  }}
+                  disabled={section == ""}
+                  className="bg-geantSap-primary-500 w-[11.25rem] flex items-center disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 disabled:cursor-not-allowed rounded-lg"
+                >
+                  <span className="size-6 flex items-center justify-center">
+                    <FontAwesomeIcon className="size-6" icon={faFileExport} />
+                  </span>
+                  <span className="font-medium text-base ">Export Items</span>
+                </Button>
+              </div>
               <TabsContent
                 className="w-full border-2 overflow-scroll border-geantSap-gray-25 rounded-lg"
                 value="item"

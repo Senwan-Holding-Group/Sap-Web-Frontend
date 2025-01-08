@@ -20,8 +20,8 @@ export const transferMenu = [
   { label: "Document number", value: "documentNumber" },
   { label: "Document date", value: "documentDate" },
   { label: "Document total", value: "documentTotal" },
-  { label: "Transfer type", value: "vendorName" },
-  { label: "Warehouse", value: "wareHouse" },
+  { label: "Transfer type", value: "transferType" },
+  { label: "Warehouse", value: "warehouseCode" },
 ];
 export const missingQTYmenu = [
   { label: "Vendor code", value: "vendorCode" },
@@ -36,8 +36,8 @@ export const inventoryMissingQTYmenu = [
   { label: "Document date", value: "documentDate" },
   { label: "Document NO", value: "documentNumber" },
   { label: "Transfer type", value: "transferType" },
-  { label: "Requested Value", value: "requestedValue" },
-  { label: "Recieved Value", value: "receivedValue" },
+  { label: "Requested Value", value: "documentTotal" },
+  { label: "Recieved Value", value: "trValue" },
 ];
 export const draftmenu = [
   { label: "Vendor code", value: "vendorCode" },

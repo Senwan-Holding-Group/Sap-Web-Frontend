@@ -12,12 +12,13 @@ import {
   Vendor,
   VendorSelectList,
 } from "@/lib/types";
-import api from ".";
+import api, { baseURL } from ".";
 import {
   CreatePORequest,
   CreateTransferRequest,
   EditDocumentRequest,
   EditTransferRequest,
+  ItemImport,
   LoginRequest,
 } from "@/lib/formsValidation";
 import { cn } from "@/lib/utils";
@@ -67,14 +68,58 @@ export const getDashboardData = async (
     console.log(error);
   }
 };
-export const checkAlert = async (
-  url: string,
-) => {
+export const checkAlert = async (url: string) => {
   try {
     const res = await api.get(url);
-    return res.status
+    return res.status;
   } catch (error: any) {
-  
+    console.log(error);
+  }
+};
+export const importItems = async (
+  url:string,
+  data: { [x: string]: string | number }[],
+  Code: string,
+  form: UseFormReturn<ItemImport>,
+  handleClose: () => void,
+  setdocLine: React.Dispatch<React.SetStateAction<DocumentLine[]>>,
+  toast: any
+) => {
+  try {
+    const res = await api.post(`${url}/${Code}`, data);
+    console.log(res.data);
+    setdocLine(res.data.data);
+    handleClose()
+    toast({
+      className: cn(
+        "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+      ),
+      description: "Items imported successfully",
+    });
+  } catch (error: any) {
+    if (error.message === "Network Error") {
+      form.setError("root", {
+        message: "Something went wrong check your connection",
+      });
+    } else {
+      form.setError("root", {
+        message: error.response.data.message,
+      });
+    }
+    console.log(error);
+  }
+};
+export const exportItemsBy = async (by: string,value:string) => {
+  try {
+    const url = `${baseURL}/export/items/${by}/${value}`;
+    const tempLink = document.createElement("a");
+    tempLink.href = url;
+    tempLink.setAttribute("download", `${by}:${value}`); 
+    document.body.appendChild(tempLink);
+    tempLink.click();
+    document.body.removeChild(tempLink);
+    window.URL.revokeObjectURL(url);
+  } catch (error: any) {
     console.log(error);
   }
 };

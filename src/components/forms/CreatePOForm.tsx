@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendarCirclePlus,
+  faFileExport,
   faSpinner,
   faX,
 } from "@fortawesome/pro-solid-svg-icons";
@@ -28,12 +29,13 @@ import { Calendar } from "../ui/calendar";
 import SelectVendor from "../SelectVendor";
 import SelectSection from "../SelectSection";
 import ItemSelect from "../ItemsSelect";
-import { createPo } from "@/api/client";
+import { createPo, exportItemsBy } from "@/api/client";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import SelectWarehouse from "../SelectWarehouse";
 import Loader from "../ui/Loader";
 import { Label } from "../ui/label";
+import ImportItems from "../ImportItems";
 
 const CreatePOForm = () => {
   const queryClient = useQueryClient();
@@ -72,7 +74,7 @@ const CreatePOForm = () => {
     return createPo(newValues, form, setdocLine, toast, queryClient);
   };
   const calculateDocumentTotal = useCallback(() => {
-    return docLine.reduce((sum, line) => sum + (line.total || 0), 0);
+    return docLine?.reduce((sum, line) => sum + (line.total || 0), 0);
   }, [docLine]);
   const documentTotal = calculateDocumentTotal();
   const calculateLineTotal = (quantity: number, price: number): number => {
@@ -278,14 +280,29 @@ const CreatePOForm = () => {
             </div>
           </div>
 
-          <div className="border-t border-geantSap-gray-50 min-w-max ">
-            <Tabs defaultValue="item" className=" mt-4 ">
+          <div className="border-t relative border-geantSap-gray-50 min-w-max">
+            <Tabs defaultValue="item" className=" mt-4">
               <TabsList className="grid w-60 grid-cols-2 ">
                 <TabsTrigger value="item">Item</TabsTrigger>
                 <TabsTrigger disabled value="attachment">
                   Attachment
                 </TabsTrigger>
               </TabsList>
+              <div className="absolute right-0 top-4 flex gap-x-4 ">
+                <ImportItems
+                  url="/item/vendor/bulk"
+                  Code={vendorCode}
+                  setState={setdocLine}
+                />
+                <Button type="button" onClick={()=>{
+                  exportItemsBy("vendor",vendorCode)
+                }} disabled={vendorCode==""} className="bg-geantSap-primary-500 w-[11.25rem] flex items-center disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 disabled:cursor-not-allowed rounded-lg">
+                  <span className="size-6 flex items-center justify-center">
+                    <FontAwesomeIcon className="size-6" icon={faFileExport} />
+                  </span>
+                  <span className="font-medium text-base ">Export Items</span>
+                </Button>
+              </div>
               <TabsContent
                 className="w-full border-2 overflow-scroll border-geantSap-gray-25 rounded-lg"
                 value="item"

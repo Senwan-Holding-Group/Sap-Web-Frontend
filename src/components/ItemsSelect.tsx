@@ -23,10 +23,10 @@ type ItemSelectProps = {
   state: DocumentLine[];
   setState: React.Dispatch<React.SetStateAction<DocumentLine[]>>;
   code: string;
-  type:string
+  type: string;
 };
 
-const ItemSelect = ({ setState, state,code,type }: ItemSelectProps) => {
+const ItemSelect = ({ setState, state, code, type }: ItemSelectProps) => {
   const { setError } = useStateContext();
   const [search, setSearch] = useState({
     searchKey: itemVendorMenu[0].value,
@@ -37,15 +37,15 @@ const ItemSelect = ({ setState, state,code,type }: ItemSelectProps) => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["items",code, search.searchValue],
+    queryKey: ["items", code, search.searchValue],
     queryFn: () =>
       getItemsByVendor(
         `/item/${type}/${code}?${search.searchKey}=${search.searchValue}`,
         setError
       ),
     refetchOnWindowFocus: false,
-    refetchOnMount:true,
-    enabled:code!=""
+    refetchOnMount: true,
+    enabled: code != "",
   });
   return (
     <Dialog>
@@ -96,12 +96,15 @@ const ItemSelect = ({ setState, state,code,type }: ItemSelectProps) => {
                     <tr
                       key={item.itemCode}
                       onClick={() => {
-                     
-                          setState((prev) => [
-                            ...prev,
-                            { ...item, quantity: 1,  total: item.price,line:state.length++ },
-                          ]);
-                     
+                        setState((prev) => [
+                          ...prev,
+                          {
+                            ...item,
+                            quantity: 1,
+                            total: parseFloat((item.price ?? 0).toString()),
+                            line: state.length++,
+                          },
+                        ]);
                       }}
                       className={`text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25  cursor-pointer ${
                         state.find(

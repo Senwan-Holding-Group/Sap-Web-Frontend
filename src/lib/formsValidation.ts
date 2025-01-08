@@ -83,6 +83,11 @@ export const editDocumentFormSchema = z.object({
   ),
 });
 export type EditDocumentRequest = z.infer<typeof editDocumentFormSchema>;
+export const itemImport = z.object({
+  item: z.string(),
+ 
+});
+export type ItemImport = z.infer<typeof itemImport>;
 
 export const loginFormSchema = z.object({
   code: z.string().min(3, { message: "UserCode is required." }),

@@ -52,7 +52,7 @@ const ItemDetails = () => {
                   Object.keys(itemDetails)
                     .slice(0, 7)
                     .map((key) => (
-                      <div className="flex flex-col gap-y-2 first:mt-2">
+                      <div key={key} className="flex flex-col gap-y-2 first:mt-2">
                         <Label className="text-sm font-bold text-geantSap-black ">
                           {capitalize(key)
                             .replace(/([A-Z])/g, " $1")
@@ -184,7 +184,7 @@ const ItemDetails = () => {
                     <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
                       {itemDetails &&
                         Object.keys(itemDetails.stock).map((key) => (
-                          <th className="p-6 first:rounded-tl-lg last:rounded-tr-lg ">
+                          <th key={key} className="p-6 first:rounded-tl-lg last:rounded-tr-lg ">
                             {key} Stock
                           </th>
                         ))}
@@ -211,7 +211,7 @@ const ItemDetails = () => {
                     <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
                       {itemDetails &&
                         Object.keys(itemDetails.cost).map((key) => (
-                          <th className="p-6 first:rounded-tl-lg last:rounded-tr-lg ">
+                          <th key={key} className="p-6 first:rounded-tl-lg last:rounded-tr-lg ">
                             {key} Cost
                           </th>
                         ))}
