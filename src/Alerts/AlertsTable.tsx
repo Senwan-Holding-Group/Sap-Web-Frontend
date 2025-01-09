@@ -97,7 +97,7 @@ const AlertsTable = () => {
                               .trim()}</td>
                   <td className="px-6 py-3">{alert.alertTime} </td>
                   <td className="px-6 py-0 hover:cursor-pointer">
-                    <AlertContent data={alert.data} message={alert.message} />
+                    <AlertContent key={i} data={alert.data} message={alert.message} />
                   </td>
                 </tr>
               ))

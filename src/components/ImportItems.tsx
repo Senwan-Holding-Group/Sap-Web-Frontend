@@ -29,9 +29,9 @@ import { useState } from "react";
 type Props = {
   setState: React.Dispatch<React.SetStateAction<DocumentLine[]>>;
   Code: string;
-  url:string
+  url: string;
 };
-const ImportItems = ({ setState, Code,url }: Props) => {
+const ImportItems = ({ setState, Code, url }: Props) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   //   const [isPasting, setIsPasting] = useState(false);
@@ -60,7 +60,7 @@ const ImportItems = ({ setState, Code,url }: Props) => {
         };
       });
     console.log(result);
-    return importItems(url,result, Code, form, handleClose, setState, toast);
+    return importItems(url, result, Code, form, handleClose, setState, toast);
   };
 
   return (
@@ -85,7 +85,10 @@ const ImportItems = ({ setState, Code,url }: Props) => {
       >
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={(e) => {
+              e.stopPropagation();
+              form.handleSubmit(onSubmit)(e);
+            }}
             className="flex flex-col w-full overflow-scroll  justify-between h-full"
           >
             <div className=" flex 3xl:h-[35rem] h-[25rem] bg-[#fcfcfc] rounded-xl overflow-scroll flex-col justify-between w-full  ">

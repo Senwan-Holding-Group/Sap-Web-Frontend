@@ -15,6 +15,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
+import { Fragment } from "react/jsx-runtime";
 type Props = {
   data: any;
   message: string;
@@ -45,28 +46,28 @@ const AlertContent = ({ data, message }: Props) => {
             <h1 className="font-medium text-base text-black">
               Alert message :
             </h1>
-            <p className="font-normal text-base leading-[22.4px]">{capitalize(message)
-                              .replace(/([A-Z])/g, " $1")
-                              .trim()}</p>
+            <p className="font-normal text-base leading-[22.4px]">
+              {capitalize(message)
+                .replace(/([A-Z])/g, " $1")
+                .trim()}
+            </p>
           </div>
-
           <div className="px-6 max-w-full overflow-scroll  h-full ">
             <table className="w-full caption-bottom">
               <thead className="sticky top-0 w-full bg-geantSap-gray-25">
                 <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
                   {Object.keys(data[0])?.map((key, i) => {
                     const currentKey = Object.keys(data[0])[i];
-
                     return (
-                      <>
+                      <Fragment key={i}>
                         {currentKey != "type" && (
-                          <th key={key} className="p-6  first:rounded-tl-xl">
+                          <th  className="p-6  first:rounded-tl-xl">
                             {capitalize(key)
                               .replace(/([A-Z])/g, " $1")
                               .trim()}
                           </th>
                         )}
-                      </>
+                      </Fragment>
                     );
                   })}
                   <th className="p-6 rounded-tr-xl">View</th>
@@ -88,15 +89,15 @@ const AlertContent = ({ data, message }: Props) => {
                       {Object.values(line).map((value: any, i: number) => {
                         const currentKey = Object.keys(data[0])[i];
                         return (
-                          <>
+                          <Fragment key={i}  >
                             {currentKey != "type" && (
-                              <td key={i} className="px-6 py-3">
+                              <td className="px-6 py-3">
                                 {currentKey === "documentDate"
                                   ? value.split(" ")[0]
                                   : value}
                               </td>
                             )}
-                          </>
+                          </Fragment>
                         );
                       })}
                       <td

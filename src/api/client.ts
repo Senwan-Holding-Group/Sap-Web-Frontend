@@ -115,6 +115,7 @@ export const exportItemsBy = async (by: string,value:string) => {
     const tempLink = document.createElement("a");
     tempLink.href = url;
     tempLink.setAttribute("download", `${by}:${value}`); 
+    tempLink.setAttribute("target", "_blank"); 
     document.body.appendChild(tempLink);
     tempLink.click();
     document.body.removeChild(tempLink);
