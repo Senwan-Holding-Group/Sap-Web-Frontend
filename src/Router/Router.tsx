@@ -33,6 +33,8 @@ import InventorMissingQtyTable from "@/Inventory/MissingQty/InventorMissingQtyTa
 import InventoryMissingQtyDetails from "@/Inventory/MissingQty/InventoryMissingQtyDetails";
 import Alerts from "@/Alerts/Alerts";
 import AlertsTable from "@/Alerts/AlertsTable";
+import Reports from "@/Reports/Reports";
+import ReportsTable from "@/Reports/ReportsTable";
 
 const router = createBrowserRouter([
   {
@@ -204,6 +206,20 @@ const router = createBrowserRouter([
           {
             path: "/sap/alerts",
             element: <AlertsTable />,
+          },
+        ],
+      },
+      {
+        path: "/sap/reports",
+        element: (
+          <ProtectedRoute>
+            <Reports />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            path: "/sap/reports",
+            element: <ReportsTable />,
           },
         ],
       },

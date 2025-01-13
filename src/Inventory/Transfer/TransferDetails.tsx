@@ -41,7 +41,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { cn, numberWithCommas } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
@@ -238,7 +238,7 @@ const TransferDetails = () => {
                       }  border border-geantSap-gray-50 p-2 rounded-lg`}
                     >
                       {transferDetails &&
-                        parseFloat(transferDetails.documentTotal).toFixed(4)}
+                        numberWithCommas(transferDetails.documentTotal)}
                     </span>
                   </div>
                   <div className="flex flex-col gap-y-2 ">
@@ -453,11 +453,6 @@ const TransferDetails = () => {
                           >
                             <SelectTrigger className="w-full justify-between rounded-lg  border border-geantSap-gray-50">
                               <SelectValue placeholder="Select" />
-                              {/* <span>
-                            {item.warehouseCode
-                              ? item.warehouseCode
-                              : warehouseList[0]}
-                          </span> */}
                             </SelectTrigger>
                             <SelectContent className="">
                             {user.warehouseList.map((WC) => (
@@ -608,10 +603,7 @@ const TransferDetails = () => {
                             LYD
                           </td>
                           <td className="px-6 py-3">
-                            {new Intl.NumberFormat("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 4,
-                            }).format(item.total)}
+                          {numberWithCommas(item.total)}
                             LYD
                           </td>
                           <td className="px-6">

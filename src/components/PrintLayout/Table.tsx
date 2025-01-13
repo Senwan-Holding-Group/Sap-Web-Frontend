@@ -1,4 +1,5 @@
 import { POPrintLayoutDocLine } from "@/lib/types";
+import { numberWithCommas } from "@/lib/utils";
 import { useCallback } from "react";
 
 type TableRow = {
@@ -17,10 +18,10 @@ const Table = ({ documentLine, noPrice }: TableRow) => {
       <td>{item.barcode}</td>
       <td>{item.itemDescription}</td>
       <td>{item.quantity}</td>
-      {noPrice && <td>{item.price}</td>}
+      {noPrice && <td>{numberWithCommas(item.price)}</td>}
       <td>{item.uomCode}</td>
       <td>{item.uomGroup}</td>
-      {noPrice && <td>{item.total}</td>}
+      {noPrice && <td>{numberWithCommas(item.total)}</td>}
     </tr>
   ));
   return (
@@ -46,7 +47,7 @@ const Table = ({ documentLine, noPrice }: TableRow) => {
           <div className=" flex font-semibold  mt-2 text-[12px] justify-end ">
             <div className="flex w-[15rem] gap-2">
               <p className=" ">Total Document :- </p>
-              <span>{documentTotal?.toFixed(4)}</span>
+              <span>{numberWithCommas(documentTotal)}</span>
             </div>
           </div>
         )}

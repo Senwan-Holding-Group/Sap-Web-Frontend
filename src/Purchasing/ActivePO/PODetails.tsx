@@ -38,7 +38,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { cn, numberWithCommas } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
@@ -216,7 +216,7 @@ const PODetails = () => {
                       }  border border-geantSap-gray-50 p-2 rounded-lg`}
                     >
                       {activePO &&
-                        parseFloat(activePO.documentTotal).toFixed(4)}
+                        numberWithCommas(activePO.documentTotal)}
                     </span>
                   </div>
                   <div className="flex flex-col gap-y-2">
@@ -543,18 +543,11 @@ const PODetails = () => {
                           <td className="px-6 py-3">{item.uomCode}</td>
                           <td className="px-6 py-3">{item.uomGroup}</td>
                           <td className="px-6 py-3">
-                            {new Intl.NumberFormat("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 4,
-                              currency: "LYD",
-                            }).format(item.price)}{" "}
+                            {numberWithCommas(item.price)}
                             LYD
                           </td>
                           <td className="px-6 py-3">
-                            {new Intl.NumberFormat("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 4,
-                            }).format(item.total)}
+                            {numberWithCommas(item.total)}
                             LYD
                           </td>
                           <td className="px-6 py-3">

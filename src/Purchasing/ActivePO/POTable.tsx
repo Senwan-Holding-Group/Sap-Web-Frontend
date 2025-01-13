@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StatusBadge from "@/components/StatusBadge";
+import { numberWithCommas } from "@/lib/utils";
 
 const POTable = () => {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ const POTable = () => {
                       {po.documentDate.split(" ")[0]}
                     </td>
                     <td className="px-6 py-3">
-                      {parseFloat(po.documentTotal).toFixed(4)}
+                      {numberWithCommas(po.documentTotal)}
                     </td>
                   </tr>
                 ))

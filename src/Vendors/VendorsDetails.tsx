@@ -3,6 +3,7 @@ import DataRenderer from "@/components/DataRenderer";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStateContext } from "@/context/useStateContext";
+import { numberWithCommas } from "@/lib/utils";
 import { faChevronLeft } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
@@ -212,7 +213,7 @@ const VendorsDetails = () => {
                       </Label>
 
                       <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
-                        {vendorDetails?.payments?.["Purchase balance"]}
+                        {numberWithCommas(vendorDetails?.payments?.["Purchase balance"])}
                       </span>
                     </div>
                   </div>
@@ -222,7 +223,7 @@ const VendorsDetails = () => {
                         Account balance
                       </Label>
                       <span className="h-10 w-[21.188rem]  border  border-geantSap-gray-50 p-2 rounded-lg">
-                        {vendorDetails?.payments?.["Account Balance"]}
+                        {numberWithCommas(vendorDetails?.payments?.["Account Balance"])}
                       </span>
                     </div>
                     <div className="flex flex-col gap-y-2 ">
@@ -230,7 +231,7 @@ const VendorsDetails = () => {
                         Goods receipt POs balance
                       </Label>
                       <span className="h-10 w-[21.188rem]  border  border-geantSap-gray-50 p-2 rounded-lg">
-                        {vendorDetails?.payments?.["Goods receipt POs balance"]}
+                        {numberWithCommas(vendorDetails?.payments?.["Goods receipt POs balance"])}
                       </span>
                     </div>
                   </div>

@@ -3,6 +3,7 @@ import DataRenderer from "@/components/DataRenderer";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStateContext } from "@/context/useStateContext";
+import { numberWithCommas } from "@/lib/utils";
 import { faChevronLeft } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
@@ -98,7 +99,7 @@ const MissingQtyDetails = () => {
                     PO Value
                   </Label>
                   <span className="h-10 w-[21.188rem]  border  border-geantSap-gray-50 p-2 rounded-lg">
-                    {missingQTYDetails?.documentTotal}
+                    {numberWithCommas(missingQTYDetails?.documentTotal)}
                   </span>
                 </div>{" "}
                 <div className="flex flex-col gap-y-2 ">
@@ -106,7 +107,7 @@ const MissingQtyDetails = () => {
                     Gr Value
                   </Label>
                   <span className="h-10 w-[21.188rem]  border  border-geantSap-gray-50 p-2 rounded-lg">
-                    {missingQTYDetails?.grValue}
+                    {numberWithCommas(missingQTYDetails?.grValue)}
                   </span>
                 </div>
                 <div className="flex flex-col gap-y-2 ">
@@ -184,13 +185,9 @@ const MissingQtyDetails = () => {
                         <td className="px-6 py-3">{item.itemDescription}</td>
                         <td className="px-6 ">{item.Quantity}</td>
                         <td className="px-6 py-3">{item.grQuantity}</td>
-                        <td className="px-6 py-3 text-geantSap-error-500">{item.difference}</td>
+                        <td className="px-6 py-3 text-geantSap-error-500">{numberWithCommas(item.difference)}</td>
                         <td className="px-6 py-3">
-                          {new Intl.NumberFormat("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 4,
-                            currency: "LYD",
-                          }).format(item.price)}
+                          {numberWithCommas(item.price)}
                           LYD
                         </td>
 

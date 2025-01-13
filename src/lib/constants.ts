@@ -203,3 +203,102 @@ export const sectionList = [
   },
   { sectionCode: "999", section: "MIX", sectionName: "999 - MIX" },
 ];
+export const customersList = [
+  {
+    customer: "مطعم ب بيروت",
+    customerCode: "B.BEIRUT",
+  },
+  {
+    customer: "خدمات",
+    customerCode: "C-00002",
+  },
+  {
+    customer: "نادي الاهلي",
+    customerCode: "C-00003",
+  },
+  {
+    customer: "شركة عروض لاستراد الملابس",
+    customerCode: "C-00004",
+  },
+  {
+    customer: "محمد الشيخي",
+    customerCode: "C-00005",
+  },
+  {
+    customer: "محمود",
+    customerCode: "C-00006",
+  },
+  {
+    customer: "تبرعات خيريه",
+    customerCode: "C1010",
+  },
+  {
+    customer: "Walk In Customer RCB",
+    customerCode: "C99998",
+  },
+  {
+    customer: "Walk In Customer Venecia",
+    customerCode: "C99999",
+  },
+  {
+    customer: "جملة عامة",
+    customerCode: "GWS",
+  },
+  {
+    customer: "VIP",
+    customerCode: "VIP",
+  },
+  {
+    customer: "ينابيع",
+    customerCode: "YB",
+  },
+];
+export const departmentList = [
+  { department: "FMCG", departmentCode: "100" },
+  { department: "FRESH FOOD", departmentCode: "200" },
+  { department: "HEAVY HOUSEHOLD", departmentCode: "300" },
+  { department: "LIGHT HOUSEHOLD", departmentCode: "400" },
+  { department: "TEXTILE", departmentCode: "500" },
+  { department: "CONSIGMENT", departmentCode: "600" },
+  { department: "CONSUMABLES", departmentCode: "700" },
+];
+export const reportsSelect = [
+  { label: "Sales by item", value: "salesByItem" },
+  { label: "Sales by store", value: "salesByStore" },
+  { label: "Sales by customer", value: "salesByCustomer" },
+  { label: "Sales by section", value: "salesBySection" },
+  { label: "Sales by department", value: "salesByDepartment" },
+  // { label: "Customers sales summary", value: "customersSalesSummary" },
+];
+const sec  = sectionList.map((section) => {
+  return {
+    label: section.sectionName,
+    value: section.sectionCode,
+  };
+});
+const dep = departmentList.map((department) => {
+  return {
+    label: department.department,
+    value: department.departmentCode,
+  };
+});
+const cus = customersList.map((customer) => {
+  return {
+    label: customer.customer,
+    value: customer.customerCode,
+  };
+});
+export const filters = [
+  {
+    title: "Store",
+    items: [
+      { label: "Vencia", value: "RCV" },
+      { label: "Berniq", value: "RCB" },
+      { label: "Air Port", value: "RCAR" },
+      { label: "DC", value: "DC" },
+    ],
+  },
+  { title: "Section", items: sec },
+  { title: "Department", items: dep },
+  { title: "Customer", items: cus },
+];

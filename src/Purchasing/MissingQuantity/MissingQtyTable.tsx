@@ -4,6 +4,7 @@ import Pagination from "@/components/ui/Pagination";
 import Search from "@/components/ui/Search";
 import { useStateContext } from "@/context/useStateContext";
 import { missingQTYmenu } from "@/lib/constants";
+import { numberWithCommas } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -85,16 +86,16 @@ const MissingQtyTable = () => {
                       {missing.deliveryDate?.split(" ")[0]}
                     </td>
                     <td className="px-6 py-3">
-                      {parseFloat(missing.documentTotal).toFixed(4)}
+                      {numberWithCommas(missing.documentTotal)}
                     </td>
                     <td className="px-6 py-3">
-                      {parseFloat(missing.grValue).toFixed(4)}
+                      {numberWithCommas(missing.grValue)}
                     </td>
                     <td className="px-6 py-3 ">
                       <span
                         className=" bg-geantSap-error-50 text-geantSap-error-500 hover:bg-geantSap-error-100 px-3  py-1 rounded-[40px] text-sm font-normalleading-[21px] inline-block  transition-colors duration-200 cursor-default"
                       >
-                        {parseFloat(missing.difference).toFixed(4)}
+                        {numberWithCommas(missing.difference)}
                       </span>
                     </td>
                   </tr>

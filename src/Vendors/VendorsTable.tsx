@@ -4,6 +4,7 @@ import Pagination from "@/components/ui/Pagination";
 import Search from "@/components/ui/Search";
 import { useStateContext } from "@/context/useStateContext";
 import { vendorsmenu } from "@/lib/constants";
+import { numberWithCommas } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -72,9 +73,9 @@ const VendorsTable = () => {
                 <td className="px-6 py-3">{vendor.vendorCode}</td>
                 <td className="px-6 py-3">{vendor.vendorName} </td>
                 <td className="px-6 py-3">{vendor.status} </td>
-                <td className="px-6 py-3">{vendor.accountBalance}</td>
-                <td className="px-6 py-3">{vendor.poBalance} </td>
-                <td className="px-6 py-3">{vendor.grBalance} </td>
+                <td className="px-6 py-3">{numberWithCommas(vendor.accountBalance)}</td>
+                <td className="px-6 py-3">{numberWithCommas(vendor.poBalance)} </td>
+                <td className="px-6 py-3">{numberWithCommas(vendor.grBalance)} </td>
               </tr>
                 )))}
             </tbody>

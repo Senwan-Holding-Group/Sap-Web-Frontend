@@ -3,6 +3,7 @@ import DataRenderer from "@/components/DataRenderer";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStateContext } from "@/context/useStateContext";
+import { numberWithCommas } from "@/lib/utils";
 import { faChevronLeft } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
@@ -76,7 +77,7 @@ const InventoryMissingQtyDetails = () => {
                   </Label>
 
                   <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
-                    {InventoryMissingQTYDetails?.documentTotal}
+                    {numberWithCommas(InventoryMissingQTYDetails?.documentTotal)}
                   </span>
                 </div>
                 <div className="flex flex-col gap-y-2 ">
@@ -85,7 +86,7 @@ const InventoryMissingQtyDetails = () => {
                   </Label>
 
                   <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
-                    {InventoryMissingQTYDetails?.trValue}
+                    {numberWithCommas(InventoryMissingQTYDetails?.trValue)}
                   </span>
                 </div>
               </div>
@@ -99,7 +100,7 @@ const InventoryMissingQtyDetails = () => {
                   </Label>
 
                   <span className="h-10 w-[21.188rem]  border border-geantSap-gray-50 p-2 rounded-lg">
-                    {InventoryMissingQTYDetails?.difference}
+                    {numberWithCommas(InventoryMissingQTYDetails?.difference)}
                   </span>
                 </div>
                 <div className="flex flex-col gap-y-2 mt-2">
@@ -205,14 +206,10 @@ const InventoryMissingQtyDetails = () => {
                             <td className="px-6 ">{item.Quantity}</td>
                             <td className="px-6 py-3">{item.grQuantity}</td>
                             <td className="px-6 py-3 text-geantSap-error-500">
-                              {item.difference}
+                              {numberWithCommas(item.difference)}
                             </td>
                             <td className="px-6 py-3">
-                              {new Intl.NumberFormat("en-US", {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 4,
-                                currency: "LYD",
-                              }).format(item.price)}
+                              {numberWithCommas(item.price)}
                               LYD
                             </td>
 

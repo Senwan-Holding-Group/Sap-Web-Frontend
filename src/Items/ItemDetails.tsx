@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStateContext } from "@/context/useStateContext";
 import { Item } from "@/lib/types";
-import { capitalize } from "@/lib/utils";
+import { capitalize, numberWithCommas } from "@/lib/utils";
 import { faChevronLeft } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
@@ -160,11 +160,7 @@ const ItemDetails = () => {
                       >
                         <td className="px-6 py-3">{price.UomCode}</td>
                         <td className="px-6 py-3">
-                          {new Intl.NumberFormat("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 4,
-                            currency: "LYD",
-                          }).format(price.Price)}
+                          {numberWithCommas(price.Price)}
                           LYD
                         </td>
                         <td className="px-6 ">{price.ListName}</td>

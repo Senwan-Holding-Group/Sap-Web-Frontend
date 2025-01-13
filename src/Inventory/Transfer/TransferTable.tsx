@@ -9,6 +9,7 @@ import DataRenderer from "@/components/DataRenderer";
 import StatusBadge from "@/components/StatusBadge";
 import Pagination from "@/components/ui/Pagination";
 import { getTransferList } from "@/api/client";
+import { numberWithCommas } from "@/lib/utils";
 
 const TransferTable = () => {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const TransferTable = () => {
                     </td>
                     <td className="px-6 py-3">{doc.transferType}</td>
                     <td className="px-6 py-3">
-                      {parseFloat(doc.documentTotal).toFixed(4)}
+                      {numberWithCommas(doc.documentTotal)}
                     </td>
                   </tr>
                 ))

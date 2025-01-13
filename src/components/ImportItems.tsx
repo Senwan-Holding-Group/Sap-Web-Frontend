@@ -68,7 +68,7 @@ const ImportItems = ({ setState, Code, url }: Props) => {
       <DialogTrigger asChild>
         <Button
           disabled={Code == ""}
-          className="bg-geantSap-primary-500 w-[11.25rem] flex items-center disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 disabled:cursor-not-allowed rounded-lg"
+          className="text-geantSap-primary-600 bg-white border w-[11.25rem] flex items-center disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 disabled:cursor-not-allowed rounded-lg"
         >
           <span className="size-6 flex items-center justify-center">
             <FontAwesomeIcon className="size-6" icon={faFileImport} />

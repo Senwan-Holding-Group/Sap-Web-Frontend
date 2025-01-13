@@ -77,7 +77,7 @@ export const checkAlert = async (url: string) => {
   }
 };
 export const importItems = async (
-  url:string,
+  url: string,
   data: { [x: string]: string | number }[],
   Code: string,
   form: UseFormReturn<ItemImport>,
@@ -89,7 +89,7 @@ export const importItems = async (
     const res = await api.post(`${url}/${Code}`, data);
     console.log(res.data);
     setdocLine(res.data.data);
-    handleClose()
+    handleClose();
     toast({
       className: cn(
         "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
@@ -109,19 +109,38 @@ export const importItems = async (
     console.log(error);
   }
 };
-export const exportItemsBy = async (by: string,value:string) => {
+export const exportItemsBy = async (by: string, value: string) => {
   try {
     const url = `${baseURL}/export/items/${by}/${value}`;
     const tempLink = document.createElement("a");
     tempLink.href = url;
-    tempLink.setAttribute("download", `${by}:${value}`); 
-    tempLink.setAttribute("target", "_blank"); 
+    tempLink.setAttribute("download", `${by}:${value}`);
+    tempLink.setAttribute("target", "_blank");
     document.body.appendChild(tempLink);
     tempLink.click();
     document.body.removeChild(tempLink);
     window.URL.revokeObjectURL(url);
   } catch (error: any) {
     console.log(error);
+  }
+};
+export const getReports = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setTotalPage: React.Dispatch<React.SetStateAction<number>>
+) => {
+  try {
+    const res = await api.get(url);
+    setTotalPage(res.data.totalPage);
+    console.log(res.data.data);
+    return res.data.data;
+  } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
   }
 };
 //********************************************* */

@@ -85,7 +85,6 @@ export const editDocumentFormSchema = z.object({
 export type EditDocumentRequest = z.infer<typeof editDocumentFormSchema>;
 export const itemImport = z.object({
   item: z.string(),
- 
 });
 export type ItemImport = z.infer<typeof itemImport>;
 
@@ -94,3 +93,13 @@ export const loginFormSchema = z.object({
   password: z.string().min(4, { message: "Password is required " }),
 });
 export type LoginRequest = z.infer<typeof loginFormSchema>;
+export const filterFormSchema = z.object({
+  reportType: z.string().min(1, { message: "Report Type is required." }),
+  from: z.date({
+    required_error: "From Date is required.",
+  }),
+  to:z.date({
+    required_error: "To Date is required.",
+  }),
+});
+export type FilterForm=z.infer<typeof filterFormSchema>

@@ -34,7 +34,7 @@ import {
   EditDocumentRequest,
 } from "@/lib/formsValidation";
 import { DocumentLine } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { cn, numberWithCommas } from "@/lib/utils";
 import {
   faCalendarCirclePlus,
   faChevronLeft,
@@ -196,7 +196,7 @@ const DraftDetails = () => {
 
                     <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails &&
-                        parseFloat(draftDetails.documentTotal).toFixed(4)}
+                        numberWithCommas(draftDetails.documentTotal)}
                     </span>
                   </div>
                   <div className="flex flex-col gap-y-2 mt-2">
@@ -518,18 +518,11 @@ const DraftDetails = () => {
                           <td className="px-6 py-3">{item.uomCode}</td>
                           <td className="px-6 py-3">{item.uomGroup}</td>
                           <td className="px-6 py-3">
-                            {new Intl.NumberFormat("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 4,
-                              currency: "LYD",
-                            }).format(item.price)}
+                            {numberWithCommas(item.price)}
                             LYD
                           </td>
                           <td className="px-6 py-3">
-                            {new Intl.NumberFormat("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 4,
-                            }).format(item.total)}
+                            {numberWithCommas(item.total)}
                             LYD
                           </td>
                           <td className="px-6 py-3">
