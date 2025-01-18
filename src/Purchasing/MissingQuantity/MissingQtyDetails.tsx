@@ -17,7 +17,7 @@ const MissingQtyDetails = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["missingQTYDetails"],
+    queryKey: ["missingQTYDetails",id],
     queryFn: () => getMissingbyDocEntry(`/po/missing/${id}`, setError),
     refetchOnWindowFocus: false,
     refetchOnMount: true,

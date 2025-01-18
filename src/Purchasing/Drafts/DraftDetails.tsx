@@ -64,7 +64,7 @@ const DraftDetails = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["draftDetails"],
+    queryKey: ["draftDetails",id],
     queryFn: () => getActivePObyDocEntry(`/po/draft/${id}`, setError),
     refetchOnWindowFocus: false,
     refetchOnMount: true,

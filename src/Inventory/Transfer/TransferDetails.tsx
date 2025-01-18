@@ -75,7 +75,7 @@ const TransferDetails = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["TransferDetails"],
+    queryKey: ["TransferDetails",id],
     queryFn: () => getTransferbyDocEntry(`/transferReq/active/${id}`, setError),
     refetchOnWindowFocus: false,
     refetchOnMount: true,

@@ -17,7 +17,7 @@ const VendorsDetails = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["vendorDetails"],
+    queryKey: ["vendorDetails",id],
     queryFn: () => getVendorsbyCode(`/vendor/${id}`, setError),
     refetchOnWindowFocus: false,
     refetchOnMount: true,

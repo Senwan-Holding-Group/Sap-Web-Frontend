@@ -25,6 +25,7 @@ const AlertsTable = () => {
     queryFn: () => checkAlert(`/alerts`),
     refetchOnWindowFocus: false,
     refetchOnMount: true,
+    staleTime:5000
   });
   useEffect(() => {
     if (status === 200) {

@@ -24,7 +24,7 @@ const CancelPOAlert = ({disabled,cancel,title,description}:CancelPOAlertProps) =
           {title}
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="gap-y-8 w-[35rem]">
+      <AlertDialogContent className="gap-y-8 w-[35rem] px-4">
         <AlertDialogHeader className="gap-y-8">
           <AlertDialogTitle className="text-lg pb-2 font-bold leading-[21.09px] border-b">{title}</AlertDialogTitle>
           <AlertDialogDescription className="text-nowrap text-lg font-normal text-geantSap-black leading-[27px]">

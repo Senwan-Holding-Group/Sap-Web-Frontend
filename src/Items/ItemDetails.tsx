@@ -18,7 +18,7 @@ const ItemDetails = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["itemDetails"],
+    queryKey: ["itemDetails",id],
     queryFn: () => getItemByCode(`/item/${id}`, setError),
     refetchOnWindowFocus: false,
     refetchOnMount: true,

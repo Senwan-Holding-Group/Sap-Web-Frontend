@@ -63,7 +63,7 @@ const PODetails = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["activePODetails"],
+    queryKey: ["activePODetails",id],
     queryFn: () => getActivePObyDocEntry(`/po/active/${id}`, setError),
     refetchOnWindowFocus: false,
     refetchOnMount: true,

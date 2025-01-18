@@ -16,7 +16,7 @@ const InventoryMissingQtyDetails = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["InventoryMissingQTYDetails"],
+    queryKey: ["InventoryMissingQTYDetails",id],
     queryFn: () =>
       getInventoryMissingbyDocEntry(`/transferReq/missing/${id}`, setError),
     refetchOnWindowFocus: false,
