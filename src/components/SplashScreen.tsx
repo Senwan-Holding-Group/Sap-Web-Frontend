@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import second from "/loginLogo.svg"; 
 import first from "/splashLogoName.svg"; 
-import third from "/loginForm.svg"; 
+// import third from "/loginForm.svg"; 
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import secureLocalStorage from "react-secure-storage";
@@ -29,11 +29,11 @@ const SplashScreen = () => {
       alt: "Loading",
       message: "Loading resources...",
     },
-    {
-      src: third,
-      alt: "Starting",
-      message: "Starting application...",
-    },
+    // {
+    //   src: third,
+    //   alt: "Starting",
+    //   message: "Starting application...",
+    // },
   ];
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const SplashScreen = () => {
 
     const interval = setInterval(transitionToNextImage, 1000);
     return () => clearInterval(interval);
-  }, []);
+  });
 
   if (redirectTo) {
     return <Navigate to={redirectTo} replace />;

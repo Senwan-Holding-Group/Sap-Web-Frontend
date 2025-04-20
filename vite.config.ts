@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
       ),
     },
     build: {
-      chunkSizeWarningLimit: 1100,
+      chunkSizeWarningLimit: 1300,
     },
     resolve: {
       alias: {

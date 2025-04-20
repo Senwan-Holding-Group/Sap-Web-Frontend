@@ -7,7 +7,7 @@ const Reports = () => {
           Reports
         </h1>
 
-      <Outlet />
+      <Outlet  />
     </div>  )
 }
 

@@ -10,6 +10,7 @@ import AlertContent from "./AlertContent";
 import { useQuery } from "@tanstack/react-query";
 import { checkAlert } from "@/api/client";
 import { capitalize } from "@/lib/utils";
+import DataRenderer from "@/components/DataRenderer";
 
 const AlertsTable = () => {
   const [isError, setisError] = useState(false);
@@ -20,7 +21,7 @@ const AlertsTable = () => {
     searchKey: alertsMenu[0].value,
     searchValue: "",
   });
-  const { data: status } = useQuery({
+  const { data: status,isFetching } = useQuery({
     queryKey: ["alerts"],
     queryFn: () => checkAlert(`/alerts`),
     refetchOnWindowFocus: false,
@@ -72,6 +73,8 @@ const AlertsTable = () => {
         <Search menuList={alertsMenu} setSearch={setSearch} search={search} />
       </div>
       <div className=" 3xl:h-[47.5rem] sm:h-[34.5rem] h-[52rem] max-h-[52rem] border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
+      <DataRenderer isLoading={isFetching} isError={isError}>
+
         <table className="w-full caption-bottom">
           <thead className="sticky top-0 w-full bg-geantSap-gray-25">
             <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
@@ -105,6 +108,7 @@ const AlertsTable = () => {
             )}
           </tbody>
         </table>
+        </DataRenderer>
       </div>
     </div>
   );

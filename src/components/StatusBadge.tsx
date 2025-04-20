@@ -1,6 +1,7 @@
 enum Status {
   APPROVED = "approved",
   OPENED = "opened",
+  OPEN = "open",
   ACTIVE = "active",
   PENDING = "pending",
   CLOSED = "closed",
@@ -21,6 +22,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
     switch (normalizedStatus) {
       case Status.APPROVED:
       case Status.OPENED:
+      case Status.OPEN:
       case Status.ACTIVE:
         return "bg-geantSap-primary-15 text-geantSap-primary-600 hover:bg-geantSap-primary-100";
       case Status.PENDING:

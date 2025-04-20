@@ -31,6 +31,7 @@ const Search = ({ menuList, setSearch, search }: searchProps) => {
         />
       </span>
       <Input
+        defaultValue={search.searchValue}
         onKeyDown={(e) => {
           if (e.key === "Enter")
             setSearch({ ...search, searchValue: e.currentTarget.value });

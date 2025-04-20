@@ -16,13 +16,21 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Checkbox } from "./ui/checkbox";
-import { filters } from "@/lib/constants";
+import { reportfilters } from "@/lib/constants";
+import { UseFormReturn } from "react-hook-form";
+import { FilterForm } from "@/lib/formsValidation";
 type FilterProps = {
   setfilter: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
   filter: Record<string, string[]>;
+  form: UseFormReturn<{
+    reportType: string;
+    from: Date;
+    to: Date;
+  }>;
+   onSubmit: (values: FilterForm) => Promise<void>
 };
 
-const Filters = ({ filter, setfilter }: FilterProps) => {
+const Filters = ({ filter, setfilter,form ,onSubmit}: FilterProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -30,8 +38,7 @@ const Filters = ({ filter, setfilter }: FilterProps) => {
       <DrawerTrigger asChild>
         <Button
           type="button"
-          className="bg-white w-[7.5rem] border rounded-lg  disabled:text-geantSap-gray-400 text-geantSap-primary-600 font-medium text-base"
-        >
+          className="bg-white w-[7.5rem] border rounded-lg  disabled:text-geantSap-gray-400 text-geantSap-primary-600 font-medium text-base">
           <span className="size-6 flex items-center justify-center">
             <FontAwesomeIcon className="" icon={faFilterList} />
           </span>
@@ -46,26 +53,28 @@ const Filters = ({ filter, setfilter }: FilterProps) => {
           <Button
             onClick={() => setfilter({})}
             type="button"
-            className="bg-white w-[6.5rem]  border rounded-lg  disabled:text-geantSap-gray-400 text-geantSap-primary-600 font-medium text-base"
-          >
+            className="bg-white w-[6.5rem]  border rounded-lg  disabled:text-geantSap-gray-400 text-geantSap-primary-600 font-medium text-base">
             <span className="font-normal  text-sm ">Clear filters</span>
           </Button>
         </DrawerHeader>
         <div className="px-6 overflow-scroll">
-          {filters.map((value, i) => (
+          {reportfilters.map((value, i) => (
             <div
               key={i}
-              className="space-y-3 border-b first:mt-0 mt-6  border-geantSap-primary-5 "
-            >
+              className="space-y-3 border-b first:mt-0 mt-6  border-geantSap-primary-5 ">
               <span className="font-semibold  text-base text-geantSap-black">
                 {value.title}
               </span>
               {value.items.map((item, i) => (
                 <div key={i} className="flex items-center gap-4 last:pb-6  ">
                   <Checkbox
-                    checked={filter[value.title.toLowerCase()]?.includes(item.value)?true:false}
+                    checked={
+                      filter[value.title.toLowerCase()]?.includes(item.value)
+                        ? true
+                        : false
+                    }
                     onCheckedChange={(checked) => {
-                      const labelValue = value.title.toLowerCase(); 
+                      const labelValue = value.title.toLowerCase();
                       if (
                         checked &&
                         !filter[labelValue]?.includes(item.value)
@@ -92,8 +101,7 @@ const Filters = ({ filter, setfilter }: FilterProps) => {
                   />
                   <label
                     htmlFor={item.label}
-                    className="font-normal text-base leading-[22.4px]"
-                  >
+                    className="font-normal text-base leading-[22.4px]">
                     {item.label}
                   </label>
                 </div>
@@ -106,27 +114,24 @@ const Filters = ({ filter, setfilter }: FilterProps) => {
           <DrawerClose asChild>
             <Button
               type="button"
-              className="bg-white w-[7.5rem] border rounded-lg  disabled:text-geantSap-gray-400 text-geantSap-primary-600 font-medium text-base"
-            >
+              className="bg-white w-[7.5rem] border rounded-lg  disabled:text-geantSap-gray-400 text-geantSap-primary-600 font-medium text-base">
               <span className="size-6 flex items-center justify-center">
                 <FontAwesomeIcon className="" icon={faX} />
               </span>
-              <span className="font-medium text-base ">Cancel</span>
+              <span className="font-medium text-base ">Close</span>
             </Button>
           </DrawerClose>
           <DrawerClose asChild>
-
-          <Button
-            type="submit"
-            className="bg-geantSap-primary-500 w-[7.5rem] disabled:bg-geantSap-gray-50 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base"
-          >
-            <span className="size-6 flex items-center justify-center">
-              <FontAwesomeIcon className="" icon={faCheckDouble} />
-            </span>
-            <span className="font-medium text-base ">Confirm</span>
-          </Button>
+            <Button
+              type="button"
+              onClick={form.handleSubmit(onSubmit)}
+              className="bg-geantSap-primary-500 w-[7.5rem] disabled:bg-geantSap-gray-50 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base">
+              <span className="size-6 flex items-center justify-center">
+                <FontAwesomeIcon className="" icon={faCheckDouble} />
+              </span>
+              <span className="font-medium text-base ">Confirm</span>
+            </Button>
           </DrawerClose>
-
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

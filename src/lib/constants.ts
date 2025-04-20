@@ -1,10 +1,3 @@
-enum Role {
-  ADMIN,
-}
-export const permissions = {
-  purchasing: [Role.ADMIN],
-};
-export type PermissionName = keyof typeof permissions;
 export const activePOmenu = [
   { label: "Vendor code", value: "vendorCode" },
   { label: "Vendor name", value: "vendorName" },
@@ -13,6 +6,20 @@ export const activePOmenu = [
   { label: "Document number", value: "documentNumber" },
   { label: "Document date", value: "documentDate" },
   { label: "Document total", value: "documentTotal" },
+];
+export const activeGRPOmenu = [
+  { label: "Vendor code", value: "vendorCode" },
+  { label: "Vendor name", value: "vendorName" },
+  { label: "Document number", value: "documentNumber" },
+  { label: "Vendor invoice NO.", value: "invoiceNumber" },
+  { label: "Document total", value: "documentTotal" },
+];
+export const toBePaidMenu = [
+  { label: "Vendor code", value: "vendorCode" },
+  { label: "Vendor name", value: "vendorName" },
+  { label: "Payment Balance", value: "paymentBalance" },
+  { label: "Vendor invoice NO.", value: "invoiceNumber" },
+  { label: "Payment Type", value: "paymentType" },
 ];
 export const transferMenu = [
   { label: "Delivery date", value: "deliveryDate" },
@@ -53,6 +60,13 @@ export const vendorsmenu = [
   { label: "Account balance", value: "accountBalance" },
   { label: "PO balance", value: "poBalance" },
   { label: "GR balance", value: "grBalance" },
+];
+export const creditNoteMenu = [
+  { label: "Vendor code", value: "vendorCode" },
+  { label: "Vendor name", value: "vendorName" },
+  { label: "Status", value: "status" },
+  { label: "Total amount", value: "totalAmount" },
+  { label: "Date", value: "createDate" },
 ];
 export const itemVendorMenu = [
   { label: "Item code", value: "itemCode" },
@@ -270,7 +284,7 @@ export const reportsSelect = [
   { label: "Sales by department", value: "salesByDepartment" },
   // { label: "Customers sales summary", value: "customersSalesSummary" },
 ];
-const sec  = sectionList.map((section) => {
+const sec = sectionList.map((section) => {
   return {
     label: section.sectionName,
     value: section.sectionCode,
@@ -288,7 +302,7 @@ const cus = customersList.map((customer) => {
     value: customer.customerCode,
   };
 });
-export const filters = [
+export const reportfilters = [
   {
     title: "Store",
     items: [
@@ -301,4 +315,39 @@ export const filters = [
   { title: "Section", items: sec },
   { title: "Department", items: dep },
   { title: "Customer", items: cus },
+];
+export const creditNoteOptions = {
+  externalScreensTwoV: "External Screens Two V",
+  tastingCampaign: "Tasting Campaign",
+  magazineOneYear: "Magazine One Year",
+  inventoryPriceDifference: "Inventory Price Difference",
+  supportWithOffers: "Support With Offers",
+  compensationDamagedGoods: "Compensation Damaged Goods",
+  inventoryDiscount: "Inventory Discount",
+  magazineHalfPage: "Magazine Half Page",
+  rentingBooth: "Renting Booth",
+  magazineSixMonths: "Magazine Six Months",
+  magazineWithCompanyLogo: "Magazine With Company Logo",
+  magazineTwoPage: "Magazine Two Page",
+  rentingSpecificFloorSpace: "Renting Specific Floor Space",
+  magazineOnePage: "Magazine One Page",
+  fridgeDiscount: "Fridge Discount",
+  quarterlyDiscount: "Quarterly Discount",
+  singleBranch: "Single Branch",
+  speAddDis: "Special Additional Discount",
+  yearlyDis: "Yearly Discount",
+  advertisingDiscount: "Advertising Discount",
+  semiAnnualDiscount: "Semi Annual Discount",
+};
+export const cashAccountList = [
+  { accountNumber: "100111010101 ", accountName:" RCV-خزينة الموردين فينيسيا"},
+  { accountNumber: "100311010101 ",accountName: "RCA -خزينة الموردين طريق المطار"},
+
+];
+export const bankAccountList = [
+  { accountNumber: "199911010201" ,accountName:"مصرف التجارة والتنمية"},
+  { accountNumber: "199911010202" ,accountName:"مصرف الوحدة"},
+  { accountNumber: "199911010203" ,accountName:"مصرف المتحد -"},
+  { accountNumber: "199911010204",accountName:"مصرف الجمهورية" },
+  { accountNumber: "199911010205",accountName:"مصرف السرايا" },
 ];

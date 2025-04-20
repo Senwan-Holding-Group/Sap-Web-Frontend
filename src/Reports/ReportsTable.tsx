@@ -25,7 +25,7 @@ const ReportsTable = () => {
     queryKey: ["reportList", query, currentPage],
     queryFn: () =>
       getReports(
-        `/report?filter=${query}&perPage=15&page=${currentPage}`,
+        `/report/view?filter=${query}&perPage=100&page=${currentPage}`,
         setError,
         setTotalPage
       ),
@@ -36,7 +36,7 @@ const ReportsTable = () => {
 
   return (
     <div className="flex flex-col gap-y-4">
-      <FiltersForm setquery={setquery} />
+      <FiltersForm setquery={setquery} query={query} />
       <div className=" 3xl:h-[45rem]  sm:h-[32rem] h-[52rem] max-h-[52rem]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
         {query != "" ? (
           <DataRenderer isLoading={isFetching} isError={isError}>
@@ -62,7 +62,7 @@ const ReportsTable = () => {
                       {Object.values(report).map((value: any, i: number) => {
                         const currentKey = Object.keys(report)[i];
                         return (
-                              <td className="px-6 py-3">
+                              <td key={i} className="px-6 py-3">
                                 {currentKey === "itemCode"
                                   ? value
                                   : numberWithCommas(value)}

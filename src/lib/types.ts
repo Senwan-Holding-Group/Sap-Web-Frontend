@@ -24,6 +24,61 @@ export type ActivePo = {
   approvalEntry: number;
   remarks: string;
 };
+export type ActiveGRPO = {
+  vendorCode: string;
+  vendorName: string;
+  receivingDate: string;
+  status: string;
+  invoiceNumber: string;
+  documentNumber: number;
+  documentEntry: number;
+  documentKey: string;
+  documentDate: string;
+  documentTotal: string;
+  section: string;
+  documentLine: DocumentLine[];
+  attachment: AttachmentList[];
+  administrativeData: {
+    createdBy: string;
+    createdOn: string;
+    editedBy: string;
+    editedOn: string;
+  };
+  comments: string;
+  currency: string;
+  approvalStatus: string;
+  processStatus: string;
+  approvalEntry: number;
+  remarks: string;
+};
+export type ActiveAP = {
+  vendorCode: string;
+  vendorName: string;
+  receivingDate: string;
+  dueDate: string;
+  status: string;
+  invoiceNumber: string;
+  documentNumber: number;
+  documentEntry: number;
+  documentKey: string;
+  documentDate: string;
+  documentTotal: string;
+  section: string;
+  documentLine: DocumentLine[];
+  attachment: AttachmentList[];
+  administrativeData: {
+    createdBy: string;
+    createdOn: string;
+    editedBy: string;
+    editedOn: string;
+  };
+  comments: string;
+  currency: string;
+  approvalStatus: string;
+  processStatus: string;
+  approvalEntry: number;
+  remarks: string;
+};
 export type Transfer = {
   documentNumber: number;
   documentDate: string;
@@ -53,6 +108,51 @@ export type Transfer = {
   approvalEntry: number;
   remarks: string;
 };
+export type ToBePaid = {
+  vendorCode: string;
+  vendorName: string;
+  paymentAmount: string;
+  paymentDate: string;
+  invoiceNumber: string;
+  cashAmount: string;
+  bankAmount: string;
+  bank: string;
+  bankName: string;
+  bankAccount: string;
+  paymentType: string;
+};
+export type CalculateCreditNote = {
+  type: string;
+  totalAmount: string;
+};
+export type CalculateRebate = {
+  CardCode: string;
+  CardName: string;
+  PaymentTotal: string;
+  ReceiveTotal: string;
+  RebateValue: string;
+  Percentage: string;
+};
+export type CreateOutgoingPayment = {
+  cash:string,
+  bank:string,
+  result: [
+    {
+      documentType: string;
+      invoiceType: string;
+      docmentNumber: number;
+      docmentEntry: number;
+      vendorRef: string;
+      remark: string;
+      vendorCode: string;
+      vendorName: string;
+      documentDate: string;
+      paymentDate: string;
+      documentTotal: string;
+    }
+  ];
+};
+
 export type MissingQTY = {
   vendorCode: string;
   vendorName: string;
@@ -113,8 +213,12 @@ export type DocumentLine = {
   uomEntry: number;
   line: number;
   lineNum: number;
+  lineNumber: number;
   stock: string;
   uomGroup: string;
+  priceStatus: string;
+  invoicePrice: number;
+  action: string;
   barcodeList: [{ barcode: string }];
   warehouseCode: string;
   warehouseList: [string];
@@ -215,6 +319,50 @@ export type Item = {
   };
   vendor: [{ vendorCode: string; vendorName: string }];
 };
+export type CreditNote = {
+  documentEntry: number;
+  documentNumber: number;
+  documentDate: string;
+  createDate: string;
+  remark: string;
+  status: string;
+  vendorName: string;
+  documentTotal: string;
+  creditNoteList: CreditNoteList[];
+  administrativeData: {
+    createdBy: string;
+    createdOn: string;
+    editedBy: string;
+    editedOn: string;
+  };
+  type: string;
+  vendorCode: string;
+};
+
+export type CreditNoteList = {
+  externalScreensTwoV: number;
+  tastingCampaign: number;
+  magazineOneYear: number;
+  inventoryPriceDifference: number;
+  supportWithOffers: number;
+  compensationDamagedGoods: number;
+  inventoryDiscount: number;
+  magazineHalfPage: number;
+  rentingBooth: number;
+  magazineSixMonths: number;
+  magazineWithCompanyLogo: number;
+  magazineTwoPage: number;
+  rentingSpecificFloorSpace: number;
+  magazineOnePage: number;
+  addNewItem: number;
+  fridgeDiscount: number;
+  quarterlyDiscount: number;
+  singleBranch: number;
+  speAddDis: number;
+  yearlyDis: number;
+  advertisingDiscount: number;
+  semiAnnualDiscount: number;
+};
 export type POPrintLayout = {
   vendorCode: string;
   vendorName: string;
@@ -259,4 +407,10 @@ export type AlertData = {
   message: string;
   alertTime: string;
   data: [];
+};
+export type AttachmentList = {
+  attachingDate: string;
+  fileName: string;
+  filePath: string;
+  fileExtension: string;
 };

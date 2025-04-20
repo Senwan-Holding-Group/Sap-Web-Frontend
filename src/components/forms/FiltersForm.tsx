@@ -20,24 +20,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { reportsSelect } from "@/lib/constants";
 import { FilterForm, filterFormSchema } from "@/lib/formsValidation";
-import { cn } from "@/lib/utils";
+import { capitalize, cn } from "@/lib/utils";
 import {
   faCalendarCirclePlus,
   faCheckDouble,
+  faFileExport,
+  faSpinner,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
+import { format, formatDate } from "date-fns";
 import { useForm } from "react-hook-form";
 import Filters from "../Filters";
 import { useState } from "react";
-type FilterProps={
-  setquery:React.Dispatch<React.SetStateAction<string>>
-}
-const FiltersForm = ({setquery}:FilterProps) => {
+import { useQuery } from "@tanstack/react-query";
+import { exportReport, getReportTypes } from "@/api/client";
+import { useStateContext } from "@/context/useStateContext";
+import { useToast } from "@/lib/hooks/use-toast";
+type FilterProps = {
+  setquery: React.Dispatch<React.SetStateAction<string>>;
+  query: string;
+};
+const FiltersForm = ({ setquery, query }: FilterProps) => {
   const [filter, setfilter] = useState<Record<string, string[]>>({});
+  const { setError } = useStateContext();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { toast } = useToast();
 
   const form = useForm<FilterForm>({
     resolver: zodResolver(filterFormSchema),
@@ -49,16 +59,37 @@ const FiltersForm = ({setquery}:FilterProps) => {
   });
 
   const onSubmit = async (values: FilterForm) => {
-    const newData= {...filter, ...values}
-    setquery(JSON.stringify(newData))
-    
+    const newData = { ...filter, ...values };
+    setquery(JSON.stringify(newData));
+  };
+
+  const { data: reportTypeList } = useQuery({
+    queryKey: ["reportTypeList"],
+    queryFn: () => getReportTypes(`/report`, setError),
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+  });
+  const reportType = form.watch("reportType");
+  const handleDownload = async () => {
+    await exportReport(
+      query,
+      `${
+        capitalize(reportType)
+          .replace(/([A-Z])/g, " $1")
+          .trim() +
+        " " +
+        formatDate(Date.now(), "PP")
+      }`,
+
+      setIsLoading,
+      toast
+    );
   };
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className=" w-full flex items-end gap-4 justify-between lg:flex-row flex-col "
-      >
+        className=" w-full flex items-end gap-4 justify-between lg:flex-row flex-col ">
         <div className="flex justify-between w-full gap-x-4 md:flex-row flex-col">
           <FormField
             control={form.control}
@@ -75,15 +106,18 @@ const FiltersForm = ({setquery}:FilterProps) => {
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                    defaultValue={field.value}>
                     <SelectTrigger className="w-full justify-between rounded-lg  border border-geantSap-gray-50">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                      {reportsSelect.map((value) => (
-                        <SelectItem key={value.label} value={value.value}>
-                          {value.label}
+                      {reportTypeList?.map((value: { queryName: string }) => (
+                        <SelectItem
+                          key={value.queryName}
+                          value={value.queryName}>
+                          {capitalize(value.queryName)
+                            .replace(/([A-Z])/g, " $1")
+                            .trim()}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -110,10 +144,9 @@ const FiltersForm = ({setquery}:FilterProps) => {
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-full pl-3 text-left bgtr font-normal",
+                          "w-full pl-3 text-left  font-normal",
                           !field.value && "text-muted-foreground"
-                        )}
-                      >
+                        )}>
                         {field.value ? (
                           format(field.value, "PP")
                         ) : (
@@ -161,8 +194,7 @@ const FiltersForm = ({setquery}:FilterProps) => {
                         className={cn(
                           "w-full pl-3 text-left bgtr font-normal",
                           !field.value && "text-muted-foreground"
-                        )}
-                      >
+                        )}>
                         {field.value ? (
                           format(field.value, "PP")
                         ) : (
@@ -192,11 +224,29 @@ const FiltersForm = ({setquery}:FilterProps) => {
           />
         </div>
         <div className="flex gap-4 justify-center ">
-          <Filters setfilter={setfilter} filter={filter}/>
+          <Button
+            type="button"
+            disabled={query === "" || isLoading}
+            onClick={handleDownload}
+            className="bg-geantSap-primary-500 disabled:bg-geantSap-gray-50 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base">
+            <span className="size-6 flex items-center justify-center">
+              <FontAwesomeIcon
+                className=""
+                icon={isLoading ? faSpinner : faFileExport}
+                spin={isLoading}
+              />
+            </span>
+            <span className="font-medium text-base ">Export Report</span>
+          </Button>
+          <Filters
+            form={form}
+            onSubmit={onSubmit}
+            setfilter={setfilter}
+            filter={filter}
+          />
           <Button
             type="submit"
-            className="bg-geantSap-primary-500 w-[7.5rem] disabled:bg-geantSap-gray-50 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base"
-          >
+            className="bg-geantSap-primary-500 w-[7.5rem] disabled:bg-geantSap-gray-50 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base">
             <span className="size-6 flex items-center justify-center">
               <FontAwesomeIcon className="" icon={faCheckDouble} />
             </span>

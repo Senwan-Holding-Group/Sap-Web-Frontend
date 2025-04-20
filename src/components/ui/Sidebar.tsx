@@ -9,7 +9,9 @@ import {
   faCartFlatbedBoxes,
   faChartMixed,
   faDiamonds4,
+  faEnvelopeOpenDollar,
   faGear,
+  faReceipt,
   faSitemap,
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
@@ -30,6 +32,16 @@ const menuItems = [
         icon: <FontAwesomeIcon icon={faBasketShopping} />,
         label: "Purchasing",
         path: "/sap/purchasing",
+      },
+      {
+        icon: <FontAwesomeIcon icon={faReceipt} />,
+        label: "Invoices",
+        path: "/sap/invoices",
+      },
+      {
+        icon: <FontAwesomeIcon icon={faEnvelopeOpenDollar} />,
+        label: "Payments",
+        path: "/sap/payments",
       },
       {
         icon: <FontAwesomeIcon icon={faUsers} />,
@@ -126,12 +138,12 @@ const Sidebar = ({
           )}
         </div>
       </div>
-      <div className="flex flex-col h-full  justify-between  ">
+      <div className="flex flex-col h-full  justify-between overflow-y-scroll ">
         {menuItems.map((i) => (
           <div
             className={`flex  flex-col ${
               expand ? " " : "items-center"
-            } gap-y-6`}
+            } gap-y-4`}
             key={i.title}
           >
             <>

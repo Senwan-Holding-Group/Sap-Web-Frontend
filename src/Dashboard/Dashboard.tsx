@@ -1,5 +1,6 @@
 import { getDashboardData } from "@/api/client";
 import { useStateContext } from "@/context/useStateContext";
+import { numberWithCommas } from "@/lib/utils";
 import {
   faBasketShopping,
   faSitemap,
@@ -62,7 +63,7 @@ const Dashboard = () => {
           <p className="text-[2.5rem] leading-[3.75rem] text-geantSap-primary-500 flex justify-between">
             {dasboardData && isNaN(parseFloat(dasboardData.netReceive))
               ? 0
-              : dasboardData && parseFloat(dasboardData.netReceive).toFixed(2)}
+              : dasboardData && numberWithCommas(dasboardData.netReceive)} LYD
             <span className="rounded-full bg-geantSap-primary-25 size-12 flex items-center justify-center">
               <FontAwesomeIcon
                 className="w-[1.25rem] h-[1.063rem]"
