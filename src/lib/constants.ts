@@ -276,14 +276,7 @@ export const departmentList = [
   { department: "CONSIGMENT", departmentCode: "600" },
   { department: "CONSUMABLES", departmentCode: "700" },
 ];
-export const reportsSelect = [
-  { label: "Sales by item", value: "salesByItem" },
-  { label: "Sales by store", value: "salesByStore" },
-  { label: "Sales by customer", value: "salesByCustomer" },
-  { label: "Sales by section", value: "salesBySection" },
-  { label: "Sales by department", value: "salesByDepartment" },
-  // { label: "Customers sales summary", value: "customersSalesSummary" },
-];
+
 const sec = sectionList.map((section) => {
   return {
     label: section.sectionName,
@@ -339,15 +332,4 @@ export const creditNoteOptions = {
   advertisingDiscount: "Advertising Discount",
   semiAnnualDiscount: "Semi Annual Discount",
 };
-export const cashAccountList = [
-  { accountNumber: "100111010101 ", accountName:" RCV-خزينة الموردين فينيسيا"},
-  { accountNumber: "100311010101 ",accountName: "RCA -خزينة الموردين طريق المطار"},
 
-];
-export const bankAccountList = [
-  { accountNumber: "199911010201" ,accountName:"مصرف التجارة والتنمية"},
-  { accountNumber: "199911010202" ,accountName:"مصرف الوحدة"},
-  { accountNumber: "199911010203" ,accountName:"مصرف المتحد -"},
-  { accountNumber: "199911010204",accountName:"مصرف الجمهورية" },
-  { accountNumber: "199911010205",accountName:"مصرف السرايا" },
-];

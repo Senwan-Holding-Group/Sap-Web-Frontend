@@ -8,10 +8,11 @@ const TobePaid = () => {
       searchValue: "",
     });  
     const [paymentDate, setpaymentDate] = useState<string>("");
+    const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <div>
-      <Outlet context={{search,setSearch,paymentDate, setpaymentDate}}/>
+      <Outlet context={{search,setSearch,paymentDate, setpaymentDate,currentPage, setCurrentPage}}/>
     </div>
   );
 };

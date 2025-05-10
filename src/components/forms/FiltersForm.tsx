@@ -59,7 +59,7 @@ const FiltersForm = ({ setquery, query }: FilterProps) => {
   });
 
   const onSubmit = async (values: FilterForm) => {
-    const newData = { ...filter, ...values };
+    const newData = { ...filter, ...values,from:new Date(format(values.from, "yyyy-MM-dd")),to:new Date(format(values.to, "yyyy-MM-dd")) };
     setquery(JSON.stringify(newData));
   };
 
@@ -89,8 +89,8 @@ const FiltersForm = ({ setquery, query }: FilterProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className=" w-full flex items-end gap-4 justify-between lg:flex-row flex-col ">
-        <div className="flex justify-between w-full gap-x-4 md:flex-row flex-col">
+        className=" w-full  ">
+        <div className="flex justify-between w-full gap-x-4 gap-y-2 sm:flex-row flex-col">
           <FormField
             control={form.control}
             name="reportType"
@@ -107,7 +107,7 @@ const FiltersForm = ({ setquery, query }: FilterProps) => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}>
-                    <SelectTrigger className="w-full justify-between rounded-lg  border border-geantSap-gray-50">
+                    <SelectTrigger className="justify-between rounded-lg  border border-geantSap-gray-50">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
@@ -222,8 +222,7 @@ const FiltersForm = ({ setquery, query }: FilterProps) => {
               </FormItem>
             )}
           />
-        </div>
-        <div className="flex gap-4 justify-center ">
+        <div className="flex gap-x-4 flex-1 items-end  overflow-x-scroll overflow-y-hidden justify-cente ">
           <Button
             type="button"
             disabled={query === "" || isLoading}
@@ -252,6 +251,7 @@ const FiltersForm = ({ setquery, query }: FilterProps) => {
             </span>
             <span className="font-medium text-base ">View</span>
           </Button>
+        </div>
         </div>
       </form>
     </Form>

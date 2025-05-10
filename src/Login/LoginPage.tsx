@@ -15,7 +15,7 @@ const LoginPage = () => {
     }
   }, [navigate, from, token]);
   return (
-    <div className="bg-geantSap-bg flex items-center justify-center w-screen h-screen">
+    <div className="bg-geantSap-bg flex items-center justify-center w-screen h-dvh">
       {token === null && <LoginForm />}{" "}
     </div>
   );

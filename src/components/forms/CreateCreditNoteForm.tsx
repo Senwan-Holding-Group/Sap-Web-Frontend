@@ -71,7 +71,7 @@ const CreateCreditNoteForm = ({ vendorDetails }: VendorProps) => {
   };
   const onSubmit = async (values: CreateCreditNote) => {
     const newValues = {
-      documentDate:values.documentDate,
+      documentDate:new Date(format(values.documentDate, "yyyy-MM-dd")),
       vendorCode: values.vendorCode,
       remark: values.remark,
       type: values.type,

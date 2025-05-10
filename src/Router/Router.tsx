@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import App from "../App";
 import LoginPage from "@/Login/LoginPage";
 import Dashboard from "@/Dashboard/Dashboard";
@@ -81,7 +85,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       {
-        path: "/sap/dashboard",
+        path: "dashboard",
         element: (
           <ProtectedRoute>
             <Dashboard />
@@ -89,7 +93,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/sap/purchasing",
+        path: "purchasing",
         element: (
           <ProtectedRoute>
             <Purchasing />
@@ -97,11 +101,15 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/sap/purchasing/draft",
+            index: true,
+            element: <Navigate to="/sap/purchasing/draft" replace />,
+          },
+          {
+            path: "draft",
             element: <Draft />,
             children: [
               {
-                path: "/sap/purchasing/draft",
+                index: true,
                 element: <DraftTable />,
               },
               {
@@ -111,11 +119,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/purchasing/active-PO",
+            path: "active-PO",
             element: <ActivePO />,
             children: [
               {
-                path: "/sap/purchasing/active-PO",
+                index: true,
                 element: <POTable />,
               },
               {
@@ -125,11 +133,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/purchasing/missing-qty",
+            path: "missing-qty",
             element: <MissingQty />,
             children: [
               {
-                path: "/sap/purchasing/missing-qty",
+                index: true,
                 element: <MissingQtyTable />,
               },
               {
@@ -139,11 +147,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/purchasing/matching",
+            path: "matching",
             element: <Matching />,
             children: [
               {
-                path: "/sap/purchasing/matching",
+                index: true,
                 element: <MatchingTable />,
               },
               {
@@ -153,11 +161,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/purchasing/goods-return-matching",
+            path: "goods-return-matching",
             element: <CMGoodsReturnMH />,
             children: [
               {
-                path: "/sap/purchasing/goods-return-matching",
+                index: true,
                 element: <CMGoodsReturnMHTable />,
               },
               {
@@ -170,7 +178,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/sap/invoices",
+        path: "invoices",
         element: (
           <ProtectedRoute>
             <Invoices />
@@ -178,11 +186,15 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/sap/invoices/GRPO",
+            index: true,
+            element: <Navigate to="/sap/invoices/GRPO" replace />
+          },
+          {
+            path: "GRPO",
             element: <GRPO />,
             children: [
               {
-                path: "/sap/invoices/GRPO",
+                index: true,
                 element: <GRPOTable />,
               },
               {
@@ -192,11 +204,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/invoices/AP-invoice",
+            path: "AP-invoice",
             element: <AP />,
             children: [
               {
-                path: "/sap/invoices/AP-invoice",
+                index: true,
                 element: <APTable />,
               },
               {
@@ -206,11 +218,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/invoices/matching",
+            path: "matching",
             element: <FNMatching />,
             children: [
               {
-                path: "/sap/invoices/matching",
+                index: true,
                 element: <FNMatchingTable />,
               },
               {
@@ -220,11 +232,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/invoices/goods-return",
+            path: "goods-return",
             element: <GoodsReturn />,
             children: [
               {
-                path: "/sap/invoices/goods-return",
+                index: true,
                 element: <GoodsReturnTable />,
               },
               {
@@ -234,11 +246,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/invoices/goods-return-matching",
+            path: "goods-return-matching",
             element: <GoodsReturnMH />,
             children: [
               {
-                path: "/sap/invoices/goods-return-matching",
+                index: true,
                 element: <GoodsReturnMHTable />,
               },
               {
@@ -248,11 +260,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/invoices/credit-memo",
+            path: "credit-memo",
             element: <CreditMemo />,
             children: [
               {
-                path: "/sap/invoices/credit-memo",
+                index: true,
                 element: <CreditMemoTable />,
               },
               {
@@ -264,38 +276,42 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/sap/payments",
+        path: "payments",
         element: (
           <ProtectedRoute>
             <Payments />
           </ProtectedRoute>
         ),
         children: [
+       {
+            index: true,
+            element: <Navigate to="/sap/payments/tobe-paid" replace />
+          },
           {
-            path: "/sap/payments/tobe-paid",
+            path: "tobe-paid",
             element: <TobePaid />,
             children: [
               {
-                path: "/sap/payments/tobe-paid",
-                element: <ToBePaidTable/>,
+                index: true,
+                element: <ToBePaidTable />,
               },
               {
                 path: "details/:id/:paymentDate",
-                element:  <ToBePaidDetails/>,
+                element: <ToBePaidDetails />,
               },
             ],
           },
           {
-            path: "/sap/payments/completed-payments",
-            element:  <CompletedPts/>,
+            path: "completed-payments",
+            element: <CompletedPts />,
             children: [
               {
-                path: "/sap/payments/completed-payments",
-                element:  <CompletedPtsTable/>,
+                index: true,
+                element: <CompletedPtsTable />,
               },
               {
                 path: "details/:id/:paymentDate",
-                element:  <CompletedPtsDetails/>,
+                element: <CompletedPtsDetails />,
               },
             ],
           },
@@ -303,19 +319,23 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/sap/inventory",
+        path: "inventory",
         element: (
           <ProtectedRoute>
             <Inventory />
           </ProtectedRoute>
         ),
         children: [
+             {
+            index: true,
+            element: <Navigate to="/sap/inventory/transfer" replace />
+          },
           {
-            path: "/sap/inventory/transfer",
+            path: "transfer",
             element: <Transfer />,
             children: [
               {
-                path: "/sap/inventory/transfer",
+                index: true,
                 element: <TransferTable />,
               },
               {
@@ -325,11 +345,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/inventory/missing-qty",
+            path: "missing-qty",
             element: <InventoryMissingQty />,
             children: [
               {
-                path: "/sap/inventory/missing-qty",
+                index: true,
                 element: <InventorMissingQtyTable />,
               },
               {
@@ -341,7 +361,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/sap/items",
+        path: "items",
         element: (
           <ProtectedRoute>
             <Items />
@@ -349,7 +369,7 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/sap/items",
+                index: true,
             element: <ItemsTable />,
           },
           {
@@ -359,19 +379,23 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/sap/vendors",
+        path: "vendors",
         element: (
           <ProtectedRoute>
             <Vendors />
           </ProtectedRoute>
         ),
         children: [
+             {
+            index: true,
+            element: <Navigate to="/sap/vendors/vendorsList" replace />
+          },
           {
-            path: "/sap/vendors/vendorsList",
+            path: "vendorsList",
             element: <VendorsList />,
             children: [
               {
-                path: "/sap/vendors/vendorsList",
+                index: true,
                 element: <VendorsListTable />,
               },
               {
@@ -381,11 +405,11 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/sap/vendors/creditNoteList",
+            path: "creditNoteList",
             element: <CreditNote />,
             children: [
               {
-                path: "/sap/vendors/creditNoteList",
+                index: true,
                 element: <CreditNoteTable />,
               },
               {
@@ -397,7 +421,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/sap/alerts",
+        path: "alerts",
         element: (
           <ProtectedRoute>
             <Alerts />
@@ -405,13 +429,13 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/sap/alerts",
+                index: true,
             element: <AlertsTable />,
           },
         ],
       },
       {
-        path: "/sap/reports",
+        path: "reports",
         element: (
           <ProtectedRoute>
             <Reports />
@@ -419,7 +443,7 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/sap/reports",
+                index: true,
             element: <ReportsTable />,
           },
         ],

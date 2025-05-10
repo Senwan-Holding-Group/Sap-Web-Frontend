@@ -64,7 +64,7 @@ const DraftDetails = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["draftDetails",id],
+    queryKey: ["draftDetails", id],
     queryFn: () => getActivePObyDocEntry(`/po/draft/${id}`, setError),
     refetchOnWindowFocus: false,
     refetchOnMount: true,
@@ -97,6 +97,8 @@ const DraftDetails = () => {
   const onSubmit = async (values: EditDocumentRequest) => {
     const newValues = {
       ...values,
+      postingDate: new Date(format(values.postingDate, "yyyy-MM-dd")),
+      deliveryDate: new Date(format(values.deliveryDate, "yyyy-MM-dd")),
       section: values.section === "" ? "999" : values.section,
       documentLines: docLine.map((item) => {
         return {
@@ -123,15 +125,18 @@ const DraftDetails = () => {
   const calculateLineTotal = (quantity: number, price: number): number => {
     return Number((Math.abs(quantity) * price).toFixed(4));
   };
-  const updateLineQuantity = (line: number,lineNum:number, newQuantity: string) => {
+  const updateLineQuantity = (
+    line: number,
+    lineNum: number,
+    newQuantity: string
+  ) => {
     const quantity = parseFloat(newQuantity);
 
     if (isNaN(quantity)) return;
 
     setdocLine(
       docLine.map((value) => {
-        if (value.lineNum != lineNum ||
-          value.line != line) {
+        if (value.lineNum != lineNum || value.line != line) {
           return value;
         }
 
@@ -147,7 +152,7 @@ const DraftDetails = () => {
 
   return (
     <Form {...form}>
-      <div className=" sm:h-[35rem] 3xl:h-[47rem] h-[52.5rem] box-border max-h-[52.5rem] overflow-auto  ">
+      <div className=" h-[calc(100dvh-9.25rem)]  box-border  overflow-auto  ">
         <Loader enable={form.formState.isSubmitting || isSubmitting} />
 
         <div className="bg-white border border-geantSap-gray-25 geantShadow h-full rounded-xl flex flex-col justify-between">
@@ -155,8 +160,7 @@ const DraftDetails = () => {
             <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">
               <Link
                 to={"/sap/purchasing/draft"}
-                className="size-10 border flex items-center   cursor-pointer border-geantSap-gray-100 rounded-lg p-2"
-              >
+                className="size-10 border flex items-center   cursor-pointer border-geantSap-gray-100 rounded-lg p-2">
                 <FontAwesomeIcon
                   className="size-6 text-geantSap-primary-600"
                   icon={faChevronLeft}
@@ -176,7 +180,12 @@ const DraftDetails = () => {
                     <Label className="text-sm font-bold text-geantSap-black">
                       Document number
                     </Label>
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border  border-geantSap-gray-50 p-2 rounded-lg`}>
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border  border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.documentNumber}
                     </span>
                   </div>
@@ -185,7 +194,12 @@ const DraftDetails = () => {
                       Document date
                     </Label>
 
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.documentDate.split(" ")[0]}
                     </span>
                   </div>
@@ -194,7 +208,12 @@ const DraftDetails = () => {
                       Document total
                     </Label>
 
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails &&
                         numberWithCommas(draftDetails.documentTotal)}
                     </span>
@@ -204,7 +223,12 @@ const DraftDetails = () => {
                       Status
                     </Label>
 
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.status}
                     </span>
                   </div>
@@ -212,7 +236,12 @@ const DraftDetails = () => {
                     <Label className="text-sm font-bold text-geantSap-black">
                       Currency
                     </Label>
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       LYD
                     </span>
                   </div>
@@ -221,7 +250,12 @@ const DraftDetails = () => {
                       Process Status
                     </Label>
 
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.processStatus}
                     </span>
                   </div>
@@ -231,7 +265,12 @@ const DraftDetails = () => {
                       Approval status
                     </Label>
 
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.approvalStatus}
                     </span>
                   </div>
@@ -240,7 +279,12 @@ const DraftDetails = () => {
                       Approval remarks
                     </Label>
 
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.remarks}
                     </span>
                   </div>
@@ -278,7 +322,12 @@ const DraftDetails = () => {
                       Vendor Name
                     </Label>
 
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {draftDetails?.vendorName}
                     </span>
                   </div>
@@ -320,8 +369,7 @@ const DraftDetails = () => {
                                 className={cn(
                                   "w-full pl-3 text-left  font-normal  border border-geantSap-gray-50",
                                   !field.value && "text-muted-foreground"
-                                )}
-                              >
+                                )}>
                                 {field.value ? (
                                   format(field.value, "PP")
                                 ) : (
@@ -370,8 +418,7 @@ const DraftDetails = () => {
                                 className={cn(
                                   "w-full pl-3 text-left  border border-geantSap-gray-50 ",
                                   !field.value && "text-muted-foreground"
-                                )}
-                              >
+                                )}>
                                 {field.value ? (
                                   format(field.value, "PP")
                                 ) : (
@@ -430,40 +477,48 @@ const DraftDetails = () => {
                   </div>
                 </div>
                 <div className="flex flex-col w-[26.875rem] gap-y-6 ">
-                <h1 className="font-bold text-lg text-geantSap-gray-500">
-                  Administrative data
-                </h1>
-                <div className="flex gap-x-4 mt-4 items-center font-normal text-base">
-                  <Label className=" text-geantSap-gray-500">Created By:</Label>
-                  <span id="createdby" className=" text-geantSap-black">
-                    {draftDetails?.administrativeData?.createdBy}
-                  </span>
+                  <h1 className="font-bold text-lg text-geantSap-gray-500">
+                    Administrative data
+                  </h1>
+                  <div className="flex gap-x-4 mt-4 items-center font-normal text-base">
+                    <Label className=" text-geantSap-gray-500">
+                      Created By:
+                    </Label>
+                    <span id="createdby" className=" text-geantSap-black">
+                      {draftDetails?.administrativeData?.createdBy}
+                    </span>
+                  </div>
+                  <div className="flex gap-x-4  items-center font-normal text-base">
+                    <Label className=" text-geantSap-gray-500">
+                      Created On:
+                    </Label>
+                    <span id="createdon" className=" text-geantSap-black">
+                      {draftDetails &&
+                        new Date(
+                          draftDetails?.administrativeData?.createdOn
+                        ).toDateString()}
+                    </span>
+                  </div>
+                  <div className="flex gap-x-4  items-center font-normal text-base">
+                    <Label className=" text-geantSap-gray-500">
+                      Edited By:
+                    </Label>
+                    <span id="Editedby" className=" text-geantSap-black">
+                      {draftDetails?.administrativeData?.editedBy}
+                    </span>
+                  </div>
+                  <div className="flex gap-x-4  items-center font-normal text-base">
+                    <Label className=" text-geantSap-gray-500">
+                      Edited On:
+                    </Label>
+                    <span id="Editedon" className=" text-geantSap-black">
+                      {draftDetails &&
+                        new Date(
+                          draftDetails?.administrativeData?.editedOn
+                        ).toDateString()}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex gap-x-4  items-center font-normal text-base">
-                  <Label className=" text-geantSap-gray-500">Created On:</Label>
-                  <span id="createdon" className=" text-geantSap-black">
-                    {draftDetails &&
-                      new Date(
-                        draftDetails?.administrativeData?.createdOn
-                      ).toDateString()}
-                  </span>
-                </div>
-                <div className="flex gap-x-4  items-center font-normal text-base">
-                  <Label className=" text-geantSap-gray-500">Edited By:</Label>
-                  <span id="Editedby" className=" text-geantSap-black">
-                    {draftDetails?.administrativeData?.editedBy}
-                  </span>
-                </div>
-                <div className="flex gap-x-4  items-center font-normal text-base">
-                  <Label className=" text-geantSap-gray-500">Edited On:</Label>
-                  <span id="Editedon" className=" text-geantSap-black">
-                    {draftDetails &&
-                      new Date(
-                        draftDetails?.administrativeData?.editedOn
-                      ).toDateString()}
-                  </span>
-                </div>
-              </div>
               </div>
               <Tabs defaultValue="item" className="w-full ">
                 <TabsList className="grid w-60 grid-cols-2 ">
@@ -474,8 +529,7 @@ const DraftDetails = () => {
                 </TabsList>
                 <TabsContent
                   className=" min-w-[1288px] border-2 border-geantSap-gray-25 rounded-lg"
-                  value="item"
-                >
+                  value="item">
                   <table className="w-full ">
                     <thead className="bg-geantSap-gray-25">
                       <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
@@ -494,8 +548,7 @@ const DraftDetails = () => {
                       {docLine.map((item, i) => (
                         <tr
                           key={i}
-                          className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
-                        >
+                          className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                           <td className="px-6 py-3">{item.itemCode}</td>
                           <td className="px-6 py-3">
                             {item.itemName
@@ -509,8 +562,11 @@ const DraftDetails = () => {
                               type="number"
                               disabled={!isEdit}
                               onChange={(e) => {
-                                
-                                updateLineQuantity(item.line,item.lineNum, e.target.value);
+                                updateLineQuantity(
+                                  item.line,
+                                  item.lineNum,
+                                  e.target.value
+                                );
                               }}
                               className="w-[5rem] p-0 h-1/2 border-0 disabled:opacity-50 text-center rounded-lg"
                             />
@@ -548,8 +604,7 @@ const DraftDetails = () => {
                               }}
                               type="button"
                               size={"icon"}
-                              className=" flex p-0 items-center disabled:opacity-50 justify-center bg-transparent "
-                            >
+                              className=" flex p-0 items-center disabled:opacity-50 justify-center bg-transparent ">
                               <FontAwesomeIcon
                                 className="text-geantSap-error-500"
                                 icon={faX}
@@ -575,8 +630,7 @@ const DraftDetails = () => {
                 </TabsContent>
                 <TabsContent
                   className=" min-w-[1288px] border-2 border-geantSap-gray-25 rounded-lg"
-                  value="attachment"
-                >
+                  value="attachment">
                   <table className="w-full ">
                     <thead className="bg-geantSap-gray-25">
                       <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
@@ -633,7 +687,7 @@ const DraftDetails = () => {
                   disabled={
                     (draftDetails?.processStatus != "Approved" &&
                       draftDetails?.approvalStatus != "Approved") ||
-                    isFetching  ||
+                    isFetching ||
                     isSubmitting
                   }
                   onClick={() => {
@@ -646,8 +700,7 @@ const DraftDetails = () => {
                       );
                     }
                   }}
-                  className="bg-transparent disabled:bg-geantSap-gray-25 disabled:opacity-50 disabled:text-geantSap-gray-400 text-geantSap-primary-600 border border-geantSap-gray-100 rounded-lg"
-                >
+                  className="bg-transparent disabled:bg-geantSap-gray-25 disabled:opacity-50 disabled:text-geantSap-gray-400 text-geantSap-primary-600 border border-geantSap-gray-100 rounded-lg">
                   {isSubmitting && (
                     <FontAwesomeIcon className="" icon={faSpinner} spin />
                   )}
@@ -662,8 +715,7 @@ const DraftDetails = () => {
                       setisEdit(true);
                     }
                   }}
-                  className="bg-geantSap-primary-500 disabled:opacity-50 rounded-lg"
-                >
+                  className="bg-geantSap-primary-500 disabled:opacity-50 rounded-lg">
                   Edit
                 </Button>
               </>
@@ -675,16 +727,14 @@ const DraftDetails = () => {
                     setisEdit(false);
                   }}
                   disabled={form.formState.isSubmitting}
-                  className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg"
-                >
+                  className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg">
                   Cancel Edit
                 </Button>
                 <Button
                   disabled={form.formState.isSubmitting}
                   type="submit"
                   onClick={form.handleSubmit(onSubmit)}
-                  className="bg-geantSap-primary-500  disabled:opacity-50 rounded-lg"
-                >
+                  className="bg-geantSap-primary-500  disabled:opacity-50 rounded-lg">
                   {form.formState.isSubmitting && (
                     <FontAwesomeIcon className="" icon={faSpinner} spin />
                   )}

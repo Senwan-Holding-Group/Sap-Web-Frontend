@@ -107,7 +107,7 @@ const CopyToAP = ({ disabled, docEntry, title }: Props) => {
                     }}
                     className="bg-white w-[8.125rem] border rounded-lg disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 text-geantSap-primary-600 font-medium text-base"
                     type="button">
-                    Cancel
+                    Close
                   </Button>
                 </DialogClose>
                 <Button

@@ -29,7 +29,7 @@ const Invoices = () => {
   return (
     <div className="overflow-hidden w-full flex  flex-col gap-y-4 ">
       <div className="  flex flex-col gap-y-2">
-        <h1 className="text-geantSap-primary-500 font-bold text-2xl leading-[36px] ">
+        <h1 className="text-geantSap-primary-500 font-bold text-2xl leading-[2.25rem] ">
           Invoices
         </h1>
         <div className="flex  border-b border-geantSap-gray-100 overflow-y-hidden overflow-x-scroll text-nowrap  h-[2.5rem]">

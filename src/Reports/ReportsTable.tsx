@@ -35,9 +35,9 @@ const ReportsTable = () => {
   });
 
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="space-y-4 h-full ">
       <FiltersForm setquery={setquery} query={query} />
-      <div className=" 3xl:h-[45rem]  sm:h-[32rem] h-[52rem] max-h-[52rem]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
+      <div className="   sm:h-[calc(100dvh-11.5rem)] h-[calc(100dvh-24rem)]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
         {query != "" ? (
           <DataRenderer isLoading={isFetching} isError={isError}>
             {reportList && reportList.length > 0 ? (
@@ -96,9 +96,9 @@ const ReportsTable = () => {
             )}
           </DataRenderer>
         ) : (
-          <div className="w-full h-[84.5%]">
-            <div className="h-[4.5rem] bg-geantSap-gray-25 rounded-tl-xl rounded-tr-xl"></div>
-            <div className="flex items-center justify-center h-full">
+          <div className="w-full  ">
+            <div className="h-10 bg-geantSap-gray-25 rounded-tl-xl rounded-tr-xl"></div>
+            <div className="flex p-6 items-center justify-center h-full">
               Select report type and period to view the data
             </div>
             <div className="h-10 bg-geantSap-gray-25 rounded-bl-xl rounded-br-xl"></div>

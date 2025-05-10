@@ -59,7 +59,7 @@ const CompletedPtsTable = () => {
       enabled:paymentDate!=""
     });
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="space-y-4 h-full ">
     <div className="flex md:flex-row flex-col  gap-2 ">
       <Search menuList={toBePaidMenu} setSearch={setSearch} search={search} />
       <Popover>
@@ -104,7 +104,7 @@ const CompletedPtsTable = () => {
         </PopoverContent>
       </Popover>
     </div>
-    <div className="  3xl:h-[43.5rem] sm:h-[31.5rem] h-[45rem] max-h-[45rem]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
+    <div className="sm:h-[calc(100dvh-12.75rem)]  h-[calc(100dvh-15.75rem)]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
       <DataRenderer isLoading={isFetching} isError={isError}>
         <table className="w-full caption-bottom ">
           <thead className="sticky top-0 w-full bg-geantSap-gray-25">
@@ -117,8 +117,8 @@ const CompletedPtsTable = () => {
           </thead>
           <tbody className="bg-white [&_tr:last-child]:border-0">
             {!toBePaidList?.length ? (
-              <tr className="h-[24rem] 3xl:h-[36rem]">
-                <td colSpan={4} className="text-center ">
+              <tr className="">
+                <td colSpan={4} className="text-center p-6 ">
                   No data found
                 </td>
               </tr>

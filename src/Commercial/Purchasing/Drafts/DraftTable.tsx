@@ -39,12 +39,12 @@ const DraftTable = () => {
   });
 
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="space-y-4 h-full ">
       <div className="flex sm:justify-between items-center flex-col sm:flex-row  gap-4">
         <Search menuList={draftmenu} setSearch={setSearch} search={search} />
         <CreatePO />
       </div>
-      <div className=" 3xl:h-[43.5rem] sm:h-[31.5rem] h-[45rem] max-h-[45rem]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
+      <div className="sm:h-[calc(100dvh-12.75rem)]  h-[calc(100dvh-16.25rem)] border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
         <DataRenderer isLoading={isFetching} isError={isError}>
           <table className="w-full caption-bottom ">
             <thead className="sticky top-0 w-full bg-geantSap-gray-25">
@@ -61,8 +61,8 @@ const DraftTable = () => {
             </thead>
             <tbody className="bg-white [&_tr:last-child]:border-0 ">
               {!draftList?.length ? (
-                <tr className="h-[24rem] 3xl:h-[36rem]">
-                  <td colSpan={8} className="text-center ">
+                <tr className="">
+                  <td colSpan={8} className="text-center p-6">
                     No data found
                   </td>
                 </tr>

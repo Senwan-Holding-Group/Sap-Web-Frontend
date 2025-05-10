@@ -58,6 +58,7 @@ export type User = {
   transferType: string[];
   requestSource: string;
   sectionList: string[];
+  paymentType: "Cash" | "Bank";
   exp: number;
 };
 // export const usePermissions = () => {

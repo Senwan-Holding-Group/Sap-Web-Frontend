@@ -63,7 +63,7 @@ const PODetails = () => {
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["activePODetails",id],
+    queryKey: ["activePODetails", id],
     queryFn: () => getActivePObyDocEntry(`/po/active/${id}`, setError),
     refetchOnWindowFocus: false,
     refetchOnMount: true,
@@ -96,6 +96,8 @@ const PODetails = () => {
   const onSubmit = async (values: EditDocumentRequest) => {
     const newValues = {
       ...values,
+      postingDate: new Date(format(values.postingDate, "yyyy-MM-dd")),
+      deliveryDate: new Date(format(values.deliveryDate, "yyyy-MM-dd")),
       section: values.section === "" ? "999" : values.section,
       documentLines: docLine.map((item) => {
         return {
@@ -155,7 +157,7 @@ const PODetails = () => {
 
   return (
     <Form {...form}>
-      <div className=" sm:h-[35rem] 3xl:h-[47rem] h-[52.5rem] box-border max-h-[52.5rem] overflow-auto  ">
+      <div className=" h-[calc(100dvh-9.25rem)]  box-border  overflow-auto  ">
         <Loader enable={form.formState.isSubmitting || isSubmitting} />
 
         <div className="bg-white border  border-geantSap-gray-25 geantShadow h-full  rounded-xl flex flex-col justify-between">
@@ -163,8 +165,7 @@ const PODetails = () => {
             <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">
               <Link
                 to={"/sap/purchasing/active-PO"}
-                className="size-10 border flex items-center   cursor-pointer border-geantSap-gray-100 rounded-lg p-2"
-              >
+                className="size-10 border flex items-center   cursor-pointer border-geantSap-gray-100 rounded-lg p-2">
                 <FontAwesomeIcon
                   className="size-6 text-geantSap-primary-600"
                   icon={faChevronLeft}
@@ -184,7 +185,12 @@ const PODetails = () => {
                     <Label className="text-sm font-bold text-geantSap-black">
                       Document number
                     </Label>
-                    <span className={`h-10 w-[21.188rem] ${isEdit ? "bg-geantSap-gray-25 text-geantSap-gray-400":""}  border border-geantSap-gray-50 p-2 rounded-lg`}>
+                    <span
+                      className={`h-10 w-[21.188rem] ${
+                        isEdit
+                          ? "bg-geantSap-gray-25 text-geantSap-gray-400"
+                          : ""
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {activePO?.documentNumber}
                     </span>
                   </div>
@@ -198,8 +204,7 @@ const PODetails = () => {
                         isEdit
                           ? "bg-geantSap-gray-25 text-geantSap-gray-400"
                           : ""
-                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
-                    >
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {activePO?.documentDate.split(" ")[0]}
                     </span>
                   </div>
@@ -213,10 +218,8 @@ const PODetails = () => {
                         isEdit
                           ? "bg-geantSap-gray-25 text-geantSap-gray-400"
                           : ""
-                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
-                    >
-                      {activePO &&
-                        numberWithCommas(activePO.documentTotal)}
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
+                      {activePO && numberWithCommas(activePO.documentTotal)}
                     </span>
                   </div>
                   <div className="flex flex-col gap-y-2">
@@ -229,8 +232,7 @@ const PODetails = () => {
                         isEdit
                           ? "bg-geantSap-gray-25 text-geantSap-gray-400"
                           : ""
-                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
-                    >
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {activePO?.status}
                     </span>
                   </div>
@@ -243,8 +245,7 @@ const PODetails = () => {
                         isEdit
                           ? "bg-geantSap-gray-25 text-geantSap-gray-400"
                           : ""
-                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
-                    >
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       LYD
                     </span>
                   </div>
@@ -258,8 +259,7 @@ const PODetails = () => {
                         isEdit
                           ? "bg-geantSap-gray-25 text-geantSap-gray-400"
                           : ""
-                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
-                    >
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {activePO?.processStatus}
                     </span>
                   </div>
@@ -301,8 +301,7 @@ const PODetails = () => {
                         isEdit
                           ? "bg-geantSap-gray-25 text-geantSap-gray-400"
                           : ""
-                      }  border border-geantSap-gray-50 p-2 rounded-lg`}
-                    >
+                      }  border border-geantSap-gray-50 p-2 rounded-lg`}>
                       {activePO?.vendorName}
                     </span>
                   </div>
@@ -344,8 +343,7 @@ const PODetails = () => {
                                 className={cn(
                                   "w-full pl-3 text-left  border border-geantSap-gray-50 font-normal",
                                   !field.value && "text-muted-foreground"
-                                )}
-                              >
+                                )}>
                                 {field.value ? (
                                   format(field.value, "PP")
                                 ) : (
@@ -394,8 +392,7 @@ const PODetails = () => {
                                 className={cn(
                                   "w-full pl-3 text-left  border border-geantSap-gray-50 font-normal ",
                                   !field.value && "text-muted-foreground"
-                                )}
-                              >
+                                )}>
                                 {field.value ? (
                                   format(field.value, "PP")
                                 ) : (
@@ -496,8 +493,7 @@ const PODetails = () => {
                 </TabsList>
                 <TabsContent
                   className=" w-full border-2  border-geantSap-gray-25 rounded-lg"
-                  value="item"
-                >
+                  value="item">
                   <table className="w-full text-nowrap ">
                     <thead className="bg-geantSap-gray-25">
                       <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
@@ -516,8 +512,7 @@ const PODetails = () => {
                       {docLine.map((item, i) => (
                         <tr
                           key={i}
-                          className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
-                        >
+                          className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                           <td className="px-6 py-3">{item.itemCode}</td>
                           <td className="px-6 py-3">
                             {item.itemName
@@ -573,8 +568,7 @@ const PODetails = () => {
                               }}
                               type="button"
                               size={"icon"}
-                              className=" flex p-0 items-center disabled:opacity-50 justify-center bg-transparent "
-                            >
+                              className=" flex p-0 items-center disabled:opacity-50 justify-center bg-transparent ">
                               <FontAwesomeIcon
                                 className="text-geantSap-error-500"
                                 icon={faX}
@@ -600,8 +594,7 @@ const PODetails = () => {
                 </TabsContent>
                 <TabsContent
                   className=" min-w-[1288px] border-2 border-geantSap-gray-25 rounded-lg"
-                  value="attachment"
-                >
+                  value="attachment">
                   <table className="w-full ">
                     <thead className="bg-geantSap-gray-25">
                       <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
@@ -670,8 +663,7 @@ const PODetails = () => {
                       setisEdit(true);
                     }
                   }}
-                  className="bg-geantSap-primary-500 disabled:opacity-50 rounded-lg"
-                >
+                  className="bg-geantSap-primary-500 disabled:opacity-50 rounded-lg">
                   Edit
                 </Button>
               </>
@@ -683,16 +675,14 @@ const PODetails = () => {
                     setisEdit(false);
                   }}
                   disabled={form.formState.isSubmitting}
-                  className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg"
-                >
+                  className="bg-transparent text-geantSap-primary-600 border disabled:opacity-50 border-geantSap-gray-100 rounded-lg">
                   Cancel Edit
                 </Button>
                 <Button
                   disabled={form.formState.isSubmitting}
                   type="submit"
                   onClick={form.handleSubmit(onSubmit)}
-                  className="bg-geantSap-primary-500  disabled:opacity-50 rounded-lg"
-                >
+                  className="bg-geantSap-primary-500  disabled:opacity-50 rounded-lg">
                   {form.formState.isSubmitting && (
                     <FontAwesomeIcon className="" icon={faSpinner} spin />
                   )}

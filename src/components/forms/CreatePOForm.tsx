@@ -58,6 +58,8 @@ const CreatePOForm = () => {
     const newValues = {
       ...values,
       section: values.section === "" ? "999" : values.section,
+      postingDate:new Date(format(values.postingDate, "yyyy-MM-dd")),
+      deliveryDate: new Date(format(values.deliveryDate, "yyyy-MM-dd")),
       documentLines: docLine.map((item) => {
         return {
           itemCode: item.itemCode,

@@ -121,6 +121,10 @@ export type ToBePaid = {
   bankAccount: string;
   paymentType: string;
 };
+export type accountsList = {
+  bank: [{ accountName: string; accountNumber: string }];
+  cash: [{ accountName: string; accountNumber: string }];
+};
 export type CalculateCreditNote = {
   type: string;
   totalAmount: string;
@@ -134,8 +138,8 @@ export type CalculateRebate = {
   Percentage: string;
 };
 export type CreateOutgoingPayment = {
-  cash:string,
-  bank:string,
+  cash: string;
+  bank: string;
   result: [
     {
       documentType: string;
@@ -152,7 +156,6 @@ export type CreateOutgoingPayment = {
     }
   ];
 };
-
 export type MissingQTY = {
   vendorCode: string;
   vendorName: string;

@@ -68,6 +68,8 @@ const TransferRequestForm = () => {
   const onSubmit = async (values: CreateTransferRequest) => {
     const newValues = {
       ...values,
+      postingDate:new Date(format(values.postingDate, "yyyy-MM-dd")),
+      deliveryDate: new Date(format(values.deliveryDate, "yyyy-MM-dd")),
       documentLines: docLine.map((item) => {
         return {
           itemCode: item.itemCode,

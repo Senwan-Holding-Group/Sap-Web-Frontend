@@ -87,7 +87,7 @@ const SplashScreen = () => {
   }
 
   return (
-    <div className="fixed inset-0 bg-white flex items-center justify-center">
+    <div className="h-dvh w-screen bg-white flex items-center justify-center">
       <div className="flex flex-col justify-between items-center">
         {/* Image Container */}
         <div className="relative w-full h-full ">

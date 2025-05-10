@@ -1,3 +1,4 @@
+import { useAuth } from "@/api/Auth/useAuth";
 import { getToBePaidByVendor } from "@/api/client";
 import CalculateCreditNote from "@/components/CalculateCreditNote";
 import CalculateRebate from "@/components/CalculateRebate";
@@ -14,7 +15,8 @@ import { Link, useParams } from "react-router-dom";
 const ToBePaidDetails = () => {
   const { id, paymentDate } = useParams();
   const { setError } = useStateContext();
-
+    const { user } = useAuth();
+  
   const {
     data: toBePaidDetails,
     isFetching,
@@ -31,7 +33,7 @@ const ToBePaidDetails = () => {
   });
 
   return (
-    <div className=" sm:h-[35rem] 3xl:h-[47rem] h-[52.5rem] box-border max-h-[52.5rem] overflow-auto  ">
+    <div className=" h-[calc(100dvh-9.25rem)]  box-border  overflow-auto  ">
       <div className="bg-white border  border-geantSap-gray-25 geantShadow h-full  rounded-xl flex flex-col justify-between">
         <DataRenderer isLoading={isFetching} isError={isError}>
           <div className="px-6 py-4 flex gap-x-6 items-center border-b border-geantSap-gray-50">
@@ -117,16 +119,6 @@ const ToBePaidDetails = () => {
                     {toBePaidDetails?.bankAccount}
                   </span>
                 </div>
-                <div className="flex flex-col gap-y-2 ">
-                  <Label className="text-sm font-bold text-geantSap-black">
-                    Bank Amount
-                  </Label>
-
-                  <span
-                    className={`h-10 w-[21.188rem]   border border-geantSap-gray-50 p-2 rounded-lg`}>
-                    {numberWithCommas(toBePaidDetails?.bankAmount)}
-                  </span>
-                </div>
                 <div className="flex flex-col gap-y-2 mt-2">
                   <Label className="text-sm font-bold text-geantSap-black">
                     Payment Amount
@@ -134,9 +126,20 @@ const ToBePaidDetails = () => {
 
                   <span
                     className={`h-10 w-[21.188rem]   border border-geantSap-gray-50 p-2 rounded-lg`}>
-                    {numberWithCommas(toBePaidDetails?.paymentAmount)}
+                    {user.paymentType==="Bank"?numberWithCommas(toBePaidDetails?.paymentAmount):"-"}
                   </span>
                 </div>
+                <div className="flex flex-col gap-y-2 ">
+                  <Label className="text-sm font-bold text-geantSap-black">
+                    Bank Amount
+                  </Label>
+
+                  <span
+                    className={`h-10 w-[21.188rem]   border border-geantSap-gray-50 p-2 rounded-lg`}>
+                    {user.paymentType==="Bank"?numberWithCommas(toBePaidDetails?.bankAmount):"-"}
+                  </span>
+                </div>
+              
                 <div className="flex flex-col gap-y-2">
                   <Label className="text-sm font-bold  text-geantSap-black">
                     Cash Amount

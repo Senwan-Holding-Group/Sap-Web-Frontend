@@ -8,18 +8,16 @@ import { useStateContext } from "@/context/useStateContext";
 import { activeGRPOmenu } from "@/lib/constants";
 import { numberWithCommas } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
 const GRPOTable = () => {
   const navigate = useNavigate();
   const { setError, setTotalPage, totalPage } = useStateContext();
-  const [currentPage, setCurrentPage] = useState(1);
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  const { query, setquery, search, setSearch } = useOutletContext<{
+  const { query, setquery, search, setSearch,currentPage, setCurrentPage } = useOutletContext<{
     query: string;
     setquery:React.Dispatch<React.SetStateAction<string>>;
     search: {
@@ -32,6 +30,8 @@ const GRPOTable = () => {
         searchValue: string;
       }>
     >;
+    currentPage: number;
+    setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   }>();
   const {
     data: activeGRPOlist,
@@ -51,12 +51,12 @@ const GRPOTable = () => {
 
   
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="space-y-4 h-full ">
       <div className="flex sm:justify-between items-center flex-col sm:flex-row  gap-4">
         <Search menuList={activeGRPOmenu} setSearch={setSearch} search={search} />
         <GRPOFilter setquery={setquery} query={query}/>
       </div>
-      <div className="  3xl:h-[43.5rem] sm:h-[31.5rem] h-[45rem] max-h-[45rem]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
+      <div className="  sm:h-[calc(100dvh-12.75rem)]  h-[calc(100dvh-16.25rem)]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
         <DataRenderer isLoading={isFetching} isError={isError}>
           <table className="w-full caption-bottom ">
             <thead className="sticky top-0 w-full bg-geantSap-gray-25">
@@ -72,8 +72,8 @@ const GRPOTable = () => {
             </thead>
             <tbody className="bg-white [&_tr:last-child]:border-0">
               {!activeGRPOlist?.length ? (
-                <tr className="h-[24rem] 3xl:h-[36rem]">
-                  <td colSpan={8} className="text-center ">
+                <tr className="">
+                  <td colSpan={8} className="text-center p-6">
                     No data found
                   </td>
                 </tr>

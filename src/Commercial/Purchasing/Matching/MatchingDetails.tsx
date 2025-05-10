@@ -48,7 +48,7 @@ const MatchingDetails = () => {
     }
   }, [matchingGRPODetails]);
   return (
-    <div className=" sm:h-[35rem] 3xl:h-[47rem] h-[52.5rem] box-border max-h-[52.5rem] overflow-auto  ">
+    <div className=" h-[calc(100dvh-9.25rem)]  box-border  overflow-auto  ">
       <Loader enable={isSubmitting} />
       <div className="bg-white border  border-geantSap-gray-25 geantShadow h-full  rounded-xl flex flex-col justify-between">
         <DataRenderer isLoading={isFetching} isError={isError}>

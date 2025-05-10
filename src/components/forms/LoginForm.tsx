@@ -46,7 +46,7 @@ const LoginForm = () => {
           </div>
           <div className="flex flex-col gap-y-8">
             <Label className="text-lg font-bold">
-              Welcome to Géant SAP Mirroring{" "}
+              Welcome to Géant SAP Mirroring
             </Label>
             <FormField
               control={form.control}

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  accountsList,
   ActiveAP,
   ActiveGRPO,
   ActivePo,
@@ -720,6 +721,22 @@ export const EditGRPOLine = async (
 };
 //******************************************** */
 //Payments Outgoing/Incoming
+export const getAccountsList = async (
+  url: string,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
+) => {
+  try {
+    const res = await api.get(url);
+    return res.data as accountsList;
+  } catch (error: any) {
+    if (error.message === "Network Error") {
+      setError("Something went wrong check your connection");
+      console.log(error);
+    } else {
+      setError(error.response.data.message);
+    }
+  }
+};
 export const getToBePaid = async (
   url: string,
   setError: React.Dispatch<React.SetStateAction<string | undefined>>,
@@ -849,17 +866,22 @@ export const postAllRebate = async (
   url: string,
   setisSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
   toast: any,
-  queryClient: QueryClient
+  queryClient: QueryClient,
+  setRebateData:React.Dispatch<React.SetStateAction<[{
+    vendor: string;
+    res: string;
+}]>>
 ) => {
   setisSubmitting(true);
   try {
-    await api.post(url);
+    const res =await api.post(url);
+    setRebateData(res.data);
     queryClient.invalidateQueries();
     toast({
       className: cn(
         "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
       ),
-      description: " Rebate Calculated successfully",
+      description: `Rebate Calculated successfully`,
     });
   } catch (error: any) {
     if (error.message === "Network Error") {

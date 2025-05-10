@@ -8,10 +8,11 @@ const GRPO = () => {
        searchValue: "",
      });  
      const [query, setquery] = useState<string>("");
- 
+     const [currentPage, setCurrentPage] = useState(1);
+
    return (
      <div>
-       <Outlet context={{search,setSearch,query, setquery}}/>
+       <Outlet context={{search,setSearch,query, setquery,currentPage, setCurrentPage}}/>
      </div>
    );
 };

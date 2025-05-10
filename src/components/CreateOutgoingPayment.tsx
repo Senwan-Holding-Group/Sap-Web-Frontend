@@ -94,7 +94,7 @@ const CreateOutgoingPayment = ({
                     outgoingPaymentList.result.map((data, i) => (
                       <tr
                         key={i}
-                        className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
+                        className="text-nowrap text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                         <td className="px-6 py-3">{data.documentType}</td>
                         <td className="px-6 py-3">
                           {data.documentDate.split(" ")[0]}
@@ -133,7 +133,7 @@ const CreateOutgoingPayment = ({
               Close
             </Button>
           </DialogClose>
-              <OutgoingPayments outgoingPaymentList={outgoingPaymentList} />
+              <OutgoingPayments disable={isFetching} outgoingPaymentList={outgoingPaymentList} />
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -74,7 +74,7 @@ const GRPOFilter = ({ setquery,query }: FilterProps) => {
       </DrawerTrigger>
       <DrawerContent aria-describedby={undefined} className="bg-white">
         <DrawerHeader className="text-left p-6 flex items-center justify-between">
-          <DrawerTitle className="font-bold text-2xl leading-[36px] text-geantSap-primary-500">
+          <DrawerTitle className="font-bold text-2xl leading-[2.25rem] text-geantSap-primary-500">
             Filters
           </DrawerTitle>
           <Button

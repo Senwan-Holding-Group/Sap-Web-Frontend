@@ -30,17 +30,25 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format, formatDate } from "date-fns";
 import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import { useAuth } from "@/api/Auth/useAuth";
+import ShowRebate from "@/components/ShowRebate";
 const ToBePaidTable = () => {
   const navigate = useNavigate();
-  const { setError, setTotalPage, totalPage } = useStateContext();
-  const [currentPage, setCurrentPage] = useState(1);
+  const { user } = useAuth();
+  const { setError, setTotalPage, totalPage,setRebateData,rebateData } = useStateContext();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isSubmitting, setisSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const handleDownload = async () => {
-    await exportCheck(`Checks ${formatDate(Date.now(),'PP')}`,paymentDate.split("=")[1], setIsLoading, toast);
+    await exportCheck(
+      `Checks ${formatDate(Date.now(), "PP")}`,
+      paymentDate.split("=")[1],
+      setIsLoading,
+      toast
+    );
   };
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -55,7 +63,14 @@ const ToBePaidTable = () => {
       setSelectedDate(undefined);
     }
   };
-  const { paymentDate, setpaymentDate, search, setSearch } = useOutletContext<{
+  const {
+    paymentDate,
+    setpaymentDate,
+    search,
+    setSearch,
+    currentPage,
+    setCurrentPage,
+  } = useOutletContext<{
     paymentDate: string;
     setpaymentDate: React.Dispatch<React.SetStateAction<string>>;
     search: {
@@ -68,6 +83,8 @@ const ToBePaidTable = () => {
         searchValue: string;
       }>
     >;
+    currentPage: number;
+    setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   }>();
 
   const {
@@ -86,10 +103,11 @@ const ToBePaidTable = () => {
     refetchOnMount: true,
     enabled: paymentDate != "",
   });
+
   return (
-    <div className="flex flex-col gap-y-4">
-      <div className="flex md:flex-row flex-col  gap-2 justify-between ">
-        <div className="flex md:flex-row flex-col  gap-2">
+    <div className="space-y-4 h-full ">
+      <div className="flex md:flex-row flex-col overflow-x-scroll overflow-y-hidden  gap-2 justify-between ">
+        <div className="flex md:flex-row flex-col w-full  gap-2">
           <Search
             menuList={toBePaidMenu}
             setSearch={setSearch}
@@ -100,7 +118,7 @@ const ToBePaidTable = () => {
               <Button
                 variant={"outline"}
                 className={cn(
-                  " max-w-md w-[23.75rem]  pl-3 text-left  font-normal",
+                  " md:w-[22rem] w-full  pl-3 text-left  font-normal",
                   !selectedDate && "text-muted-foreground"
                 )}>
                 {selectedDate || paymentDate ? (
@@ -138,35 +156,47 @@ const ToBePaidTable = () => {
             </PopoverContent>
           </Popover>
         </div>
-        <div className="flex md:flex-row justify-end gap-2">
+        <div className="flex  gap-2">
           <Button
             type="button"
-            disabled={isSubmitting || paymentDate === "" || isFetching||isLoading}
+            disabled={
+              isSubmitting || paymentDate === "" || isFetching || isLoading
+            }
             onClick={handleDownload}
             className="bg-geantSap-primary-500 flex-1 disabled:bg-geantSap-gray-50 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base">
             <span className="size-6 flex items-center justify-center">
-              <FontAwesomeIcon className="" icon={isLoading?faSpinner:faFileExport} spin={isLoading}/>
+              <FontAwesomeIcon
+                className=""
+                icon={isLoading ? faSpinner : faFileExport}
+                spin={isLoading}
+              />
             </span>
-            <span className="font-medium text-base ">Export Checks</span>
+            <span className="font-medium text-base sm:block hidden">Export Checks</span>
           </Button>
+          <ShowRebate rebateData={rebateData}/>
+
           <Button
             size={"icon"}
-            disabled={isSubmitting || selectedDate === undefined}
+            disabled={isSubmitting ||!paymentDate}
             onClick={() => {
               postAllRebate(
-                `/outgoing-payment/rebate?paymentDate=${selectedDate}`,
+                `/outgoing-payment/rebate?paymentDate=${format(
+                  selectedDate ?? new Date(),
+                  "yyyy-MM-dd"
+                )}`,
                 setisSubmitting,
                 toast,
-                queryClient
+                queryClient,
+                setRebateData
               );
             }}
             className="text-geantSap-primary-500 bg-transparent disabled:opacity-50 border  border-geantSap-gray-25 hover:bg-geantSap-gray-25 disabled:cursor-not-allowed">
-            {" "}
+
             <FontAwesomeIcon className="" icon={faPercentage} />
           </Button>
           <Button
             size={"icon"}
-            disabled={isSubmitting || selectedDate === undefined}
+            disabled={isSubmitting ||!paymentDate}
             onClick={() => {
               postAllCreditNote(
                 `/outgoing-payment/creditNote?paymentDate=${selectedDate}`,
@@ -180,21 +210,27 @@ const ToBePaidTable = () => {
           </Button>
         </div>
       </div>
-      <div className="  3xl:h-[43.5rem] sm:h-[31.5rem] h-[45rem] max-h-[45rem]  border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
+      <div className=" md:h-[calc(100dvh-12.75rem)]  h-[calc(100dvh-18.75rem)] border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
         <DataRenderer isLoading={isFetching} isError={isError}>
           <table className="w-full caption-bottom ">
             <thead className="sticky top-0 w-full bg-geantSap-gray-25">
               <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
                 <th className="p-6 rounded-tl-xl ">Vendor code</th>
                 <th className="p-6">Name (AR)</th>
-                <th className="p-6">Payment Balance</th>
-                <th className="p-6 rounded-tr-xl">Payment Type</th>
+                {user.paymentType === "Bank" && (
+                  <>
+                  <th className="p-6">Payment Balance</th>
+                    <th className="p-6 ">Bank Amount</th>
+                  </>
+                )}
+                <th className="p-6">Cash Amount</th>
+                <th className="p-6  rounded-tr-xl">Payment Type</th>
               </tr>
             </thead>
             <tbody className="bg-white [&_tr:last-child]:border-0">
               {!toBePaidList?.length ? (
-                <tr className="h-[24rem] 3xl:h-[36rem]">
-                  <td colSpan={4} className="text-center ">
+                <tr className="">
+                  <td colSpan={6} className="text-center p-6">
                     No data found
                   </td>
                 </tr>
@@ -214,9 +250,18 @@ const ToBePaidTable = () => {
                     className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                     <td className="px-6 py-3">{data.vendorCode}</td>
                     <td className="px-6 py-3">{data.vendorName}</td>
-
+                    {user.paymentType === "Bank" && (
+                  <>
                     <td className="px-6 py-3">
                       {numberWithCommas(data.paymentAmount)}
+                    </td>
+                    <td className="px-6 py-3">
+                      {numberWithCommas(data.bankAmount)}
+                    </td>
+                    </>
+                )}
+                    <td className="px-6 py-3">
+                      {numberWithCommas(data.cashAmount)}
                     </td>
                     <td className="px-6 py-3">{data.paymentType}</td>
                   </tr>
