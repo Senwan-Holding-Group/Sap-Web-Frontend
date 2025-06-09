@@ -31,7 +31,7 @@ const POTable = () => {
     queryKey: ["activePO",search,currentPage],
     queryFn: () =>
       getActivePOs(
-        `/po/active?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`,
+        `/po/active?${search.searchKey}=${search.searchValue}&perPage=15&page=${currentPage}`,
         setError,setTotalPage
       ),
     refetchOnWindowFocus: false,

@@ -3,10 +3,15 @@ import { Button } from "./ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/pro-solid-svg-icons";
 import { downloadAttachments } from "@/api/client";
+import { useState } from "react";
+import { useToast } from "@/lib/hooks/use-toast";
 type AttachmentProp = {
   attachmentList: AttachmentList[] | undefined;
 };
 const Attachments = ({ attachmentList }: AttachmentProp) => {
+   const [isLoading, setIsLoading] = useState(false);
+  
+    const { toast } = useToast();
   
   return (
     <table className="w-full ">
@@ -33,10 +38,11 @@ const Attachments = ({ attachmentList }: AttachmentProp) => {
             </td>
             <td className="px-6 py-3">
               <Button
+                disabled={isLoading}
                 onClick={() =>
                   downloadAttachments(
                     `attachment?fileName=${attachment.fileName}&fileExtension=${attachment.fileExtension}&filePath=${attachment.filePath}`,
-                    attachment.fileName
+                    attachment.fileName,setIsLoading,toast
                   )
                 }
                 size={"icon"}
@@ -45,7 +51,7 @@ const Attachments = ({ attachmentList }: AttachmentProp) => {
                   icon={faDownload}
                   className="text-geantSap-primary-500"
                 />
-              </Button>{" "}
+              </Button>
             </td>
           </tr>
         ))}

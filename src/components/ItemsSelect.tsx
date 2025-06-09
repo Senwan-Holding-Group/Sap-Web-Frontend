@@ -18,16 +18,21 @@ import { useQuery } from "@tanstack/react-query";
 import { getItemsByVendor } from "@/api/client";
 import { useStateContext } from "@/context/useStateContext";
 import DataRenderer from "./DataRenderer";
+import { useLocation } from "react-router-dom";
 
 type ItemSelectProps = {
   state: DocumentLine[];
   setState: React.Dispatch<React.SetStateAction<DocumentLine[]>>;
   code: string;
+  whs?: string;
   type: string;
 };
 
-const ItemSelect = ({ setState, state, code, type }: ItemSelectProps) => {
+const ItemSelect = ({ setState, state, code, whs, type }: ItemSelectProps) => {
   const { setError } = useStateContext();
+  const location = useLocation();
+  console.log(location.pathname.includes("details"));
+
   const [search, setSearch] = useState({
     searchKey: itemVendorMenu[0].value,
     searchValue: "",
@@ -52,8 +57,14 @@ const ItemSelect = ({ setState, state, code, type }: ItemSelectProps) => {
       <DialogTrigger asChild>
         <Button
           size={"icon"}
-          className=" flex items-center justify-start bg-transparent "
-        >
+          disabled={
+            type === "vendor"
+              ? location.pathname.includes("details")
+                ? false
+                : typeof whs == "undefined"
+              : code == ""
+          }
+          className=" flex items-center justify-start bg-transparent ">
           <FontAwesomeIcon
             className="text-geantSap-primary-500"
             icon={faGrid2Plus}
@@ -62,8 +73,7 @@ const ItemSelect = ({ setState, state, code, type }: ItemSelectProps) => {
       </DialogTrigger>
       <DialogContent
         aria-describedby={undefined}
-        className="h-[25rem] flex flex-col  justify-between 3xl:h-[27.5rem]  max-w-4xl 3xl:w-[56rem] lg:w-[50rem] md:w-[45em] sm:w-[35rem] w-[80%]"
-      >
+        className="h-[25rem] flex flex-col  justify-between 3xl:h-[27.5rem]  max-w-4xl 3xl:w-[56rem] lg:w-[50rem] md:w-[45em] sm:w-[35rem] w-[80%]">
         <div className="p-4 ">
           <DialogHeader className="border-b  border-geantSap-gray-50  md:h-[3.5rem]">
             <DialogTitle className=" flex md:flex-row flex-col  justify-between items-center  py-2 pl-2  pr-4">
@@ -102,16 +112,17 @@ const ItemSelect = ({ setState, state, code, type }: ItemSelectProps) => {
                             ...item,
                             quantity: 1,
                             total: parseFloat((item.price ?? 0).toString()),
-                            line: state.length++,
+                            line: Math.random(),
+                            warehouseCode: whs ? whs : state[0]?.warehouseCode,
                           },
                         ]);
+                        console.log(state);
                       }}
                       className={`text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25  cursor-pointer ${
                         state.find(
                           (value) => value.itemCode === item.itemCode
                         ) && "bg-geantSap-primary-15"
-                      }`}
-                    >
+                      }`}>
                       <td className="px-6 py-3">{item.itemCode}</td>
                       <td className="px-6 py-3">{item.itemName}</td>
                       <td className="px-6 py-3">{item.stock}</td>
@@ -130,16 +141,14 @@ const ItemSelect = ({ setState, state, code, type }: ItemSelectProps) => {
             <Button
               // onClick={() => setState([])}
               className="bg-white w-[8.125rem] border rounded-lg text-geantSap-primary-600 font-medium text-base"
-              type="button"
-            >
+              type="button">
               Cancel
             </Button>
           </DialogClose>
           <DialogClose asChild>
             <Button
               className="bg-geantSap-primary-500 w-[8.125rem] rounded-lg font-medium text-base"
-              type="button"
-            >
+              type="button">
               Confirm
             </Button>
           </DialogClose>

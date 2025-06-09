@@ -7,7 +7,7 @@ import DataRenderer from "@/components/DataRenderer";
 import ItemSelect from "@/components/ItemsSelect";
 import SelectSection from "@/components/SelectSection";
 import SelectVendor from "@/components/SelectVendor";
-import SelectWarehouse from "@/components/SelectWarehouse";
+// import SelectWarehouse from "@/components/SelectWarehouse";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -582,12 +582,13 @@ const DraftDetails = () => {
                             LYD
                           </td>
                           <td className="px-6 py-3">
-                            <SelectWarehouse
+                            {item.warehouseCode}
+                            {/* <SelectWarehouse
                               item={item}
                               disable={!isEdit}
                               docLine={docLine}
                               setdocLine={setdocLine}
-                            />
+                            /> */}
                           </td>
                           <td className="px-6">
                             <Button
@@ -595,10 +596,12 @@ const DraftDetails = () => {
                               onClick={() => {
                                 setdocLine(
                                   docLine.filter((value) => {
-                                    return (
-                                      value.lineNum !== item.lineNum ||
-                                      value.line !== item.line
-                                    );
+                                    if (docLine.length === 1) return value;
+                                    else
+                                      return (
+                                        value.lineNum !== item.lineNum ||
+                                        value.line !== item.line
+                                      );
                                   })
                                 );
                               }}

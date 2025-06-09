@@ -31,7 +31,7 @@ const GoodsReturnTable = () => {
         queryKey: ["GRPO", search, currentPage],
         queryFn: () =>
           getActiveGRPO(
-            `/goods-return/active?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`,
+            `/goods-return/active?${search.searchKey}=${search.searchValue}&perPage=15&page=${currentPage}`,
             setError,
             setTotalPage
           ),

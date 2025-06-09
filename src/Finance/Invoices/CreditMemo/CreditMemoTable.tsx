@@ -30,7 +30,7 @@ const CreditMemoTable = () => {
         queryKey: ["credit-memo", search, currentPage],
         queryFn: () =>
           getActiveAP(
-            `/credit-memo/active?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`,
+            `/credit-memo/active?${search.searchKey}=${search.searchValue}&perPage=15&page=${currentPage}`,
             setError,
             setTotalPage
           ),

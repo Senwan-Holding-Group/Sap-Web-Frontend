@@ -80,10 +80,19 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
+    path: "/promotion",
+    element: <SplashScreen />,
+    errorElement: <NotFound />,
+  },
+  {
     path: "/sap",
     element: <App />,
     errorElement: <NotFound />,
     children: [
+      {
+            index: true,
+            element: <Navigate to="/sap/dashboard" replace />,
+          },
       {
         path: "dashboard",
         element: (

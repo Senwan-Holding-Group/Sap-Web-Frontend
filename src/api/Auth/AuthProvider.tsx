@@ -37,7 +37,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       const BUFFER_TIME = 30 * 1000;
       console.log("Current time:", new Date(now).toISOString());
       console.log("Expiration time:", new Date(expirationTime).toISOString());
-
+      console.log(decodedUser);
+      
       if (expirationTime > now + BUFFER_TIME) {
         setToken(storedToken);
         setUser(decodedUser);

@@ -603,10 +603,12 @@ const TransferDetails = () => {
                               onClick={() => {
                                 setdocLine(
                                   docLine.filter((value) => {
-                                    return (
-                                      value.lineNum !== item.lineNum ||
-                                      value.line !== item.line
-                                    );
+                                    if (docLine.length === 1) return value;
+                                    else
+                                      return (
+                                        value.lineNum !== item.lineNum ||
+                                        value.line !== item.line
+                                      );
                                   })
                                 );
                               }}

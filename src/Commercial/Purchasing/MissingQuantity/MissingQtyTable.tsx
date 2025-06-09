@@ -30,7 +30,7 @@ const MissingQtyTable = () => {
     queryKey: ["missingQTY", search, currentPage],
     queryFn: () =>
       getMissingQuantity(
-        `/po/missing?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`,
+        `/po/missing?${search.searchKey}=${search.searchValue}&perPage=15&page=${currentPage}`,
         setError,
         setTotalPage
       ),

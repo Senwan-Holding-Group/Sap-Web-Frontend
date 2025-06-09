@@ -48,6 +48,7 @@ import ImportItems from "../ImportItems";
 const TransferRequestForm = () => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
   const [docLine, setdocLine] = useState<DocumentLine[]>([]);
@@ -68,7 +69,7 @@ const TransferRequestForm = () => {
   const onSubmit = async (values: CreateTransferRequest) => {
     const newValues = {
       ...values,
-      postingDate:new Date(format(values.postingDate, "yyyy-MM-dd")),
+      postingDate: new Date(format(values.postingDate, "yyyy-MM-dd")),
       deliveryDate: new Date(format(values.deliveryDate, "yyyy-MM-dd")),
       documentLines: docLine.map((item) => {
         return {
@@ -105,7 +106,6 @@ const TransferRequestForm = () => {
         if (value.line != line) {
           return value;
         }
-
         return {
           ...value,
           quantity: Math.abs(quantity),
@@ -120,8 +120,7 @@ const TransferRequestForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full overflow-scroll  justify-between h-full"
-      >
+        className="flex flex-col w-full overflow-scroll  justify-between h-full">
         <Loader enable={form.formState.isSubmitting} />
 
         <div className="flex w-full flex-col  overflow-scroll  gap-y-6 p-6 h-full ">
@@ -143,8 +142,7 @@ const TransferRequestForm = () => {
                             className={cn(
                               "w-full pl-3 text-left bgtr font-normal",
                               !field.value && "text-muted-foreground"
-                            )}
-                          >
+                            )}>
                             {field.value ? (
                               format(field.value, "PP")
                             ) : (
@@ -189,8 +187,7 @@ const TransferRequestForm = () => {
                             className={cn(
                               "w-full pl-3 text-left bgtr font-normal",
                               !field.value && "text-muted-foreground"
-                            )}
-                          >
+                            )}>
                             {field.value ? (
                               format(field.value, "PP")
                             ) : (
@@ -250,13 +247,12 @@ const TransferRequestForm = () => {
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                        defaultValue={field.value}>
                         <SelectTrigger className="w-full justify-between rounded-lg  border border-geantSap-gray-50">
                           <SelectValue placeholder="Select" />
                         </SelectTrigger>
                         <SelectContent>
-                          {user.warehouseList.map((WC) => (
+                          {user.reqWhsList?.map((WC) => (
                             <SelectItem key={WC} value={WC}>
                               {WC}
                             </SelectItem>
@@ -279,8 +275,7 @@ const TransferRequestForm = () => {
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                        defaultValue={field.value}>
                         <SelectTrigger className="w-full justify-between rounded-lg  border border-geantSap-gray-50">
                           <SelectValue placeholder="Select" />
                         </SelectTrigger>
@@ -368,21 +363,23 @@ const TransferRequestForm = () => {
                 <Button
                   type="button"
                   onClick={() => {
-                    exportItemsBy("section", section);
+                    exportItemsBy("section", section, setIsLoading, toast);
                   }}
-                  disabled={section == ""}
-                  className="bg-geantSap-primary-500 w-[11.25rem] flex items-center disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 disabled:cursor-not-allowed rounded-lg"
-                >
+                  disabled={section == "" || isLoading}
+                  className="bg-geantSap-primary-500 w-[11.25rem] flex items-center disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 disabled:cursor-not-allowed rounded-lg">
                   <span className="size-6 flex items-center justify-center">
-                    <FontAwesomeIcon className="size-6" icon={faFileExport} />
+                    <FontAwesomeIcon
+                      className=""
+                      icon={isLoading ? faSpinner : faFileExport}
+                      spin={isLoading}
+                    />
                   </span>
                   <span className="font-medium text-base ">Export Items</span>
                 </Button>
               </div>
               <TabsContent
                 className="w-full border-2 overflow-scroll border-geantSap-gray-25 rounded-lg"
-                value="item"
-              >
+                value="item">
                 <table className="w-full text-nowrap bg-white ">
                   <thead className="bg-geantSap-gray-25">
                     <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
@@ -400,8 +397,7 @@ const TransferRequestForm = () => {
                     {docLine?.map((item, i) => (
                       <tr
                         key={i}
-                        className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
-                      >
+                        className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                         <td className="px-6 py-3">{item.itemCode}</td>
                         <td className="px-6 py-3">{item.itemName}</td>
                         <td className="px-6 ">
@@ -439,14 +435,14 @@ const TransferRequestForm = () => {
                             onClick={() => {
                               setdocLine(
                                 docLine.filter((value) => {
-                                  return value.line != item.line;
+                                  if (docLine.length === 1) return value;
+                                  else return value.line != item.line;
                                 })
                               );
                             }}
                             type="button"
                             size={"icon"}
-                            className=" flex p-0 items-center justify-center bg-transparent "
-                          >
+                            className=" flex p-0 items-center justify-center bg-transparent ">
                             <FontAwesomeIcon
                               className="text-geantSap-error-500"
                               icon={faX}
@@ -470,8 +466,7 @@ const TransferRequestForm = () => {
               </TabsContent>
               <TabsContent
                 className=" min-w-[1288px] border-2 border-geantSap-gray-25 rounded-lg"
-                value="attachment"
-              >
+                value="attachment">
                 <table className="w-full ">
                   <thead className="bg-geantSap-gray-25">
                     <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
@@ -529,16 +524,14 @@ const TransferRequestForm = () => {
                 setdocLine([]);
               }}
               className="bg-white w-[8.125rem] border rounded-lg disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 text-geantSap-primary-600 font-medium text-base"
-              type="button"
-            >
+              type="button">
               Cancel
             </Button>
           </DialogClose>
           <Button
             disabled={form.formState.isSubmitting}
             className="bg-geantSap-primary-500 w-[8.125rem] disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base"
-            type="submit"
-          >
+            type="submit">
             {form.formState.isSubmitting && (
               <FontAwesomeIcon className="" icon={faSpinner} spin />
             )}

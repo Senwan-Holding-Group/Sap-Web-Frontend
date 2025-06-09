@@ -30,7 +30,7 @@ const MatchingTable = () => {
        queryKey: ["MatchingCOMGRPO", search, currentPage],
        queryFn: () =>
          getMatchingGRPO(
-           `/grpo/commercial/matching?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`,
+           `/grpo/commercial/matching?${search.searchKey}=${search.searchValue}&perPage=15&page=${currentPage}`,
            setError,
            setTotalPage
          ),

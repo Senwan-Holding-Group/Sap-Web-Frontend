@@ -42,7 +42,7 @@ import { cn, numberWithCommas } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import SelectWarehouse from "@/components/SelectWarehouse";
+// import SelectWarehouse from "@/components/SelectWarehouse";
 import ItemSelect from "@/components/ItemsSelect";
 import Loader from "@/components/ui/Loader";
 import Alert from "@/components/CancelPOAlert";
@@ -105,9 +105,7 @@ const PODetails = () => {
           quantity: item.quantity.toString(),
           price: item.price.toString(),
           uomCode: item.uomCode,
-          warehouseCode: item.warehouseCode
-            ? item.warehouseCode
-            : item.warehouseList[0],
+          warehouseCode: item.warehouseCode,
           uomEntry: item.uomEntry,
         };
       }),
@@ -546,12 +544,13 @@ const PODetails = () => {
                             LYD
                           </td>
                           <td className="px-6 py-3">
-                            <SelectWarehouse
+                            {item.warehouseCode}
+                            {/* <SelectWarehouse
                               item={item}
                               disable={!isEdit}
                               docLine={docLine}
                               setdocLine={setdocLine}
-                            />
+                            /> */}
                           </td>
                           <td className="px-6">
                             <Button
@@ -559,10 +558,12 @@ const PODetails = () => {
                               onClick={() => {
                                 setdocLine(
                                   docLine.filter((value) => {
-                                    return (
-                                      value.lineNum !== item.lineNum ||
-                                      value.line !== item.line
-                                    );
+                                    if (docLine.length === 1) return value;
+                                    else
+                                      return (
+                                        value.lineNum !== item.lineNum ||
+                                        value.line !== item.line
+                                      );
                                   })
                                 );
                               }}

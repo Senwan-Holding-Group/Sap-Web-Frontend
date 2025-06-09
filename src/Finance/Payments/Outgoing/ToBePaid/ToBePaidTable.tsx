@@ -95,7 +95,7 @@ const ToBePaidTable = () => {
     queryKey: ["toBePaid", search, currentPage, paymentDate],
     queryFn: () =>
       getToBePaid(
-        `/outgoing-payment/to-paid?${search.searchKey}=${search.searchValue}${paymentDate}&perPage=12&page=${currentPage}`,
+        `/outgoing-payment/to-paid?${search.searchKey}=${search.searchValue}${paymentDate}&perPage=15&page=${currentPage}`,
         setError,
         setTotalPage
       ),

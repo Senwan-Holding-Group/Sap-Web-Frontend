@@ -60,6 +60,7 @@ export type User = {
   sectionList: string[];
   paymentType: "Cash" | "Bank";
   exp: number;
+  reqWhsList: string[];
 };
 // export const usePermissions = () => {
 //   const {  user } = useAuth();

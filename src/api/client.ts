@@ -120,36 +120,23 @@ export const importItems = async (
     console.log(error);
   }
 };
-export const exportItemsBy = async (by: string, value: string) => {
-  try {
-    const url = `${baseURL}/export/items/${by}/${value}`;
-    const tempLink = document.createElement("a");
-    tempLink.href = url;
-    tempLink.setAttribute("download", `${by}:${value}`);
-    tempLink.setAttribute("target", "_blank");
-    document.body.appendChild(tempLink);
-    tempLink.click();
-    document.body.removeChild(tempLink);
-    window.URL.revokeObjectURL(url);
-  } catch (error: any) {
-    console.log(error);
-  }
-};
-export const exportReport = async (query: string,
-  fileName:string,
+export const exportItemsBy = async (
+  by: string,
+  value: string,
   setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>,
-  toast?: any) => {
+  toast?: any
+) => {
   try {
     if (setIsLoading) setIsLoading(true);
-    const res = await api.get(`${baseURL}/export/report?filter=${query}`, {
+    const res = await api.get(`${baseURL}/export/items/${by}/${value}`, {
       responseType: "blob",
     });
+    // const url = `${baseURL}/export/items/${by}/${value}`;
     const blob = res.data;
     const url = window.URL.createObjectURL(blob);
     const tempLink = document.createElement("a");
     tempLink.href = url;
-    tempLink.setAttribute("download", fileName);
-
+    tempLink.setAttribute("download", `${by}:${value}`);
     tempLink.setAttribute("target", "_blank");
     document.body.appendChild(tempLink);
     tempLink.click();
@@ -181,8 +168,54 @@ export const exportReport = async (query: string,
     if (setIsLoading) setIsLoading(false);
   }
 };
+export const exportReport = async (
+  query: string,
+  fileName: string,
+  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>,
+  toast?: any
+) => {
+  try {
+    if (setIsLoading) setIsLoading(true);
+    const res = await api.get(`${baseURL}/export/report?filter=${query}`, {
+      responseType: "blob",
+    });
+    const blob = res.data;
+    const url = window.URL.createObjectURL(blob);
+    const tempLink = document.createElement("a");
+    tempLink.href = url;
+    tempLink.setAttribute("download", fileName);
+    document.body.appendChild(tempLink);
+    tempLink.click();
+    document.body.removeChild(tempLink);
+    window.URL.revokeObjectURL(url);
+    if (toast) {
+      toast({
+        className: cn(
+          "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        description: "File downloaded successfully",
+      });
+    }
+  } catch (error: any) {
+    console.error("Error downloading file:", error);
+    if (toast) {
+      toast({
+        className: cn(
+          "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        variant: "destructive",
+        description:
+          error.message === "Network Error"
+            ? "Something went wrong check your connection"
+            : error.response?.data?.message || "Error downloading file",
+      });
+    }
+  } finally {
+    if (setIsLoading) setIsLoading(false);
+  }
+};
 export const exportCheck = async (
-  fileName:string,
+  fileName: string,
 
   date: string,
   setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>,
@@ -231,7 +264,7 @@ export const exportCheck = async (
   }
 };
 export const exportItems = async (
-  fileName:string,
+  fileName: string,
   setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>,
   toast?: any
 ) => {
@@ -278,20 +311,48 @@ export const exportItems = async (
 };
 export const downloadAttachments = async (
   filePath: string,
-  fileName: string
+  fileName: string,
+  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>,
+  toast?: any
 ) => {
   try {
-    const url = `${baseURL}/${filePath}`;
+     if (setIsLoading) setIsLoading(true);
+     const res = await api.get(`${baseURL}/${filePath}`, {
+      responseType: "blob"
+    });
+    const blob = res.data;
+    const url = window.URL.createObjectURL(blob);
     const tempLink = document.createElement("a");
     tempLink.href = url;
-    tempLink.setAttribute("download", fileName);
-    tempLink.setAttribute("target", "_blank");
+    tempLink.setAttribute("download", `${fileName}.pdf`);
     document.body.appendChild(tempLink);
     tempLink.click();
     document.body.removeChild(tempLink);
     window.URL.revokeObjectURL(url);
-  } catch (error) {
+     if (toast) {
+      toast({
+        className: cn(
+          "top-0 right-0 bg-geantSap-primary-25 text-geantSap-primary-600 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        description: "File downloaded successfully",
+      });
+    }
+  } catch (error: any) {
     console.error("Error downloading file:", error);
+    if (toast) {
+      toast({
+        className: cn(
+          "top-0 right-0 flex left-1/2 -translate-x-1/2 fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        variant: "destructive",
+        description:
+          error.message === "Network Error"
+            ? "Something went wrong check your connection"
+            : error.response?.data?.message || "Error downloading file",
+      });
+    }
+  } finally {
+    if (setIsLoading) setIsLoading(false);
   }
 };
 export const getReports = async (
@@ -390,7 +451,9 @@ export const createPo = async (
   queryClient: QueryClient
 ) => {
   try {
-    await api.post("/po", PO);
+    const { warehouseCode, ...filteredPO } = PO;
+    console.log(warehouseCode);
+    await api.post("/po", filteredPO);
     queryClient.invalidateQueries();
     form.reset();
     setdocLine([]);
@@ -723,7 +786,7 @@ export const EditGRPOLine = async (
 //Payments Outgoing/Incoming
 export const getAccountsList = async (
   url: string,
-  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>
 ) => {
   try {
     const res = await api.get(url);
@@ -867,14 +930,20 @@ export const postAllRebate = async (
   setisSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
   toast: any,
   queryClient: QueryClient,
-  setRebateData:React.Dispatch<React.SetStateAction<[{
-    vendor: string;
-    res: string;
-}]>>
+  setRebateData: React.Dispatch<
+    React.SetStateAction<
+      [
+        {
+          vendor: string;
+          res: string;
+        }
+      ]
+    >
+  >
 ) => {
   setisSubmitting(true);
   try {
-    const res =await api.post(url);
+    const res = await api.post(url);
     setRebateData(res.data);
     queryClient.invalidateQueries();
     toast({

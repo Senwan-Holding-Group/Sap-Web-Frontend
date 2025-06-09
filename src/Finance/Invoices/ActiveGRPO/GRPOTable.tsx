@@ -41,7 +41,7 @@ const GRPOTable = () => {
     queryKey: ["GRPO", search, currentPage,query],
     queryFn: () =>
       getActiveGRPO(
-        `/grpo/active?${search.searchKey}=${search.searchValue}${query}&perPage=12&page=${currentPage}`,
+        `/grpo/active?${search.searchKey}=${search.searchValue}${query}&perPage=15&page=${currentPage}`,
         setError,
         setTotalPage
       ),

@@ -31,7 +31,7 @@ const DraftTable = () => {
     queryKey: ["draft", search,currentPage],
     queryFn: () =>
       getActivePOs(
-        `/po/draft?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`,
+        `/po/draft?${search.searchKey}=${search.searchValue}&perPage=15&page=${currentPage}`,
         setError,setTotalPage
       ),
     refetchOnWindowFocus: false,

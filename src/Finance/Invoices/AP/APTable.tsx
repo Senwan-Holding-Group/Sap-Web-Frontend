@@ -34,7 +34,7 @@ const APTable = () => {
       queryKey: ["ap", search, currentPage,query],
       queryFn: () =>
         getActiveAP(
-          `/ap/active?${search.searchKey}=${search.searchValue}${query}&perPage=12&page=${currentPage}`,
+          `/ap/active?${search.searchKey}=${search.searchValue}${query}&perPage=15&page=${currentPage}`,
           setError,
           setTotalPage
         ),

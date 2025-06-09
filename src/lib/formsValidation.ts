@@ -10,6 +10,8 @@ export const CreatePOFormSchema = z.object({
     required_error: "Posting Date is required.",
   }),
   section: z.string(),
+    warehouseCode: z.string(),
+
   documentLines: z.array(
     z.object({
       itemCode: z.string(),

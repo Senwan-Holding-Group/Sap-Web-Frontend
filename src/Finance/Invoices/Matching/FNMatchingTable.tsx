@@ -31,7 +31,7 @@ const FNMatchingTable = () => {
       queryKey: ["MatchingFinGRPO", search, currentPage],
       queryFn: () =>
         getMatchingGRPO(
-          `/grpo/finance/matching?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`,
+          `/grpo/finance/matching?${search.searchKey}=${search.searchValue}&perPage=15&page=${currentPage}`,
           setError,
           setTotalPage
         ),

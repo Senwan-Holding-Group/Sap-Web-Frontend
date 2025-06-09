@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { faFileImport, faSpinner } from "@fortawesome/pro-solid-svg-icons";
+import {  faFileImport, faSpinner } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Textarea } from "./ui/textarea";
 import { DocumentLine } from "@/lib/types";
@@ -29,12 +29,12 @@ import { useState } from "react";
 type Props = {
   setState: React.Dispatch<React.SetStateAction<DocumentLine[]>>;
   Code: string;
+  whs?: string;
   url: string;
 };
-const ImportItems = ({ setState, Code, url }: Props) => {
+const ImportItems = ({ setState, Code, whs, url }: Props) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  //   const [isPasting, setIsPasting] = useState(false);
 
   const form = useForm<ItemImport>({
     resolver: zodResolver(itemImport),
@@ -67,9 +67,12 @@ const ImportItems = ({ setState, Code, url }: Props) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          disabled={Code == ""}
-          className="text-geantSap-primary-600 bg-white border w-[11.25rem] flex items-center disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 disabled:cursor-not-allowed rounded-lg"
-        >
+          disabled={
+            url.includes("vendor")
+              ? typeof whs == "undefined"
+              : Code==""
+          }
+          className="text-geantSap-primary-600 bg-white border w-[11.25rem] flex items-center disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 disabled:cursor-not-allowed rounded-lg">
           <span className="size-6 flex items-center justify-center">
             <FontAwesomeIcon className="size-6" icon={faFileImport} />
           </span>
@@ -81,16 +84,14 @@ const ImportItems = ({ setState, Code, url }: Props) => {
         aria-describedby={undefined}
         onInteractOutside={(e) => {
           e.preventDefault();
-        }}
-      >
+        }}>
         <Form {...form}>
           <form
             onSubmit={(e) => {
               e.stopPropagation();
               form.handleSubmit(onSubmit)(e);
             }}
-            className="flex flex-col w-full overflow-scroll  justify-between h-full"
-          >
+            className="flex flex-col w-full overflow-scroll  justify-between h-full">
             <div className=" flex 3xl:h-[35rem] h-[25rem] bg-[#fcfcfc] rounded-xl overflow-scroll flex-col justify-between w-full  ">
               <div className="px-6  mt-4">
                 <DialogHeader className="border-b border-geantSap-gray-50  h-[3.25rem]">
@@ -107,38 +108,7 @@ const ImportItems = ({ setState, Code, url }: Props) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Paste Items</FormLabel>
-                      {/* <Button
-                        className="bg-white w-[8.125rem] border  rounded-lg  text-geantSap-primary-600 font-medium text-base"
-                        type="button"
-                        disabled={isPasting}
-                        onClick={async () => {
-                          setIsPasting(true);
-                          try {
-                            const text = await navigator.clipboard.readText();
-                            const formattedText = text
-                              .split('\n')
-                              .filter(line => line.trim().length > 0)
-                              .map(line => line.trim())
-                              .join('\n');
-                      
-                            field.onChange(formattedText);
-                          } catch (error) {
-                            console.log(error);
-                            toast({
-                              title: "Clipboard Error",
-                              description: "Unable to access clipboard. Please check permissions.",
-                              variant: "destructive",
-                            });
-                          } finally {
-                            setIsPasting(false);
-                          }
-                        }}
-                      >
-                        {isPasting ? (
-                          <FontAwesomeIcon icon={faSpinner} className="animate-spin mr-2" />
-                        ) : null}
-                        Paste Items
-                      </Button> */}
+      
                       <FormControl>
                         <div className="space-y-4">
                           <Textarea
@@ -172,8 +142,7 @@ const ImportItems = ({ setState, Code, url }: Props) => {
                                       .map((header, i) => (
                                         <th
                                           key={i}
-                                          className="px-4 py-2 text-left border-b"
-                                        >
+                                          className="px-4 py-2 text-left border-b">
                                           {header}
                                         </th>
                                       ))}
@@ -187,16 +156,14 @@ const ImportItems = ({ setState, Code, url }: Props) => {
                                     .map((row, i) => (
                                       <tr
                                         key={i}
-                                        className={i % 2 ? "bg-gray-50" : ""}
-                                      >
+                                        className={i % 2 ? "bg-gray-50" : ""}>
                                         {row
                                           .split("\t")
                                           .slice(0, 2)
                                           .map((cell, i) => (
                                             <td
                                               key={i}
-                                              className="px-4 py-2 border-t"
-                                            >
+                                              className="px-4 py-2 border-t">
                                               {cell}
                                             </td>
                                           ))}
@@ -225,8 +192,7 @@ const ImportItems = ({ setState, Code, url }: Props) => {
                 <Button
                   disabled={form.formState.isSubmitting}
                   className="bg-white w-[8.125rem] border rounded-lg disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 text-geantSap-primary-600 font-medium text-base"
-                  type="button"
-                >
+                  type="button">
                   Close
                 </Button>
               </DialogClose>
@@ -234,8 +200,7 @@ const ImportItems = ({ setState, Code, url }: Props) => {
               <Button
                 disabled={form.formState.isSubmitting}
                 className="bg-geantSap-primary-500 w-[8.125rem] disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base"
-                type="submit"
-              >
+                type="submit">
                 {form.formState.isSubmitting && (
                   <FontAwesomeIcon icon={faSpinner} spin />
                 )}

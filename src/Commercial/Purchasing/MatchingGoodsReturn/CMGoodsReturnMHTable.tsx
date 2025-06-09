@@ -30,7 +30,7 @@ const CMGoodsReturnMHTable = () => {
            queryKey: ["MatchingCOMGoodsReturn", search, currentPage],
            queryFn: () =>
              getMatchingGRPO(
-               `/goods-return/commercial/matching?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`,
+               `/goods-return/commercial/matching?${search.searchKey}=${search.searchValue}&perPage=15&page=${currentPage}`,
                setError,
                setTotalPage
              ),

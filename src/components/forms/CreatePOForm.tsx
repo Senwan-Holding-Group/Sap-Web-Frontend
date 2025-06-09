@@ -32,15 +32,25 @@ import ItemSelect from "../ItemsSelect";
 import { createPo, exportItemsBy } from "@/api/client";
 import { useToast } from "@/lib/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import SelectWarehouse from "../SelectWarehouse";
+// import SelectWarehouse from "../SelectWarehouse";
 import Loader from "../ui/Loader";
 import { Label } from "../ui/label";
 import ImportItems from "../ImportItems";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { useAuth } from "@/api/Auth/useAuth";
 
 const CreatePOForm = () => {
   const queryClient = useQueryClient();
-
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
+
   const [docLine, setdocLine] = useState<DocumentLine[]>([]);
   const form = useForm<CreatePORequest>({
     resolver: zodResolver(CreatePOFormSchema),
@@ -58,7 +68,7 @@ const CreatePOForm = () => {
     const newValues = {
       ...values,
       section: values.section === "" ? "999" : values.section,
-      postingDate:new Date(format(values.postingDate, "yyyy-MM-dd")),
+      postingDate: new Date(format(values.postingDate, "yyyy-MM-dd")),
       deliveryDate: new Date(format(values.deliveryDate, "yyyy-MM-dd")),
       documentLines: docLine.map((item) => {
         return {
@@ -68,7 +78,7 @@ const CreatePOForm = () => {
           uomCode: item.uomCode,
           warehouseCode: item.warehouseCode
             ? item.warehouseCode
-            : item.warehouseList[0],
+            : warehouseCode,
           uomEntry: item.uomEntry,
         };
       }),
@@ -104,12 +114,12 @@ const CreatePOForm = () => {
   };
 
   const vendorCode = form.watch("vendorCode");
+  const warehouseCode = form.watch("warehouseCode");
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full overflow-scroll  justify-between h-full"
-      >
+        className="flex flex-col w-full overflow-scroll  justify-between h-full">
         <Loader enable={form.formState.isSubmitting} />
 
         <div className="flex w-full flex-col  overflow-scroll  gap-y-6 p-6 h-full ">
@@ -131,8 +141,7 @@ const CreatePOForm = () => {
                             className={cn(
                               "w-full pl-3 text-left bgtr font-normal",
                               !field.value && "text-muted-foreground"
-                            )}
-                          >
+                            )}>
                             {field.value ? (
                               format(field.value, "PP")
                             ) : (
@@ -177,8 +186,7 @@ const CreatePOForm = () => {
                             className={cn(
                               "w-full pl-3 text-left bgtr font-normal",
                               !field.value && "text-muted-foreground"
-                            )}
-                          >
+                            )}>
                             {field.value ? (
                               format(field.value, "PP")
                             ) : (
@@ -262,6 +270,51 @@ const CreatePOForm = () => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="warehouseCode"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-y-2">
+                    <FormLabel className="text-sm font-bold text-geantSap-black">
+                      Warehouse Code
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        disabled={!vendorCode || !!docLine.length}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        // onValueChange={(SelectValue) => {
+                        //   console.log(SelectValue);
+
+                        //   setdocLine(
+                        //     docLine.map((value) => {
+                        //       return {
+                        //         ...value,
+                        //         warehouseCode: SelectValue,
+                        //       };
+                        //     })
+                        //   );
+                        // }}
+                      >
+                        <SelectTrigger className="w- h-10  border border-geantSap-gray-50 p-2 rounded-lg">
+                          <SelectValue
+                            className="placeholder:font-bold placeholder:text-geantSap-black"
+                            placeholder="Select"
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {user.warehouseList.map((wc: string) => (
+                            <SelectItem key={wc} value={wc}>
+                              {wc}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <div className="flex flex-col gap-y-2 ">
                 <Label className="text-sm font-bold text-geantSap-black">
                   Document total
@@ -282,7 +335,7 @@ const CreatePOForm = () => {
             </div>
           </div>
 
-          <div className="border-t relative border-geantSap-gray-50 min-w-max">
+          <div className="border-t relative border-geantSap-gray-50 w-[82.563rem] sm:w-[87rem]">
             <Tabs defaultValue="item" className=" mt-4">
               <TabsList className="grid w-60 grid-cols-2 ">
                 <TabsTrigger value="item">Item</TabsTrigger>
@@ -294,21 +347,29 @@ const CreatePOForm = () => {
                 <ImportItems
                   url="/item/vendor/bulk"
                   Code={vendorCode}
+                  whs={warehouseCode}
                   setState={setdocLine}
                 />
-                <Button type="button" onClick={()=>{
-                  exportItemsBy("vendor",vendorCode)
-                }} disabled={vendorCode==""} className="bg-geantSap-primary-500 w-[11.25rem] flex items-center disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 disabled:cursor-not-allowed rounded-lg">
+                <Button
+                  type="button"
+                  onClick={() => {
+                    exportItemsBy("vendor", vendorCode, setIsLoading, toast);
+                  }}
+                  disabled={vendorCode == "" || isLoading}
+                  className="bg-geantSap-primary-500 w-[11.25rem] flex items-center disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 disabled:cursor-not-allowed rounded-lg">
                   <span className="size-6 flex items-center justify-center">
-                    <FontAwesomeIcon className="size-6" icon={faFileExport} />
+                    <FontAwesomeIcon
+                      className=""
+                      icon={isLoading ? faSpinner : faFileExport}
+                      spin={isLoading}
+                    />
                   </span>
                   <span className="font-medium text-base ">Export Items</span>
                 </Button>
               </div>
               <TabsContent
                 className="w-full border-2 overflow-scroll border-geantSap-gray-25 rounded-lg"
-                value="item"
-              >
+                value="item">
                 <table className="w-full text-nowrap bg-white ">
                   <thead className="bg-geantSap-gray-25">
                     <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
@@ -327,8 +388,7 @@ const CreatePOForm = () => {
                     {docLine?.map((item, i) => (
                       <tr
                         key={i}
-                        className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
-                      >
+                        className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                         <td className="px-6 py-3">{item.itemCode}</td>
                         <td className="px-6 py-3">{item.itemName}</td>
                         <td className="px-6 ">
@@ -361,25 +421,28 @@ const CreatePOForm = () => {
                           LYD
                         </td>
                         <td className="px-6 py-3">
-                          <SelectWarehouse
+                          {item.warehouseCode
+                            ? item.warehouseCode
+                            : warehouseCode}
+                          {/* <SelectWarehouse
                             item={item}
                             docLine={docLine}
                             setdocLine={setdocLine}
-                          />
+                          /> */}
                         </td>
                         <td className="px-6">
                           <Button
                             onClick={() => {
                               setdocLine(
                                 docLine.filter((value) => {
-                                  return value.line != item.line;
+                                  if (docLine.length === 1) return value;
+                                  else return value.line != item.line;
                                 })
                               );
                             }}
                             type="button"
                             size={"icon"}
-                            className=" flex p-0 items-center justify-center bg-transparent "
-                          >
+                            className=" flex p-0 items-center justify-center bg-transparent ">
                             <FontAwesomeIcon
                               className="text-geantSap-error-500"
                               icon={faX}
@@ -392,6 +455,7 @@ const CreatePOForm = () => {
                       <td className="px-6 py-3 ">
                         <ItemSelect
                           code={vendorCode}
+                          whs={warehouseCode}
                           setState={setdocLine}
                           state={docLine}
                           type="vendor"
@@ -403,8 +467,7 @@ const CreatePOForm = () => {
               </TabsContent>
               <TabsContent
                 className=" min-w-[1288px] border-2 border-geantSap-gray-25 rounded-lg"
-                value="attachment"
-              >
+                value="attachment">
                 <table className="w-full ">
                   <thead className="bg-geantSap-gray-25">
                     <tr className="text-nowrap   text-base  text-left font-bold text-geantSap-gray-600">
@@ -462,16 +525,14 @@ const CreatePOForm = () => {
                 setdocLine([]);
               }}
               className="bg-white w-[8.125rem] border rounded-lg disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 text-geantSap-primary-600 font-medium text-base"
-              type="button"
-            >
+              type="button">
               Cancel
             </Button>
           </DialogClose>
           <Button
             disabled={form.formState.isSubmitting}
             className="bg-geantSap-primary-500 w-[8.125rem] disabled:bg-geantSap-gray-25 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base"
-            type="submit"
-          >
+            type="submit">
             {form.formState.isSubmitting && (
               <FontAwesomeIcon className="" icon={faSpinner} spin />
             )}

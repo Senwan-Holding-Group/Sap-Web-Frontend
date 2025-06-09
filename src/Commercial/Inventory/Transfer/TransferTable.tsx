@@ -31,7 +31,7 @@ const TransferTable = () => {
     isError,
   } = useQuery({
     queryKey: ["transferList", search, currentPage],
-    queryFn: () => getTransferList(`/transferReq/active?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`, setError, setTotalPage),
+    queryFn: () => getTransferList(`/transferReq/active?${search.searchKey}=${search.searchValue}&perPage=15&page=${currentPage}`, setError, setTotalPage),
     refetchOnWindowFocus: false,
     refetchOnMount: true,
   });

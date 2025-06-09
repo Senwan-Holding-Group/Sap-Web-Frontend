@@ -30,7 +30,7 @@ const InventorMissingQtyTable = () => {
     queryKey: ["inventoryMissingQtyList", search, currentPage],
     queryFn: () =>
       getInventoryMissingQuantity(
-        `/transferReq/missing?${search.searchKey}=${search.searchValue}&perPage=12&page=${currentPage}`,
+        `/transferReq/missing?${search.searchKey}=${search.searchValue}&perPage=15&page=${currentPage}`,
         setError,
         setTotalPage
       ),
