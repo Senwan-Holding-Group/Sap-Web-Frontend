@@ -29,42 +29,44 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     secureLocalStorage.clear();
     delete api.defaults.headers.common["Authorization"];
   }, []);
-  const validateAndSetToken =useCallback((storedToken: string) => { 
-    try {
-      const now = Date.now();
-      const decodedUser = jwtDecode(storedToken) as User;
-      const expirationTime = decodedUser.exp * 1000;
-      const BUFFER_TIME = 30 * 1000;
-      console.log("Current time:", new Date(now).toISOString());
-      console.log("Expiration time:", new Date(expirationTime).toISOString());
-      console.log(decodedUser);
-      
-      if (expirationTime > now + BUFFER_TIME) {
-        setToken(storedToken);
-        setUser(decodedUser);
+  const validateAndSetToken = useCallback(
+    (storedToken: string) => {
+      try {
+        const now = Date.now();
+        const decodedUser = jwtDecode(storedToken) as User;
+        const expirationTime = decodedUser.exp * 1000;
+        const BUFFER_TIME = 30 * 1000;
+        console.log("Current time:", new Date(now).toISOString());
+        console.log("Expiration time:", new Date(expirationTime).toISOString());
 
-        const timeToExpire = expirationTime - now;
-        console.log(
-          "Token valid for:",
-          Math.floor(timeToExpire / 1000),
-          "seconds"
-        );
+        if (expirationTime > now + BUFFER_TIME) {
+          setToken(storedToken);
+          setUser(decodedUser);
 
-        const timeoutId = setTimeout(() => {
-          console.log("Token expiration timeout triggered");
+          const timeToExpire = expirationTime - now;
+          console.log(
+            "Token valid for:",
+            Math.floor(timeToExpire / 1000),
+            "seconds"
+          );
+
+          const timeoutId = setTimeout(() => {
+            console.log("Token expiration timeout triggered");
+            logout();
+          }, timeToExpire);
+
+          return () => clearTimeout(timeoutId);
+        } else {
+          console.log("Token expired or too close to expiration");
           logout();
-        }, timeToExpire);
-
-        return () => clearTimeout(timeoutId);
-      } else {
-        console.log("Token expired or too close to expiration");
+        }
+      } catch (error) {
+        console.error("Error validating token:", error);
         logout();
       }
-    } catch (error) {
-      console.error("Error validating token:", error);
-      logout();
-    }
-  }, [logout]);
+    },
+    [logout]
+  );
 
   useEffect(() => {
     const initializeAuth = () => {
@@ -82,14 +84,19 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     initializeAuth();
-  }, [ token,validateAndSetToken]);
+  }, [token, validateAndSetToken]);
 
   useLayoutEffect(() => {
     const authInterceptor = api.interceptors.request.use((config: any) => {
-      config.headers.Authorization =
-        !config._retry && token
-          ? `Bearer ${token}`
-          : config.headers.Authorization;
+      const skipAuthRoutes = ["/promotions", "/promotions/"];
+      const shouldSkipAuth = skipAuthRoutes.some(
+        (route) =>
+          config.url?.startsWith(route) || config.baseURL?.includes(route)
+      );
+      if (!shouldSkipAuth && !config._retry && token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+
       return config;
     });
 

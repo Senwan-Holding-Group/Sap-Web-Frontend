@@ -72,6 +72,7 @@ import ToBePaidDetails from "@/Finance/Payments/Outgoing/ToBePaid/ToBePaidDetail
 import CompletedPts from "@/Finance/Payments/Outgoing/Completed/CompletedPts";
 import CompletedPtsTable from "@/Finance/Payments/Outgoing/Completed/CompletedPtsTable";
 import CompletedPtsDetails from "@/Finance/Payments/Outgoing/Completed/CompletedPtsDetails";
+import Promotions from "@/Promotions/Promotions";
 
 const router = createBrowserRouter([
   {
@@ -81,7 +82,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/promotion",
-    element: <SplashScreen />,
+    element: <Promotions />,
     errorElement: <NotFound />,
   },
   {

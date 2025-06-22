@@ -58,6 +58,8 @@ export type User = {
   transferType: string[];
   requestSource: string;
   sectionList: string[];
+  warehouseCode: string;
+  whsCode: string;
   paymentType: "Cash" | "Bank";
   exp: number;
   reqWhsList: string[];

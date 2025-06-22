@@ -50,35 +50,6 @@ const formSchema = z
     cashAmount: z.string(),
     bankAmount: z.string(),
   })
-  .refine(
-    (data) => {
-      const hasCashAmount = Number(data.cashAmount) > 0;
-      const hasBankAmount = Number(data.bankAmount) > 0;
-      const hasCashAccount = data.cashAccount !== "";
-      const hasBankAccount = data.bankAccount !== "";
-
-      if (hasCashAmount && hasBankAmount) {
-        return (
-          (hasCashAccount || hasBankAccount) &&
-          !(hasCashAccount && hasBankAccount)
-        );
-      }
-
-      if (hasCashAmount) {
-        return hasCashAccount;
-      }
-
-      if (hasBankAmount) {
-        return hasBankAccount;
-      }
-
-      return true;
-    },
-    {
-      message:
-        "Please select either cash account OR bank account, but not both",
-    }
-  );
 
 type FormValues = z.infer<typeof formSchema>;
 const OutgoingPayments = ({ outgoingPaymentList, disable }: Props) => {

@@ -8,7 +8,6 @@
     font-family: "Poppins", serif;
     font-display: swap;
     font-size: 16px;
-
   }
 }
 @media (max-width: 450px) {
@@ -57,6 +56,31 @@ body {
 .unset {
   all: unset;
 }
+
+@page a4Portrait {
+  size: A4 portrait;
+  margin: 0;
+  @bottom-center {
+    content: none;
+  }
+}
+
+@page a5Portrait {
+  size: A5 portrait;
+  margin: 0;
+  @bottom-center {
+    content: none;
+  }
+}
+@page a6Portrait {
+  size: 10.5cm 14.8cm; 
+  orientation: portrait;
+  margin: 0;
+  @bottom-center {
+    content: none;
+  }
+}
+
 @media print {
   @page {
     size: A4 landscape;
@@ -68,8 +92,30 @@ body {
     }
   }
 
-  @page:first{
+  @page: first {
     margin-top: 0;
-  };
+  }
+  .a4 {
+    width: 210mm;
+    height: 297mm;
+  }
 
+  .a5 {
+    width: 148mm;
+    height: 210mm;
+  }
+  .a6 {
+    width: 105mm;
+    height: 148mm;
+  }
+
+  .a4 * {
+    page: a4Portrait;
+  }
+  .a5 * {
+    page: a5Portrait;
+  }
+  .a6 * {
+    page: a6Portrait;
+  }
 }
