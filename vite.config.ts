@@ -15,7 +15,34 @@ export default defineConfig(({ mode }) => {
       ),
     },
     build: {
-      chunkSizeWarningLimit: 1300,
+      chunkSizeWarningLimit: 900,
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            if (
+              id.includes("node_modules/react") ||
+              id.includes("node_modules/react-dom") ||
+              id.includes("node_modules/scheduler")
+            ) {
+              return "vendor-react";
+            }
+            if (
+              id.includes("node_modules/@fortawesome") ||
+              id.includes("node_modules/@radix-ui") ||
+              id.includes("node_modules/tailwindcss") ||
+              id.includes("node_modules/class-variance-authority")
+            ) {
+              return "vendor-ui";
+            }
+            if (id.includes("node_modules")) {
+              return "vendor-misc";
+            }
+            if (id.includes("/components/")) {
+              return "ui";
+            }
+          },
+        },
+      },
     },
     resolve: {
       alias: {

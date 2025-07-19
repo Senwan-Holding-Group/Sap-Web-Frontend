@@ -19,9 +19,21 @@ type SelectPromotionProps = {
 
 const SelectPromotion = ({ selectedItems }: SelectPromotionProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const [selectedSize, setSelectedSize] = useState<"a4" | "a5" | "a6" | null>(null);
+  const [selectedSize, setSelectedSize] = useState<"a4" | "a5" | "a6" | null>(
+    null
+  );
   const [prevPrice, setPrevPrice] = useState<boolean>(false);
   const reactToPrintFn = useReactToPrint({ contentRef });
+  console.log(selectedItems);
+
+  const groupedItems = selectedItems.reduce((groups, item) => {
+    const group = item.pageGroup || 1;
+    if (!groups[group]) groups[group] = [];
+    groups[group].push(item);
+    return groups;
+  }, {} as Record<number, PromoItem[]>);
+  console.log(groupedItems);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -130,190 +142,294 @@ const SelectPromotion = ({ selectedItems }: SelectPromotionProps) => {
           </div>
           <div ref={contentRef} className="hidden print:block">
             {selectedSize === "a4" && (
-              <div className="a4">
-                <div className="w-full h-[23.15rem]"></div>
-                <div className="h-[47rem] flex flex-col gap-y-8 justify-center items-center">
-                  {selectedItems.map((item, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col leading-[140%] text-black items-center">
-                      <span className="font-normal text-4xl  ">
-                        {item.shortName}
-                      </span>
-                      <span className="font-normal text-2xl  ">
-                        {item.shortForeignName}
-                      </span>
-                      <span className="font-semibold text-[32px] mt-3 h-[45px] flex items-end gap-x-2">
-                        {prevPrice && item.previousPrices ? (
-                          <>
-                            {parseFloat(item.currentPrice).toFixed(2)}
-                            <span className="text-sm flex items-end">LYD</span>/
-                            <span className="line-through ">
-                              {parseFloat(item.previousPrices).toFixed(2)}
+              <>
+                {Object.entries(groupedItems).map(([pageGroup, items]) => (
+                  <div
+                    className="w-full "
+                    data-page-group={pageGroup}
+                    key={pageGroup}>
+                    {/* Front side */}
+                    <div className="a4 w-full">
+                      <div className="w-full h-[23.15rem] "></div>
+                      <div className="h-[47rem] flex flex-col   justify-evenly items-center">
+                        {items.slice(0, 3).map((item, i) => (
+                          <div
+                            key={`front-${pageGroup}-${i}`}
+                            className="flex flex-col gap-y-4   text-black items-center">
+                            <div className="flex flex-col   gap-y-3 items-center">
+                              <span className="font-normal text-5xl">
+                                {item.shortName}
+                              </span>
+                              <span className="font-normal text-3xl">
+                                {item.shortForeignName}
+                              </span>
+                            </div>
+                            <span
+                              className={`font-semibold  ${
+                                prevPrice && item.previousPrices
+                                  ? "text-[6.875rem]"
+                                  : "text-[8.5rem]"
+                              } leading-[0.85]  h-fit flex items-center  justify-center gap-x-2`}>
+                              {prevPrice && item.previousPrices ? (
+                                <>
+                                  {parseFloat(item.currentPrice).toFixed(2)}
+                                  <span className="text-xl flex items-end">
+                                    LYD
+                                  </span>
+                                  <span className="text-6xl">/</span>
+                                  <span className="line-through">
+                                    {parseFloat(item.previousPrices).toFixed(2)}
+                                  </span>
+                                </>
+                              ) : (
+                                parseFloat(item.currentPrice).toFixed(2)
+                              )}
+                              <span className="text-xl flex items-end">
+                                LYD
+                              </span>
                             </span>
-                          </>
-                        ) : (
-                          parseFloat(item.currentPrice).toFixed(2)
-                        )}
-                        <span className="text-sm flex items-end">LYD</span>
-                      </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
-                <div className="w-full h-[23.15rem]"></div>
-                <div className="h-[47rem] flex flex-col gap-y-8 justify-center items-center">
-                  {selectedItems.map((item, i) => (
-                    <div
-                      key={i + 4}
-                      className="flex flex-col leading-[140%] text-black items-center">
-                      <span className="font-normal text-4xl  ">
-                        {item.shortName}
-                      </span>
-                      <span className="font-normal text-2xl  ">
-                        {item.shortForeignName}
-                      </span>
-                      <span className="font-semibold text-[32px] mt-3 h-[45px] flex items-center gap-x-2">
-                        {prevPrice && item.previousPrices ? (
-                          <>
-                            {parseFloat(item.currentPrice).toFixed(2)}
-                            <span className="text-sm flex items-end">LYD</span>
-                            /
-                            <span className="line-through ">
-                              {parseFloat(item.previousPrices).toFixed(2)}
+                    {/* Back side */}
+                    <div className="a4">
+                      <div className="w-full h-[23.15rem] "></div>
+                      <div className="h-[47rem] flex flex-col  justify-evenly items-center">
+                        {items.slice(0, 3).map((item, i) => (
+                          <div
+                            key={`back-${pageGroup}-${i}`}
+                            className="flex flex-col gap-y-4  text-black items-center">
+                            <div className="flex flex-col  gap-y-3 items-center">
+                              <span className="font-normal text-5xl">
+                                {item.shortName}
+                              </span>
+                              <span className="font-normal text-3xl">
+                                {item.shortForeignName}
+                              </span>
+                            </div>
+                            <span
+                              className={`font-semibold  ${
+                                prevPrice && item.previousPrices
+                                  ? "text-[6.875rem]"
+                                  : "text-[8.5rem]"
+                              } leading-[0.85]  h-fit flex items-center  justify-center gap-x-2`}>
+                              {prevPrice && item.previousPrices ? (
+                                <>
+                                  {parseFloat(item.currentPrice).toFixed(2)}
+                                  <span className="text-xl flex items-end">
+                                    LYD
+                                  </span>
+                                  <span className="text-6xl">/</span>
+                                  <span className="line-through">
+                                    {parseFloat(item.previousPrices).toFixed(2)}
+                                  </span>
+                                </>
+                              ) : (
+                                parseFloat(item.currentPrice).toFixed(2)
+                              )}
+                              <span className="text-xl flex items-end">
+                                LYD
+                              </span>
                             </span>
-                          </>
-                        ) : (
-                          parseFloat(item.currentPrice).toFixed(2)
-                        )}
-                        <span className="text-sm flex items-end">LYD</span>
-                      </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
+                ))}
+              </>
             )}
             {selectedSize === "a5" && (
-              <div className="a5">
-                <div className="w-full  h-[16rem] "></div>
-                <div className=" h-[33.625rem]  flex flex-col gap-y-8 justify-center items-center">
-                  {selectedItems.map((item, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col leading-[140%] text-black items-center">
-                      <span className="font-normal text-3xl  ">
-                        {item.shortName}
-                      </span>
-                      <span className="font-normal text-lg  ">
-                        {item.shortForeignName}
-                      </span>
-                      <span className="font-semibold text-[24px] mt-3 h-[45px] flex items-center gap-x-2">
-                        {prevPrice && item.previousPrices ? (
-                          <>
-                            {parseFloat(item.currentPrice).toFixed(2)}
-                            <span className="text-sm flex ">LYD</span>/
-                            <span className="line-through ">
-                              {parseFloat(item.previousPrices).toFixed(2)}
+              <div>
+                {Object.entries(groupedItems).map(([pageGroup, items]) => (
+                  <div
+                    className="w-full "
+                    data-page-group={pageGroup}
+                    key={pageGroup}>
+                    {/* Front side */}
+                    <div className="a5">
+                      <div className="w-full h-[16rem]"></div>
+                      <div className="h-[33.625rem] flex flex-col  justify-evenly items-center">
+                        {items.slice(0, 3).map((item, i) => (
+                          <div
+                            key={`front-${pageGroup}-${i}`}
+                            className="flex flex-col gap-y-4 text-black items-center">
+                            <div className="flex flex-col   gap-y-3 items-center">
+                              <span className="font-normal text-4xl">
+                                {item.shortName}
+                              </span>
+                              <span className="font-normal text-2xl">
+                                {item.shortForeignName}
+                              </span>
+                            </div>
+                            <span
+                              className={`font-semibold  ${
+                                prevPrice && item.previousPrices
+                                  ? "text-[3.875rem]"
+                                  : "text-[4.5rem]"
+                              } leading-[0.85]  h-fit flex items-center  justify-center gap-x-2`}>
+                              {prevPrice && item.previousPrices ? (
+                                <>
+                                  {parseFloat(item.currentPrice).toFixed(2)}
+                                  <span className="text-sm flex">LYD</span>
+                                  <span className="text-3xl">/</span>
+                                  <span className="line-through">
+                                    {parseFloat(item.previousPrices).toFixed(2)}
+                                  </span>
+                                </>
+                              ) : (
+                                parseFloat(item.currentPrice).toFixed(2)
+                              )}
+                              <span className="text-sm flex">LYD</span>
                             </span>
-                          </>
-                        ) : (
-                          parseFloat(item.currentPrice).toFixed(2)
-                        )}
-                        <span className="text-sm flex  ">LYD</span>
-                      </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
-                <div className="w-full  h-[16rem] "></div>
-                <div className=" h-[33.625rem]  flex flex-col gap-y-8 justify-center items-center">
-                  {selectedItems.map((item, i) => (
-                    <div
-                      key={i + 4}
-                      className="flex flex-col leading-[140%] text-black items-center">
-                      <span className="font-normal text-3xl  ">
-                        {item.shortName}
-                      </span>
-                      <span className="font-normal text-lg  ">
-                        {item.shortForeignName}
-                      </span>
-                      <span className="font-semibold text-[24px] mt-3 h-[45px] flex items-center gap-x-2">
-                        {prevPrice && item.previousPrices ? (
-                          <>
-                            {parseFloat(item.currentPrice).toFixed(2)}
-                            <span className="text-sm flex items-end">LYD</span>/
-                            <span className="line-through ">
-                              {parseFloat(item.previousPrices).toFixed(2)}
+                    {/* Back side */}
+                    <div className="a5">
+                      <div className="w-full h-[16rem]"></div>
+                      <div className="h-[33.625rem] flex flex-col justify-evenly items-center">
+                        {items.slice(0, 3).map((item, i) => (
+                          <div
+                            key={`back-${pageGroup}-${i}`}
+                            className="flex flex-col  gap-y-4 text-black items-center">
+                            <div className="flex flex-col  gap-y-3 items-center">
+                              <span className="font-normal text-4xl">
+                                {item.shortName}
+                              </span>
+                              <span className="font-normal text-2xl">
+                                {item.shortForeignName}
+                              </span>
+                            </div>
+                            <span
+                              className={`font-semibold  ${
+                                prevPrice && item.previousPrices
+                                  ? "text-[3.875rem]"
+                                  : "text-[4.5rem]"
+                              } leading-[0.85]  h-fit flex items-center  justify-center gap-x-2`}>
+                              {prevPrice && item.previousPrices ? (
+                                <>
+                                  {parseFloat(item.currentPrice).toFixed(2)}
+                                  <span className="text-sm flex items-end">
+                                    LYD
+                                  </span>
+                                  <span className="text-3xl">/</span>
+                                  <span className="line-through">
+                                    {parseFloat(item.previousPrices).toFixed(2)}
+                                  </span>
+                                </>
+                              ) : (
+                                parseFloat(item.currentPrice).toFixed(2)
+                              )}
+                              <span className="text-sm flex items-end">
+                                LYD
+                              </span>
                             </span>
-                          </>
-                        ) : (
-                          parseFloat(item.currentPrice).toFixed(2)
-                        )}
-                        <span className="text-sm flex items-end">LYD</span>
-                      </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             )}
             {selectedSize === "a6" && (
-              <div className="a6">
-                <div className="w-full  h-[16rem]  "></div>
-                <div className=" h-[30.6rem]   flex flex-col gap-y-8 justify-center items-center">
-                  {selectedItems.map((item, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col leading-[140%] text-black items-center">
-                      <span className="font-normal text-4xl  ">
-                        {item.shortName}
-                      </span>
-                      <span className="font-normal text-2xl  ">
-                        {item.shortForeignName}
-                      </span>
-                      <span className="font-semibold text-[24px] mt-3 h-[45px] flex items-center gap-x-2">
-                        {prevPrice && item.previousPrices ? (
-                          <>
-                            {parseFloat(item.currentPrice).toFixed(2)}
-                            <span className="text-sm flex ">LYD</span>/
-                            <span className="line-through ">
-                              {parseFloat(item.previousPrices).toFixed(2)}
+              <div>
+                {Object.entries(groupedItems).map(([pageGroup, items]) => (
+                  <div
+                    className="w-full"
+                    data-page-group={pageGroup}
+                    key={pageGroup}>
+                    {/* Front side */}
+                    <div className="a6">
+                      <div className="w-full h-[16rem]"></div>
+                      <div className="h-[30.6rem] flex flex-col justify-evenly items-center">
+                        {items.slice(0, 3).map((item, i) => (
+                          <div
+                            key={`front-${pageGroup}-${i}`}
+                            className="flex flex-col gap-y-4 text-black items-center">
+                            <div className="flex flex-col   gap-y-3 items-center">
+                              <span className="font-normal text-4xl">
+                                {item.shortName}
+                              </span>
+                              <span className="font-normal text-2xl">
+                                {item.shortForeignName}
+                              </span>
+                            </div>
+                            <span
+                              className={`font-semibold  ${
+                                prevPrice && item.previousPrices
+                                  ? "text-[2.875rem]"
+                                  : "text-[3.5rem]"
+                              } leading-[0.85]  h-fit flex items-center  justify-center gap-x-2`}>
+                              {prevPrice && item.previousPrices ? (
+                                <>
+                                  {parseFloat(item.currentPrice).toFixed(2)}
+                                  <span className="text-sm flex">LYD</span>
+                                  <span className="text-xl">/</span>
+                                  <span className="line-through">
+                                    {parseFloat(item.previousPrices).toFixed(2)}
+                                  </span>
+                                </>
+                              ) : (
+                                parseFloat(item.currentPrice).toFixed(2)
+                              )}
+                              <span className="text-sm flex">LYD</span>
                             </span>
-                          </>
-                        ) : (
-                          parseFloat(item.currentPrice).toFixed(2)
-                        )}
-                        <span className="text-sm flex  ">LYD</span>
-                      </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
-                <div className="w-full  h-[16rem] "></div>
-                <div className=" h-[30.6rem]  flex flex-col gap-y-8 justify-center items-center">
-                  {selectedItems.map((item, i) => (
-                    <div
-                      key={i + 4}
-                      className="flex flex-col leading-[140%] text-black items-center">
-                      <span className="font-normal text-4xl  ">
-                        {item.shortName}
-                      </span>
-                      <span className="font-normal text-2xl  ">
-                        {item.shortForeignName}
-                      </span>
-                      <span className="font-semibold text-[24px] mt-3 h-[45px] flex items-center gap-x-2">
-                        {prevPrice && item.previousPrices ? (
-                          <>
-                            {parseFloat(item.currentPrice).toFixed(2)}
-                            <span className="text-sm flex items-end">LYD</span>/
-                            <span className="line-through ">
-                              {parseFloat(item.previousPrices).toFixed(2)}
+
+                    {/* Back side */}
+                    <div className="a6">
+                      <div className="w-full h-[16rem]"></div>
+                      <div className="h-[30.6rem] flex flex-col justify-evenly items-center">
+                        {items.slice(0, 3).map((item, i) => (
+                          <div
+                            key={`back-${pageGroup}-${i}`}
+                            className="flex flex-col gap-y-4 text-black items-center">
+                            <div className="flex flex-col  gap-y-3 items-center">
+                              <span className="font-normal text-4xl">
+                                {item.shortName}
+                              </span>
+                              <span className="font-normal text-2xl">
+                                {item.shortForeignName}
+                              </span>
+                            </div>
+                            <span
+                              className={`font-semibold  ${
+                                prevPrice && item.previousPrices
+                                  ? "text-[2.875rem]"
+                                  : "text-[3.5rem]"
+                              } leading-[0.85]  h-fit flex items-center  justify-center gap-x-2`}>
+                              {prevPrice && item.previousPrices ? (
+                                <>
+                                  {parseFloat(item.currentPrice).toFixed(2)}
+                                  <span className="text-sm flex items-end">
+                                    LYD
+                                  </span>
+                                  <span className="text-3xl">/</span>
+
+                                  <span className="line-through">
+                                    {parseFloat(item.previousPrices).toFixed(2)}
+                                  </span>
+                                </>
+                              ) : (
+                                parseFloat(item.currentPrice).toFixed(2)
+                              )}
+                              <span className="text-sm flex items-end">
+                                LYD
+                              </span>
                             </span>
-                          </>
-                        ) : (
-                          parseFloat(item.currentPrice).toFixed(2)
-                        )}
-                        <span className="text-sm flex items-end">LYD</span>
-                      </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

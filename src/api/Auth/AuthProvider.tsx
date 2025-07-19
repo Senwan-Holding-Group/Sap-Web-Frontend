@@ -129,13 +129,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }),
     [token, user, isLoading, logout]
   );
-  // if (isLoading) {
-  //   return (
-  //     <div className="h-screen w-full flex items-center justify-center">
-  //       <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
-  //     </div>
-  //   );
-  // }
+
   <Loader enable={isLoading} />;
 
   return (
