@@ -1,9 +1,4 @@
-import {
-  exportCheck,
-  getToBePaid,
-  postAllCreditNote,
-  postAllRebate,
-} from "@/api/client";
+import { exportCheck, getToBePaid } from "@/api/client";
 import DataRenderer from "@/components/DataRenderer";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -21,31 +16,28 @@ import { cn, numberWithCommas } from "@/lib/utils";
 import {
   faCalendarCirclePlus,
   faFileExport,
-  faNote,
-  faPercentage,
   faSpinner,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { format, formatDate } from "date-fns";
 import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { useAuth } from "@/api/Auth/useAuth";
 import ShowRebate from "@/components/ShowRebate";
+import CalculateCreditNoteAll from "./components/CalculateCreditNoteAll";
+import CalculateRebateAll from "./components/CalculateRebateAll";
 const ToBePaidTable = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { setError, setTotalPage, totalPage,setRebateData,rebateData } = useStateContext();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  
+  const { setError, setTotalPage, totalPage, setRebateData, rebateData } =
+    useStateContext();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const [isSubmitting, setisSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const handleDownload = async () => {
     await exportCheck(
       `Checks ${formatDate(Date.now(), "PP")}`,
-      paymentDate.split("=")[1],
+      paymentDate,
       setIsLoading,
       toast
     );
@@ -53,16 +45,7 @@ const ToBePaidTable = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const handleDateSelect = (date: Date | undefined) => {
-    if (date) {
-      const formattedDate = format(date, "yyyy-MM-dd");
-      setSelectedDate(date);
-      setpaymentDate(`&paymentDate=${formattedDate}`);
-    } else {
-      setpaymentDate("");
-      setSelectedDate(undefined);
-    }
-  };
+
   const {
     paymentDate,
     setpaymentDate,
@@ -86,7 +69,14 @@ const ToBePaidTable = () => {
     currentPage: number;
     setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   }>();
-
+  const handleDateSelect = (date: Date | undefined) => {
+    if (date) {
+      const formattedDate = format(date, "yyyy-MM-dd");
+      setpaymentDate(formattedDate);
+    } else {
+      setpaymentDate("");
+    }
+  };
   const {
     data: toBePaidList,
     isFetching,
@@ -95,7 +85,7 @@ const ToBePaidTable = () => {
     queryKey: ["toBePaid", search, currentPage, paymentDate],
     queryFn: () =>
       getToBePaid(
-        `/outgoing-payment/to-paid?${search.searchKey}=${search.searchValue}${paymentDate}&perPage=15&page=${currentPage}`,
+        `/outgoing-payment/to-paid?${search.searchKey}=${search.searchValue}&paymentDate=${paymentDate}&perPage=15&page=${currentPage}`,
         setError,
         setTotalPage
       ),
@@ -119,10 +109,10 @@ const ToBePaidTable = () => {
                 variant={"outline"}
                 className={cn(
                   " md:w-[22rem] w-full  pl-3 text-left  font-normal",
-                  !selectedDate && "text-muted-foreground"
+                  !paymentDate && "text-muted-foreground"
                 )}>
-                {selectedDate || paymentDate ? (
-                  format(new Date(selectedDate || paymentDate), "PP")
+                {paymentDate ? (
+                  format(paymentDate, "PP")
                 ) : (
                   <span>Pick a date</span>
                 )}
@@ -134,11 +124,11 @@ const ToBePaidTable = () => {
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0 " align="start">
               <Calendar
-                selected={selectedDate}
+                selected={new Date(paymentDate)}
                 mode="single"
-                onSelect={(date) =>
-                  handleDateSelect(date ? new Date(date) : undefined)
-                }
+                onSelect={(date) => {
+                  handleDateSelect(date ?? undefined);
+                }}
                 disabled={(date) => {
                   const lastDay = new Date(
                     date.getFullYear(),
@@ -159,9 +149,7 @@ const ToBePaidTable = () => {
         <div className="flex  gap-2">
           <Button
             type="button"
-            disabled={
-              isSubmitting || paymentDate === "" || isFetching || isLoading
-            }
+            disabled={paymentDate === "" || isFetching || isLoading}
             onClick={handleDownload}
             className="bg-geantSap-primary-500 flex-1 disabled:bg-geantSap-gray-50 disabled:text-geantSap-gray-400 rounded-lg font-medium text-base">
             <span className="size-6 flex items-center justify-center">
@@ -171,43 +159,20 @@ const ToBePaidTable = () => {
                 spin={isLoading}
               />
             </span>
-            <span className="font-medium text-base sm:block hidden">Export Checks</span>
+            <span className="font-medium text-base sm:block hidden">
+              Export Checks
+            </span>
           </Button>
-          <ShowRebate rebateData={rebateData}/>
-
-          <Button
-            size={"icon"}
-            disabled={isSubmitting ||!paymentDate}
-            onClick={() => {
-              postAllRebate(
-                `/outgoing-payment/rebate?paymentDate=${format(
-                  selectedDate ?? new Date(),
-                  "yyyy-MM-dd"
-                )}`,
-                setisSubmitting,
-                toast,
-                queryClient,
-                setRebateData
-              );
-            }}
-            className="text-geantSap-primary-500 bg-transparent disabled:opacity-50 border  border-geantSap-gray-25 hover:bg-geantSap-gray-25 disabled:cursor-not-allowed">
-
-            <FontAwesomeIcon className="" icon={faPercentage} />
-          </Button>
-          <Button
-            size={"icon"}
-            disabled={isSubmitting ||!paymentDate}
-            onClick={() => {
-              postAllCreditNote(
-                `/outgoing-payment/creditNote?paymentDate=${selectedDate}`,
-                setisSubmitting,
-                toast,
-                queryClient
-              );
-            }}
-            className="text-geantSap-primary-500 bg-transparent disabled:opacity-50  border border-geantSap-gray-25 hover:bg-geantSap-gray-25 disabled:cursor-not-allowed">
-            <FontAwesomeIcon className="" icon={faNote} />
-          </Button>
+          <ShowRebate rebateData={rebateData} />
+          <CalculateCreditNoteAll
+            paymentDate={paymentDate}
+            disabled={paymentDate === ""}
+          />
+          <CalculateRebateAll
+            disabled={paymentDate === ""}
+            paymentDate={paymentDate}
+            setRebateData={setRebateData}
+          />
         </div>
       </div>
       <div className=" md:h-[calc(100dvh-12.75rem)]  h-[calc(100dvh-18.75rem)] border-geantSap-gray-25 rounded-xl block overflow-y-scroll">
@@ -219,7 +184,7 @@ const ToBePaidTable = () => {
                 <th className="p-6">Name (AR)</th>
                 {user.paymentType === "Bank" && (
                   <>
-                  <th className="p-6">Payment Balance</th>
+                    <th className="p-6">Payment Balance</th>
                     <th className="p-6 ">Bank Amount</th>
                   </>
                 )}
@@ -240,26 +205,22 @@ const ToBePaidTable = () => {
                     key={data.vendorCode}
                     onClick={() =>
                       navigate(
-                        `/sap/payments/tobe-paid/details/${data.vendorCode}/${
-                          selectedDate
-                            ? format(selectedDate, "yyyy-MM-dd")
-                            : paymentDate.split("=")[1]
-                        }`
+                        `/sap/payments/tobe-paid/details/${data.vendorCode}/${paymentDate}`
                       )
                     }
                     className="text-geantSap-black font-normal text-base border-b-2 border-geantSap-gray-25 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer">
                     <td className="px-6 py-3">{data.vendorCode}</td>
                     <td className="px-6 py-3">{data.vendorName}</td>
                     {user.paymentType === "Bank" && (
-                  <>
-                    <td className="px-6 py-3">
-                      {numberWithCommas(data.paymentAmount)}
-                    </td>
-                    <td className="px-6 py-3">
-                      {numberWithCommas(data.bankAmount)}
-                    </td>
-                    </>
-                )}
+                      <>
+                        <td className="px-6 py-3">
+                          {numberWithCommas(data.paymentAmount)}
+                        </td>
+                        <td className="px-6 py-3">
+                          {numberWithCommas(data.bankAmount)}
+                        </td>
+                      </>
+                    )}
                     <td className="px-6 py-3">
                       {numberWithCommas(data.cashAmount)}
                     </td>

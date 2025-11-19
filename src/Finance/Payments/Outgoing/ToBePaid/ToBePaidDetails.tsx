@@ -1,7 +1,5 @@
 import { useAuth } from "@/api/Auth/useAuth";
 import { getToBePaidByVendor } from "@/api/client";
-import CalculateCreditNote from "@/components/CalculateCreditNote";
-import CalculateRebate from "@/components/CalculateRebate";
 import CreateOutgoingPayment from "@/components/CreateOutgoingPayment";
 import DataRenderer from "@/components/DataRenderer";
 import { Label } from "@/components/ui/label";
@@ -157,7 +155,7 @@ const ToBePaidDetails = () => {
         </DataRenderer>
         {toBePaidDetails && paymentDate && (
           <div className="flex md:justify-end gap-x-4 p-6 border-t flex-col items-center md:flex-row  gap-y-4 border-geantSap-gray-50">
-            <CalculateCreditNote
+            {/* <CalculateCreditNote
               disabled={isFetching}
               vendorCode={toBePaidDetails.vendorCode}
               paymentDate={paymentDate}
@@ -168,7 +166,7 @@ const ToBePaidDetails = () => {
               vendorCode={toBePaidDetails.vendorCode}
               paymentDate={paymentDate}
 
-            />
+            /> */}
             
               <CreateOutgoingPayment
                 disabled={isFetching}

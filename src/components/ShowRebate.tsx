@@ -23,8 +23,6 @@ const ShowRebate = ({ rebateData }: ShowRebateProps) => {
       { header: "Vendor Name", key: "vendor" },
       { header: "Result", key: "res" },
     ];
-console.log(headers.map((h) => h.key));
-console.log([headers.map((h) => h.header)]);
 
     const worksheet = XLSX.utils.json_to_sheet(rebateData, {
       header: headers.map((h) => h.key),

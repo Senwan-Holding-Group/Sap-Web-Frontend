@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "./ui/button";
+import { Button } from "../../../../../components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -8,10 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "../../../../../components/ui/dialog";
 import { getCreditNoteByVendorCode, postCreditNote } from "@/api/client";
 import { useStateContext } from "@/context/useStateContext";
-import DataRenderer from "./DataRenderer";
+import DataRenderer from "../../../../../components/DataRenderer";
 import { numberWithCommas } from "@/lib/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/pro-solid-svg-icons";
